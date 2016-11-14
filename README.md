@@ -1,8 +1,25 @@
-# Personnel Services
-Web services for a Personnel System
+#TRAPPS API application
+##(T)racking
+##(R)esource
+##(A)pplicants
+##(P)roject
+##(P)ersonnel
+##(S)kills
 
-Applicant Tracking System
+##develop branch works on CF right now. Haven't tested on pcf dev.
 
-Once Hired Track Employee Skills and Training
+##Build and push to CF (for now)
+mvn -Dmaven.test.skip=true clean package
+cf create-service cleardb spark mysqldb
+cf push trapps-api -p target/trapps-api-0.0.1-SNAPSHOT.jar
+cf bind-service trapps-api mysqldb
+cf restart trapps-api
 
-Track Project Personnel Requirements and Assigned Personnel
+##Steps to clone, create branch, made changes and push
+git clone https://github.com/insys-group/trapps-api.git
+git checkout develop
+git branch feature/TRAP-<story number>
+git add .
+git commit -m "<some description about your changes>"
+git push origin feature/TRAP-<story number>
+ 
