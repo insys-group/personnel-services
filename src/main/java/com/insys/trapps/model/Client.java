@@ -1,6 +1,8 @@
 package com.insys.trapps.model;
 
 public class Client {
+	
+	private long id;
 	private String name;
 
 	public Client(String name) {
