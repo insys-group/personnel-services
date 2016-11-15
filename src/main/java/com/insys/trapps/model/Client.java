@@ -9,6 +9,12 @@ public class Client {
 	private String description;
 	private List<String> locations;
 	private List<Date> dates;
+	
+	public Client(String name) {
+		this.name = name;
+	}
+	
+	
 
 	public Client(long id, String name, String description, List<String> locations, List<Date> dates) {
 		this.id = id;
