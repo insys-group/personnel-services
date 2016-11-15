@@ -1,0 +1,5 @@
+spring:
+  profiles:
+    active: cloud,default
+  jpa:
+    database: MYSQL
