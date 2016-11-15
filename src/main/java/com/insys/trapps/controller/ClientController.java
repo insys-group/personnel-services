@@ -1,6 +1,5 @@
 package com.insys.trapps.controller;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +13,6 @@ public class ClientController {
 	
 	@RequestMapping("/")
 	public List<Client> listClients() {
-		return Arrays.asList(new Client[]{new Client("Test Client")});
+		return null;
 	}
 }
