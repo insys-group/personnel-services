@@ -1,0 +1,9 @@
+---
+applications:
+- name: trapps-api
+  memory: 512M
+  disk_quota: 512M
+  stack: cflinuxfs2
+  buildpack: java_buildpack
+  services:
+    - mysqldb
