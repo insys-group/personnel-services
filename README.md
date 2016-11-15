@@ -11,9 +11,9 @@ Skills
 ##Build and push to CF (for now) 
 mvn -Dmaven.test.skip=true clean package
 
-#next line for PWS
-cf create-service cleardb spark mysqldb
-#use this line for PCF Dev
+--next line for PWS  
+cf create-service cleardb spark mysqldb  
+--use this line for PCF Dev  
 cf create-service p-mysql 512mb mysqldb
 
 cf push trapps-api -p target/trapps-api-0.0.1-SNAPSHOT.jar
