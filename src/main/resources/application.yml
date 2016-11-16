@@ -1,3 +1,4 @@
 spring:
-  profiles:
-    active: cloud,default
+  jpa:
+    generate-ddl: true
+    show-sql: true

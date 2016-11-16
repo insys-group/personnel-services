@@ -7,6 +7,8 @@ Personnel
 Skills  
  
 ##develop branch works on CF right now. Haven't tested on pcf dev. 
+Please install Lombok Plugin in IDE
+https://projectlombok.org/features/index.html
 
 ##Build and push to CF (for now) 
 mvn -Dmaven.test.skip=true clean package
