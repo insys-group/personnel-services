@@ -15,7 +15,7 @@ import javax.persistence.Table;;
 
 @Entity
 @Table(name = "client")
-public class Client {
+public class Business {
 	
 	//Client, Location and Address
 	@Id
@@ -36,12 +36,12 @@ public class Client {
     private Collection<Location> locations;
 
    
-	public Client() {
+	public Business() {
 		super();
 	}
 
 
-	public Client(String name, String description,
+	public Business(String name, String description,
 			BusinessEntityType entity_type, Collection<Location> locations) {
 		super();
 		//this.business_entity_id = business_entity_id;
@@ -127,7 +127,7 @@ public class Client {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Client other = (Client) obj;
+		Business other = (Business) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;

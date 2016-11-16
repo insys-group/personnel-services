@@ -1,10 +1,10 @@
 package com.insys.trapps.util;
 
-import com.insys.trapps.model.Client;
+import com.insys.trapps.model.Business;
 
 public class ClientBuilder {
 	
-	private Client client=new Client();
+	private Business client=new Business();
 	
 	public static ClientBuilder buildClient(String comments) {
 		ClientBuilder builder = new ClientBuilder();
@@ -12,21 +12,21 @@ public class ClientBuilder {
 		return builder;
 	}
 	
-	public static ClientBuilder buildClient(Client client) {
+	public static ClientBuilder buildClient(Business client) {
 		ClientBuilder builder = new ClientBuilder();
 		builder.client=client;
 		return builder;
 	}
 
-	public Client getClient() {
+	public Business getClient() {
 		return client;
 	}
 
-	public void setClient(Client client) {
+	public void setClient(Business client) {
 		this.client = client;
 	}
 
-	public Client build() {
+	public Business build() {
 		return client;
 	}
 

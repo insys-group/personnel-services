@@ -18,9 +18,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.insys.trapps.model.Address;
 import com.insys.trapps.model.BusinessEntityType;
-import com.insys.trapps.model.Client;
+import com.insys.trapps.model.Business;
 import com.insys.trapps.model.Location;
-import com.insys.trapps.respositories.ClientRepository;
+import com.insys.trapps.respositories.BusinessRepository;
 import com.insys.trapps.util.ClientBuilder;
 
 @RunWith(SpringRunner.class)
@@ -32,8 +32,8 @@ public class ClientRepositoryTest {
     @Autowired
     private TestEntityManager entityManager;
     @Autowired
-    private ClientRepository clientRepository;
-    private Client testClient;
+    private BusinessRepository clientRepository;
+    private Business testClient;
    
     
     /*@Test
@@ -65,7 +65,7 @@ public class ClientRepositoryTest {
 		Location location_2 = new Location(Long.valueOf(2), address_2);
 		Collection<Location> locations = Arrays.asList(location_1, location_2);
 		
-		Client client = new Client(
+		Business client = new Business(
 		           "test", "testing-denver business", 
 		          BusinessEntityType.CONSULTING_TYPE,  locations);
 		
@@ -76,7 +76,7 @@ public class ClientRepositoryTest {
     public void testSaveClient() throws Exception {
     	logger.debug("Enter: testSaveClient");
         this.clientRepository.save(testClient);
-        Iterable<Client> clients = this.clientRepository.findAll();
+        Iterable<Business> clients = this.clientRepository.findAll();
         clients.forEach(client ->{
         	logger.debug("@@@  Client is " + client.toString());
         	assertTrue(testClient.getName().contains(client.getName()));
@@ -90,7 +90,7 @@ public class ClientRepositoryTest {
     public void testFindClient() throws Exception {
     	logger.debug("Enter: testSaveClient");
         this.clientRepository.save(testClient);
-        Iterable<Client> clients = this.clientRepository.findAll();
+        Iterable<Business> clients = this.clientRepository.findAll();
         clients.forEach(client ->{
         	logger.debug("@@@  Client is " + client.toString());
         	assertTrue(testClient.getName().contains(client.getName()));

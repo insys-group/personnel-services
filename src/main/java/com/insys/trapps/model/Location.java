@@ -24,7 +24,7 @@ public class Location {
 	
 	@ManyToOne
 	@JoinColumn(name="business_entity_id")
-	private Client client;
+	private Business client;
 	
 	public Location() {
 		super();
@@ -60,12 +60,12 @@ public class Location {
 	}
 
 
-	public Client getClient() {
+	public Business getClient() {
 		return client;
 	}
 
 
-	public void setClient(Client client) {
+	public void setClient(Business client) {
 		this.client = client;
 	}
 
