@@ -1,9 +1,10 @@
 package com.insys.trapps.repo;
+import java.util.List;
+import org.springframework.data.repository.CrudRepository;
 
-import org.springframework.data.repository.Repository;
 
 import com.insys.trapps.model.Client;
 
-public class ClientRepository implements Repository<Client, Long> {
-	
+public interface ClientRepository extends CrudRepository<Client, Long> {
+		List<Client> findByName(String name);
 }
