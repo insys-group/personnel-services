@@ -7,3 +7,7 @@ applications:
   buildpack: java_buildpack
   services:
     - mysqldb
+  #env:
+    #SPRING_PROFILES_ACTIVE: pcf
+    #CF_TARGET: https://api.system.mgpcf.net
+
