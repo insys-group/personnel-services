@@ -1,15 +1,4 @@
 spring:
   jpa:
-    hibernate:
-      ddl-auto: create-drop
----
-spring:
-  profiles:
-    active: cloud,default
-  jpa:
-    database: MYSQL
----
-spring:
-  profiles: default
-  jpa:
-    database: HSQL
+    generate-ddl: true
+    show-sql: true

@@ -42,8 +42,18 @@ public class BusinessRepositoryTest {
 
 	@Before
 	public void beforeEachMethod() {
-		Address address_1 = new Address("Insys Street", "Denver", "CO", "80014");
-		Address address_2 = new Address("Luxoft Street", "Seattle", "WA", "70014");
+		Address address_1 = Address.builder()
+				.address1("Insys Street")
+				.city("Denver")
+				.state("CO")
+				.zipCode("80014")
+				.build();
+		Address address_2 =Address.builder()
+				.address1("Luxoft Street")
+				.city("Seattle")
+				.state("WA")
+				.zipCode("70014")
+				.build();
 
 		testClient = BusinessBuilder.buildBusiness("test", "testing-denver",  BusinessType.INSYS).addLocation(address_1).addLocation(address_2).build();
 	}
