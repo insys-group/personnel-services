@@ -1,16 +1,26 @@
 package com.insys.trapps.model;
 
-import java.util.Arrays;
+import java.util.Collection;
 
-import javax.persistence.*;;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;;
 
 @Entity
 @Table(name = "client")
 public class Client {
 	
+	//Client, Location and Address
 	@Id
     @GeneratedValue
-    private Long id;
+    private Long business_entity_id;
 
     @Column(nullable = false)
     private String name;
@@ -19,70 +29,37 @@ public class Client {
     private String description;
 
     @Column(nullable = false)
-    private String location;
+    @Enumerated(EnumType.STRING)
+    private BusinessEntityType entity_type;
+    
+    @OneToMany(mappedBy="client", cascade =  CascadeType.ALL , fetch = FetchType.EAGER)
+    private Collection<Location> locations;
 
-    @Column(nullable = false)
-    private String region;
-
-    @Column(nullable = false)
-    private String phone;
-
-    @Column(nullable = false)
-    private String[] emails;
-
-    @Column(nullable = false)
-    private String address;
-
-  
-    @Column(nullable = false)
-    private String[] projects;
-
-    @Column(nullable = false)
-    private String[] roles;
-
-    @Column(nullable = false)
-    private boolean msa;
    
-    @Column(nullable = false)
-    private String msaExpirationDate;
-    
-    
-    
-    
 	public Client() {
 		super();
 	}
 
 
-
-	public Client(Long id, String name, String description, String location,
-			String region, String phone, String[] emails, String address,
-			String[] projects, String[] roles, boolean msa, String msaExpirationDate) {
+	public Client(String name, String description,
+			BusinessEntityType entity_type, Collection<Location> locations) {
 		super();
-		this.id = id;
+		//this.business_entity_id = business_entity_id;
 		this.name = name;
 		this.description = description;
-		this.location = location;
-		this.region = region;
-		this.phone = phone;
-		this.emails = emails;
-		this.address = address;
-		this.projects = projects;
-		this.roles = roles;
-		this.msa = msa;
-		this.msaExpirationDate = msaExpirationDate;
+		this.entity_type = entity_type;
+		this.locations = locations;
+	}
+
+
+	public Long getBusiness_entity_id() {
+		return business_entity_id;
 	}
 
 
 
-	public Long getId() {
-		return id;
-	}
-
-
-
-	public void setId(Long id) {
-		this.id = id;
+	public void setBusiness_entity_id(Long business_entity_id) {
+		this.business_entity_id = business_entity_id;
 	}
 
 
@@ -111,110 +88,25 @@ public class Client {
 
 
 
-	public String getLocation() {
-		return location;
+
+	public BusinessEntityType getEntity_type() {
+		return entity_type;
+	}
+
+
+	public void setEntity_type(BusinessEntityType entity_type) {
+		this.entity_type = entity_type;
+	}
+
+
+	public Collection<Location> getLocations() {
+		return locations;
 	}
 
 
 
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-
-
-	public String getRegion() {
-		return region;
-	}
-
-
-
-	public void setRegion(String region) {
-		this.region = region;
-	}
-
-
-
-	public String getPhone() {
-		return phone;
-	}
-
-
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-
-
-	public String[] getEmails() {
-		return emails;
-	}
-
-
-
-	public void setEmails(String[] emails) {
-		this.emails = emails;
-	}
-
-
-
-	public String getAddress() {
-		return address;
-	}
-
-
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-
-
-	public String[] getProjects() {
-		return projects;
-	}
-
-
-
-	public void setProjects(String[] projects) {
-		this.projects = projects;
-	}
-
-
-
-	public String[] getRoles() {
-		return roles;
-	}
-
-
-
-	public void setRoles(String[] roles) {
-		this.roles = roles;
-	}
-
-
-
-	public boolean isMsa() {
-		return msa;
-	}
-
-
-
-	public void setMsa(boolean msa) {
-		this.msa = msa;
-	}
-
-
-
-	public String getMsaExpirationDate() {
-		return msaExpirationDate;
-	}
-
-
-
-	public void setMsaExpirationDate(String msaExpirationDate) {
-		this.msaExpirationDate = msaExpirationDate;
+	public void setLocations(Collection<Location> locations) {
+		this.locations = locations;
 	}
 
 
@@ -248,14 +140,10 @@ public class Client {
 
 	@Override
 	public String toString() {
-		return "Client [id=" + id + ", name=" + name + ", description=" + description
-				+ ", location=" + location + ", region=" + region + ", phone=" + phone
-				+ ", emails=" + Arrays.toString(emails) + ", address=" + address
-				+ ", projects=" + Arrays.toString(projects) + ", roles="
-				+ Arrays.toString(roles) + ", msa=" + msa + ", msaExpirationDate="
-				+ msaExpirationDate + "]";
+		return "Client [business_entity_id=" + business_entity_id + ", name=" + name
+				+ ", description=" + description + ", entity_type=" + entity_type
+				+ ", locations=" + locations + "]";
 	}
-	
 	
 	
 	

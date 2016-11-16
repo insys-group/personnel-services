@@ -6,5 +6,5 @@ import com.insys.trapps.model.Client;
 
 public interface ClientRepository extends PagingAndSortingRepository<Client, Long> {
 
-    public Client save(Client client);
+    
 }
