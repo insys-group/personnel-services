@@ -15,12 +15,12 @@ import javax.persistence.Table;;
 
 @Entity
 @Table(name = "business_entity")
-public class BusinessEntity {
+public class Business {
 
 	// Client, Location and Address
 	@Id
 	@GeneratedValue
-	private Long businessEntityId;
+	private Long businessId;
 
 	@Column(nullable = false)
 	private String name;
@@ -30,27 +30,27 @@ public class BusinessEntity {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private BusinessEntityType entityType;
+	private BusinessType type;
 
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Collection<Location> locations;
 
-	public BusinessEntity() {
+	public Business() {
 	}
 
-	public BusinessEntity(String name, String description, BusinessEntityType entityType, Collection<Location> locations) {
+	public Business(String name, String description, BusinessType type, Collection<Location> locations) {
 		this.name = name;
 		this.description = description;
-		this.entityType = entityType;
+		this.type = type;
 		this.locations = locations;
 	}
 
-	public Long getBusinessEntityId() {
-		return businessEntityId;
+	public Long getBusinessId() {
+		return businessId;
 	}
 
-	public void setBusinessEntityId(Long businessEntityId) {
-		this.businessEntityId = businessEntityId;
+	public void setBusinessId(Long businessId) {
+		this.businessId = businessId;
 	}
 
 	public String getName() {
@@ -69,12 +69,12 @@ public class BusinessEntity {
 		this.description = description;
 	}
 
-	public BusinessEntityType getEntityType() {
-		return entityType;
+	public BusinessType getEntityType() {
+		return type;
 	}
 
-	public void setEntityType(BusinessEntityType entityType) {
-		this.entityType = entityType;
+	public void setEntityType(BusinessType entityType) {
+		this.type = entityType;
 	}
 
 	public Collection<Location> getLocations() {
@@ -101,7 +101,7 @@ public class BusinessEntity {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		BusinessEntity other = (BusinessEntity) obj;
+		Business other = (Business) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -112,8 +112,8 @@ public class BusinessEntity {
 
 	@Override
 	public String toString() {
-		return "Client [business_entity_id=" + businessEntityId + ", name=" + name + ", description=" + description
-				+ ", entity_type=" + entityType + ", locations=" + locations + "]";
+		return "Client [business_entity_id=" + businessId + ", name=" + name + ", description=" + description
+				+ ", entity_type=" + type + ", locations=" + locations + "]";
 	}
 
 }

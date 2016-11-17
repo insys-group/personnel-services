@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "location")
@@ -23,7 +23,7 @@ public class Location {
 
 	@ManyToOne
 	@JoinColumn(name = "business_entity_id")
-	private BusinessEntity businessEntity;
+	private Business business;
 
 	public Location() {
 	}
@@ -49,12 +49,12 @@ public class Location {
 		this.address = address;
 	}
 
-	public BusinessEntity getClient() {
-		return businessEntity;
+	public Business getClient() {
+		return business;
 	}
 
-	public void setBusinessEntity(BusinessEntity entity) {
-		this.businessEntity = entity;
+	public void setBusiness(Business business) {
+		this.business = business;
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class Location {
 
 	@Override
 	public String toString() {
-		return "Location [location_id=" + locationId + ", address=" + address + ", client=" + businessEntity + "]";
+		return "Location [location_id=" + locationId + ", address=" + address + ", client=" + business + "]";
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.insys.trapps.model;
 
-public enum BusinessEntityType {
+public enum BusinessType {
 	CONSULTING_TYPE,
     BUSINESS_TYPE,
     DIRECT_CLIENT
