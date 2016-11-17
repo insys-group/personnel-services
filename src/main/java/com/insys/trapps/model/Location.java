@@ -49,16 +49,12 @@ public class Location {
 		this.address = address;
 	}
 
-	public Business getClient() {
+	public Business getBusiness() {
 		return business;
 	}
 
 	public void setBusiness(Business business) {
 		this.business = business;
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
 	}
 
 	@Override
