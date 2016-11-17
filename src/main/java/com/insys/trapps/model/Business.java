@@ -115,9 +115,10 @@ public class Business {
 
 	@Override
 	public String toString() {
-		return "Business [businessId=" + businessId + ", name=" + name + ", description="
-				+ description + ", businessType=" + businessType + ", locations="
-				+ locations + "]";
+		return "Business [name=" + name + ", description=" + description
+				+ ", businessType=" + businessType + ", locations=" + locations + "]";
 	}
+
+	
 
 }

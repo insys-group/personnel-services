@@ -2,6 +2,7 @@ package com.insys.trapps;
 
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -15,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -26,6 +28,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.insys.trapps.model.Address;
+import com.insys.trapps.model.Business;
+import com.insys.trapps.model.BusinessType;
+import com.insys.trapps.util.Builder;
 
 /**
  * @author kkrish003c
@@ -70,11 +76,32 @@ public class BusinessSpringIntegrationTests {
     
     @Test
     @Ignore
-    public void testListClients() throws Exception {
+    public void testListBusinesses() throws Exception {
         
-        ResultActions resultActions = mvc.perform(get("/client"));
+        ResultActions resultActions = mvc.perform(get("/business"));
         
         MvcResult result = resultActions.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith("application/json")).andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        
+        logger.info(content);
+       
+        assertNotNull(content);
+
+    }
+    
+    
+    @Test
+    public void testCreateBusiness() throws Exception {
+    	
+      	Address address_1 = new Address("Insys Street", "Denver", "CO", "80014");
+		Address address_2 = new Address("Luxoft Street", "Seattle", "WA", "70014");
+
+		Business testBuisness = Builder.buildBusiness("test", "testing-denver",  BusinessType.INSYS).addLocation(address_1).addLocation(address_2).build();
+        
+        ResultActions resultActions = mvc.perform(post("/business").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(testBuisness)));
+        
+        MvcResult result = resultActions.andExpect(status().isCreated()).andExpect(content().contentTypeCompatibleWith("application/json")).andReturn();
 
         String content = result.getResponse().getContentAsString();
         
