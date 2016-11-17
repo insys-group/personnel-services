@@ -14,102 +14,76 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;;
 
 @Entity
-@Table(name = "client")
-public class Client {
-	
-	//Client, Location and Address
+@Table(name = "business_entity")
+public class Business {
+
+	// Client, Location and Address
 	@Id
-    @GeneratedValue
-    private Long business_entity_id;
+	@GeneratedValue
+	private Long businessId;
 
-    @Column(nullable = false)
-    private String name;
+	@Column(nullable = false)
+	private String name;
 
-    @Column(nullable = false)
-    private String description;
+	@Column(nullable = false)
+	private String description;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private BusinessEntityType entity_type;
-    
-    @OneToMany(mappedBy="client", cascade =  CascadeType.ALL , fetch = FetchType.EAGER)
-    private Collection<Location> locations;
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private BusinessType type;
 
-   
-	public Client() {
-		super();
+	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Collection<Location> locations;
+
+	public Business() {
 	}
 
-
-	public Client(String name, String description,
-			BusinessEntityType entity_type, Collection<Location> locations) {
-		super();
-		//this.business_entity_id = business_entity_id;
+	public Business(String name, String description, BusinessType type, Collection<Location> locations) {
 		this.name = name;
 		this.description = description;
-		this.entity_type = entity_type;
+		this.type = type;
 		this.locations = locations;
 	}
 
-
-	public Long getBusiness_entity_id() {
-		return business_entity_id;
+	public Long getBusinessId() {
+		return businessId;
 	}
 
-
-
-	public void setBusiness_entity_id(Long business_entity_id) {
-		this.business_entity_id = business_entity_id;
+	public void setBusinessId(Long businessId) {
+		this.businessId = businessId;
 	}
-
-
 
 	public String getName() {
 		return name;
 	}
 
-
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
-
 
 	public String getDescription() {
 		return description;
 	}
 
-
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-
-
-
-	public BusinessEntityType getEntity_type() {
-		return entity_type;
+	public BusinessType getEntityType() {
+		return type;
 	}
 
-
-	public void setEntity_type(BusinessEntityType entity_type) {
-		this.entity_type = entity_type;
+	public void setEntityType(BusinessType entityType) {
+		this.type = entityType;
 	}
-
 
 	public Collection<Location> getLocations() {
 		return locations;
 	}
 
-
-
 	public void setLocations(Collection<Location> locations) {
 		this.locations = locations;
 	}
-
-
 
 	@Override
 	public int hashCode() {
@@ -127,7 +101,7 @@ public class Client {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Client other = (Client) obj;
+		Business other = (Business) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -136,15 +110,10 @@ public class Client {
 		return true;
 	}
 
-
-
 	@Override
 	public String toString() {
-		return "Client [business_entity_id=" + business_entity_id + ", name=" + name
-				+ ", description=" + description + ", entity_type=" + entity_type
-				+ ", locations=" + locations + "]";
+		return "Client [business_entity_id=" + businessId + ", name=" + name + ", description=" + description
+				+ ", entity_type=" + type + ", locations=" + locations + "]";
 	}
-	
-	
-	
+
 }

@@ -12,5 +12,4 @@ public class TrappsApiApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-
 }
