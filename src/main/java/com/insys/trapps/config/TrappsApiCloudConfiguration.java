@@ -5,6 +5,6 @@ import org.springframework.context.annotation.Profile;
 
 @Profile("cloud")
 @Configuration
-public class TrappsApiCloudConfiguration{
+public class TrappsApiCloudConfiguration {
 
 }
