@@ -6,5 +6,4 @@ import com.insys.trapps.model.Location;
 
 public interface LocationRepository extends PagingAndSortingRepository<Location, Long> {
 
-    
 }

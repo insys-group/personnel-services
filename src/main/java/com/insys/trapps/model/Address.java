@@ -1,9 +1,7 @@
 package com.insys.trapps.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -25,25 +23,24 @@ public class Address {
 	private String state;
 	@Column(name = "ZIP_CODE", nullable = false)
 	private String zip;
-	
+
 	@OneToOne
-	@JoinColumn(name="address_id", nullable = false)
+	@JoinColumn(name = "address_id", nullable = false)
 	private Location location;
 
 	public Address() {
 		super();
 	}
 
-	public Address(Long address_id, String street, String city, String state,
-			String zip) {
+	public Address(Long address_id, String street, String city, String state, String zip) {
 		super();
-		//this.address_id = address_id;
+		// this.address_id = address_id;
 		this.street = street;
 		this.city = city;
 		this.state = state;
 		this.zip = zip;
 	}
-	
+
 	public Long getAddress_id() {
 		return address_id;
 	}
@@ -83,7 +80,7 @@ public class Address {
 	public void setZip(String zip) {
 		this.zip = zip;
 	}
-	
+
 	public Location getLocation() {
 		return location;
 	}
@@ -112,18 +109,15 @@ public class Address {
 		if (street == null) {
 			if (other.street != null)
 				return false;
-		}
-		else if (!street.equals(other.street))
+		} else if (!street.equals(other.street))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Address [address_id=" + address_id + ", street=" + street + ", city="
-				+ city + ", state=" + state + ", zip=" + zip + "]";
+		return "Address [address_id=" + address_id + ", street=" + street + ", city=" + city + ", state=" + state
+				+ ", zip=" + zip + "]";
 	}
-	
-	
 
 }

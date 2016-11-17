@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.insys.trapps.model.Address;
 import com.insys.trapps.model.BusinessEntityType;
-import com.insys.trapps.model.Business;
+import com.insys.trapps.model.BusinessEntity;
 import com.insys.trapps.model.Location;
 import com.insys.trapps.respositories.AddressRepository;
-import com.insys.trapps.respositories.BusinessRepository;
+import com.insys.trapps.respositories.BusinessEntityRepository;
 import com.insys.trapps.respositories.LocationRepository;
 
 
@@ -22,7 +22,7 @@ import com.insys.trapps.respositories.LocationRepository;
 public class BusinessController {
 	
 	 @Autowired
-	 BusinessRepository businessRepository;
+	 BusinessEntityRepository businessRepository;
 	 
 	 @Autowired
 	 LocationRepository locationRepository;
@@ -31,12 +31,12 @@ public class BusinessController {
 	 AddressRepository addressRepository;
 	
 	@RequestMapping("/")
-	public List<Iterable<Business>> listClients() {
+	public List<Iterable<BusinessEntity>> listClients() {
 		return Arrays.asList(businessRepository.findAll());
 	}
 	
 	@RequestMapping("/create")
-	public Business createClient() {
+	public BusinessEntity createClient() {
 		Address address_1 = new Address(Long.valueOf(1), "Insys Street", "Denver", "CO", "80014");
 		Location location_1 = new Location(Long.valueOf(1), address_1);
 		
@@ -49,7 +49,7 @@ public class BusinessController {
 		
 		//locationRepository.save(locations);
 		
-		return businessRepository.save(new Business(
+		return businessRepository.save(new BusinessEntity(
 				           "test", "testing-denver business", 
 				          BusinessEntityType.CONSULTING_TYPE,  locations));
 				
