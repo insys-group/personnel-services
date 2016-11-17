@@ -26,7 +26,7 @@ public class Location {
 	private Address address;
 	
 	@ManyToOne
-	@JoinColumn(name="business_entity_id")
+	@JoinColumn(name="business_id")
 	 @JsonIgnore
 	private Business business;
 	
