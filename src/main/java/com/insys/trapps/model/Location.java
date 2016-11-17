@@ -1,7 +1,6 @@
 package com.insys.trapps.model;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,7 +19,7 @@ public class Location {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO) 
-	private Long location_id;
+	private Long locationId;
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER )
 	@JoinColumn(name="address_id", nullable = false)
@@ -29,27 +28,27 @@ public class Location {
 	@ManyToOne
 	@JoinColumn(name="business_entity_id")
 	 @JsonIgnore
-	private Client client;
+	private Business business;
 	
 	public Location() {
 		super();
 	}
 
 
-	public Location(Address address, Client client) {
+	public Location(Address address, Business business) {
 		super();
 		this.address = address;
-		this.client = client;
+		this.business = business;
 	}
 
 
-	public Long getLocation_id() {
-		return location_id;
+	public Long getLocationId() {
+		return locationId;
 	}
 
 
-	public void setLocation_id(Long location_id) {
-		this.location_id = location_id;
+	public void setLocationId(Long locationId) {
+		this.locationId = locationId;
 	}
 
 
@@ -62,48 +61,6 @@ public class Location {
 		this.address = address;
 	}
 
-
-	public Client getClient() {
-		return client;
-	}
-
-
-	public void setClient(Client client) {
-		this.client = client;
-	}
-
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((address == null) ? 0 : address.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Location other = (Location) obj;
-		if (address == null) {
-			if (other.address != null)
-				return false;
-		}
-		else if (!address.equals(other.address))
-			return false;
-		return true;
-	}
-
-
-	@Override
-	public String toString() {
-		return "Location [location_id=" + location_id + ", address=" + address + "]";
-	}
 
 
 }
