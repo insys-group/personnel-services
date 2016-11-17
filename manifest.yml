@@ -1,12 +1,15 @@
 ---
+memory: 384M
+disk_quota: 512M
+instances: 1
 applications:
 - name: trapps-api
-  memory: 512M
-  disk_quota: 512M
-  stack: cflinuxfs2
+  host: trapps-api
+  path: target/trapps-api-0.0.1-SNAPSHOT.jar
   buildpack: java_buildpack
+  stack: cflinuxfs2
   services:
-    - mysqldb
+  - mysqldb
   #env:
     #SPRING_PROFILES_ACTIVE: pcf
     #CF_TARGET: https://api.system.mgpcf.net

@@ -9,9 +9,12 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;;
 
 @Entity
 @Table(name = "client")
@@ -19,8 +22,8 @@ public class Client {
 	
 	//Client, Location and Address
 	@Id
-    @GeneratedValue
-    private Long business_entity_id;
+    @GeneratedValue(strategy = GenerationType.AUTO) 
+    private Long businessEntityId;
 
     @Column(nullable = false)
     private String name;
@@ -30,7 +33,7 @@ public class Client {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private BusinessEntityType entity_type;
+    private BusinessEntityType businessType;
     
     @OneToMany(mappedBy="client", cascade =  CascadeType.ALL , fetch = FetchType.EAGER)
     private Collection<Location> locations;
@@ -41,27 +44,34 @@ public class Client {
 	}
 
 
-	public Client(String name, String description,
-			BusinessEntityType entity_type, Collection<Location> locations) {
+	public Client(String name, String description, BusinessEntityType businessType,
+			Collection<Location> locations) {
 		super();
-		//this.business_entity_id = business_entity_id;
 		this.name = name;
 		this.description = description;
-		this.entity_type = entity_type;
+		this.businessType = businessType;
 		this.locations = locations;
 	}
 
 
-	public Long getBusiness_entity_id() {
-		return business_entity_id;
+	public Long getBusinessEntityId() {
+		return businessEntityId;
 	}
 
 
-
-	public void setBusiness_entity_id(Long business_entity_id) {
-		this.business_entity_id = business_entity_id;
+	public void setBusinessEntityId(Long businessEntityId) {
+		this.businessEntityId = businessEntityId;
 	}
 
+
+	public BusinessEntityType getBusinessType() {
+		return businessType;
+	}
+
+
+	public void setBusinessType(BusinessEntityType businessType) {
+		this.businessType = businessType;
+	}
 
 
 	public String getName() {
@@ -87,16 +97,6 @@ public class Client {
 	}
 
 
-
-
-	public BusinessEntityType getEntity_type() {
-		return entity_type;
-	}
-
-
-	public void setEntity_type(BusinessEntityType entity_type) {
-		this.entity_type = entity_type;
-	}
 
 
 	public Collection<Location> getLocations() {
@@ -137,14 +137,14 @@ public class Client {
 	}
 
 
-
 	@Override
 	public String toString() {
-		return "Client [business_entity_id=" + business_entity_id + ", name=" + name
-				+ ", description=" + description + ", entity_type=" + entity_type
+		return "Client [businessEntityId=" + businessEntityId + ", name=" + name
+				+ ", description=" + description + ", businessType=" + businessType
 				+ ", locations=" + locations + "]";
 	}
-	
+
+
 	
 	
 }

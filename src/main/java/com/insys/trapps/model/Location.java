@@ -5,25 +5,30 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;;
 
 @Entity
 @Table(name = "location")
 public class Location {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.AUTO) 
 	private Long location_id;
 	
-	@OneToOne(mappedBy="location", cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER )
+	@JoinColumn(name="address_id", nullable = false)
 	private Address address;
 	
 	@ManyToOne
 	@JoinColumn(name="business_entity_id")
+	 @JsonIgnore
 	private Client client;
 	
 	public Location() {
@@ -31,13 +36,11 @@ public class Location {
 	}
 
 
-	public Location(Long location_id, Address address) {
+	public Location(Address address, Client client) {
 		super();
-		//this.location_id = location_id;
 		this.address = address;
+		this.client = client;
 	}
-
-
 
 
 	public Long getLocation_id() {
@@ -99,8 +102,7 @@ public class Location {
 
 	@Override
 	public String toString() {
-		return "Location [location_id=" + location_id + ", address=" + address
-				+ ", client=" + client + "]";
+		return "Location [location_id=" + location_id + ", address=" + address + "]";
 	}
 
 
