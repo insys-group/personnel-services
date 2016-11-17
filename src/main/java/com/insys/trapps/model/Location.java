@@ -16,31 +16,29 @@ public class Location {
 
 	@Id
 	@GeneratedValue
-	private Long location_id;
+	private Long locationId;
 
 	@OneToOne(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Address address;
 
 	@ManyToOne
 	@JoinColumn(name = "business_entity_id")
-	private BusinessEntity client;
+	private BusinessEntity businessEntity;
 
 	public Location() {
-		super();
 	}
 
-	public Location(Long location_id, Address address) {
-		super();
-		// this.location_id = location_id;
+	public Location(Long locationId, Address address) {
+		this.locationId = locationId;
 		this.address = address;
 	}
 
-	public Long getLocation_id() {
-		return location_id;
+	public Long getLocationId() {
+		return locationId;
 	}
 
-	public void setLocation_id(Long location_id) {
-		this.location_id = location_id;
+	public void setLocationId(Long locationId) {
+		this.locationId = locationId;
 	}
 
 	public Address getAddress() {
@@ -52,11 +50,11 @@ public class Location {
 	}
 
 	public BusinessEntity getClient() {
-		return client;
+		return businessEntity;
 	}
 
-	public void setClient(BusinessEntity client) {
-		this.client = client;
+	public void setBusinessEntity(BusinessEntity entity) {
+		this.businessEntity = entity;
 	}
 
 	@Override
@@ -86,7 +84,7 @@ public class Location {
 
 	@Override
 	public String toString() {
-		return "Location [location_id=" + location_id + ", address=" + address + ", client=" + client + "]";
+		return "Location [location_id=" + locationId + ", address=" + address + ", client=" + businessEntity + "]";
 	}
 
 }

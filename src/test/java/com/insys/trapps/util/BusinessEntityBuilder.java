@@ -6,24 +6,16 @@ public class BusinessEntityBuilder {
 
 	private BusinessEntity businessEntity = new BusinessEntity();
 
-	public static BusinessEntityBuilder buildClient(String comments) {
+	public static BusinessEntityBuilder buildEntity(String comments) {
 		BusinessEntityBuilder builder = new BusinessEntityBuilder();
 		builder.businessEntity.setDescription(comments);
 		return builder;
 	}
 
-	public static BusinessEntityBuilder buildClient(BusinessEntity entity) {
+	public static BusinessEntityBuilder buildEntity(BusinessEntity entity) {
 		BusinessEntityBuilder builder = new BusinessEntityBuilder();
 		builder.businessEntity = entity;
 		return builder;
-	}
-
-	public BusinessEntity getClient() {
-		return businessEntity;
-	}
-
-	public void setClient(BusinessEntity entity) {
-		this.businessEntity = entity;
 	}
 
 	public BusinessEntity build() {

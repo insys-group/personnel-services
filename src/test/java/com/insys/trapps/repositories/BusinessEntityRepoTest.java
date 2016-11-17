@@ -32,8 +32,8 @@ public class BusinessEntityRepoTest {
 	@Autowired
 	private TestEntityManager entityManager;
 	@Autowired
-	private BusinessEntityRepository clientRepository;
-	private BusinessEntity testClient;
+	private BusinessEntityRepository businessEntityRepository;
+	private BusinessEntity testBusinessEntity;
 
 	/*
 	 * @Test public void testFindByName() { Address address_1 = new
@@ -56,45 +56,47 @@ public class BusinessEntityRepoTest {
 	@Before
 	public void beforeEachMethod() {
 
-		Address address_1 = new Address(Long.valueOf(1), "Insys Street", "Denver", "CO", "80014");
-		Location location_1 = new Location(Long.valueOf(1), address_1);
+		Address address1 = new Address(Long.valueOf(1), "Insys Street", "Denver", "CO", "80014");
+		Location location1 = new Location(Long.valueOf(1), address1);
 
-		Address address_2 = new Address(Long.valueOf(2), "Luxoft Street", "Seattle", "WA", "70014");
-		Location location_2 = new Location(Long.valueOf(2), address_2);
-		Collection<Location> locations = Arrays.asList(location_1, location_2);
+		Address address2 = new Address(Long.valueOf(2), "Luxoft Street", "Seattle", "WA", "70014");
+		Location location2 = new Location(Long.valueOf(2), address2);
+		Collection<Location> locations = Arrays.asList(location1, location2);
 
-		BusinessEntity client = new BusinessEntity("test", "testing-denver business",
+		BusinessEntity entity = new BusinessEntity("test", "testing-denver business",
 				BusinessEntityType.CONSULTING_TYPE, locations);
 
-		testClient = BusinessEntityBuilder.buildClient(client).build();
+		testBusinessEntity = BusinessEntityBuilder.buildEntity(entity).build();
 	}
 
 	@Test
-	public void testSaveClient() throws Exception {
-		logger.debug("Enter: testSaveClient");
-		this.clientRepository.save(testClient);
-		Iterable<BusinessEntity> clients = this.clientRepository.findAll();
-		clients.forEach(client -> {
-			logger.debug("@@@  Client is " + client.toString());
-			assertTrue(testClient.getName().contains(client.getName()));
-			assertNotNull(client.getDescription());
+	public void testSaveBusinessEntity() throws Exception {
+		logger.debug("Enter: testSaveBusinessEntity");
+		this.businessEntityRepository.save(testBusinessEntity);
+		
+		Iterable<BusinessEntity> entities = this.businessEntityRepository.findAll();
+		entities.forEach(entity -> {
+			logger.debug("@@@  Entity is " + entity.toString());
+			assertTrue(testBusinessEntity.getName().contains(entity.getName()));
+			assertNotNull(entity.getDescription());
 		});
 
-		this.clientRepository.delete(testClient);
+		this.businessEntityRepository.delete(testBusinessEntity);
 	}
 
 	@Test
-	public void testFindClient() throws Exception {
-		logger.debug("Enter: testSaveClient");
-		this.clientRepository.save(testClient);
-		Iterable<BusinessEntity> clients = this.clientRepository.findAll();
-		clients.forEach(client -> {
-			logger.debug("@@@  Client is " + client.toString());
-			assertTrue(testClient.getName().contains(client.getName()));
-			assertNotNull(client.getDescription());
+	public void testFindBusinessEntity() throws Exception {
+		logger.debug("Enter: testFindBusinessEntity");
+		this.businessEntityRepository.save(testBusinessEntity);
+		
+		Iterable<BusinessEntity> entities = this.businessEntityRepository.findAll();
+		entities.forEach(entity -> {
+			logger.debug("@@@  Entity is " + entity.toString());
+			assertTrue(testBusinessEntity.getName().contains(entity.getName()));
+			assertNotNull(entity.getDescription());
 		});
 
-		this.clientRepository.delete(testClient);
+		this.businessEntityRepository.delete(testBusinessEntity);
 	}
 
 }

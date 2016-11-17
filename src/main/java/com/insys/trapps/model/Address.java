@@ -14,7 +14,7 @@ public class Address {
 
 	@Id
 	@GeneratedValue
-	private Long address_id;
+	private Long addressId;
 	@Column(nullable = false)
 	private String street;
 	@Column(nullable = false)
@@ -29,24 +29,22 @@ public class Address {
 	private Location location;
 
 	public Address() {
-		super();
 	}
 
-	public Address(Long address_id, String street, String city, String state, String zip) {
-		super();
-		// this.address_id = address_id;
+	public Address(Long addressId, String street, String city, String state, String zip) {
+		this.addressId = addressId;
 		this.street = street;
 		this.city = city;
 		this.state = state;
 		this.zip = zip;
 	}
 
-	public Long getAddress_id() {
-		return address_id;
+	public Long getAddressId() {
+		return addressId;
 	}
 
-	public void setAddress_id(Long address_id) {
-		this.address_id = address_id;
+	public void setAddressId(Long addressId) {
+		this.addressId = addressId;
 	}
 
 	public String getStreet() {
@@ -116,7 +114,7 @@ public class Address {
 
 	@Override
 	public String toString() {
-		return "Address [address_id=" + address_id + ", street=" + street + ", city=" + city + ", state=" + state
+		return "Address [address_id=" + addressId + ", street=" + street + ", city=" + city + ", state=" + state
 				+ ", zip=" + zip + "]";
 	}
 
