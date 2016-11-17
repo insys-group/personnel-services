@@ -78,7 +78,6 @@ public class Address {
 	public void setZip(String zip) {
 		this.zip = zip;
 	}
-
 	public Location getLocation() {
 		return location;
 	}
@@ -117,5 +116,4 @@ public class Address {
 		return "Address [address_id=" + addressId + ", street=" + street + ", city=" + city + ", state=" + state
 				+ ", zip=" + zip + "]";
 	}
-
 }

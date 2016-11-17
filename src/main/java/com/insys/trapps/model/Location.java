@@ -57,6 +57,10 @@ public class Location {
 		this.business = business;
 	}
 
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -86,5 +90,4 @@ public class Location {
 	public String toString() {
 		return "Location [location_id=" + locationId + ", address=" + address + ", client=" + business + "]";
 	}
-
 }
