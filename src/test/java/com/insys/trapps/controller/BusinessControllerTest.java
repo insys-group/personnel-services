@@ -95,7 +95,7 @@ public class BusinessControllerTest {
 
 		});
 
-		MvcResult result = mvc.perform(get("/business")).andExpect(status().isOk())
+		MvcResult result = mvc.perform(get("/businesses")).andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith("application/json"))
 				.andReturn();
 
@@ -113,7 +113,7 @@ public class BusinessControllerTest {
 			}
 
 		});
-		ResultActions resultActions = mvc.perform(post("/business").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(testBusiness)));
+		ResultActions resultActions = mvc.perform(post("/businesses").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(testBusiness)));
 		
 		 MvcResult result = resultActions.andExpect(status().isCreated()).andExpect(content().contentTypeCompatibleWith("application/json")).andReturn();
 

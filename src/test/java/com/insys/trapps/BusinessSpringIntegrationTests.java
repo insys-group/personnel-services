@@ -81,7 +81,7 @@ public class BusinessSpringIntegrationTests {
    // @Ignore
     public void testListBusinesses() throws Exception {
         
-        ResultActions resultActions = mvc.perform(get("/business"));
+        ResultActions resultActions = mvc.perform(get("/businesses"));
         
         MvcResult result = resultActions.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith("application/json")).andReturn();
 
@@ -102,7 +102,7 @@ public class BusinessSpringIntegrationTests {
 
 		Business testBuisness = Builder.buildBusiness("test", "testing-denver",  BusinessType.INSYS).addLocation(address_1).addLocation(address_2).build();
         
-        ResultActions resultActions = mvc.perform(post("/business").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(testBuisness)));
+        ResultActions resultActions = mvc.perform(post("/businesses").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(testBuisness)));
         
         MvcResult result = resultActions.andExpect(status().isCreated()).andExpect(content().contentTypeCompatibleWith("application/json")).andReturn();
 

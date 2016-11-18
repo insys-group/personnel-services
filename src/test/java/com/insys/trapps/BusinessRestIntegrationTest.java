@@ -46,7 +46,7 @@ public class BusinessRestIntegrationTest {
 
 	@Test
 	public void getBusinessList() {
-		ResponseEntity<List> responseEntity = restTemplate.getForEntity("/business",
+		ResponseEntity<List> responseEntity = restTemplate.getForEntity("/businesses",
 				List.class);
 		List clients = responseEntity.getBody();
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -67,7 +67,7 @@ public class BusinessRestIntegrationTest {
 
 		HttpEntity<String> entity = new HttpEntity<String>(objectMapper.writeValueAsString(testBuisness), headers);
 
-		ResponseEntity<Business> responseEntity = restTemplate.exchange("/business/", HttpMethod.POST, entity, Business.class);
+		ResponseEntity<Business> responseEntity = restTemplate.exchange("/businesses/", HttpMethod.POST, entity, Business.class);
 
 		// ResponseEntity<Business> responseEntity =  restTemplate.postForEntity("/business", entity, Business.class);
 		

@@ -27,7 +27,7 @@ import com.insys.trapps.service.BusinessService;
 **/
 
 @RestController
-@RequestMapping("/business")
+@RequestMapping("/businesses")
 public class BusinessController {
 
 	@Autowired
