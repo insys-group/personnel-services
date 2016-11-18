@@ -8,6 +8,15 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.insys.trapps.controller.BusinessController;
+
+
+/**
+ * {@link Address Entity} for PersonellServices.
+ *
+ * @author  Kris Krishna
+ * @since 1.0.0
+**/
 
 @Entity
 @Table(name = "address")

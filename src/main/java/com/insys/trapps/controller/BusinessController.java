@@ -2,7 +2,6 @@ package com.insys.trapps.controller;
 
 import java.net.URI;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,34 +15,36 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.insys.trapps.model.Address;
-import com.insys.trapps.model.BusinessType;
 import com.insys.trapps.model.Business;
-import com.insys.trapps.model.Location;
-import com.insys.trapps.respositories.AddressRepository;
 import com.insys.trapps.respositories.BusinessRepository;
-import com.insys.trapps.respositories.LocationRepository;
-import com.insys.trapps.util.Builder;
+import com.insys.trapps.service.BusinessService;
+
+/**
+ * {@link BusinessController} for PersoneelServices.
+ *
+ * @author  Kris Krishna
+ * @since 1.0.0
+**/
 
 @RestController
 @RequestMapping("/business")
 public class BusinessController {
 
 	@Autowired
-	BusinessRepository businessRepository;
+	BusinessService businessService;
 
 
 	@RequestMapping(value = {"","/"},  method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Iterable<Business>>> listBusinesses() {
+	public ResponseEntity<List<Business>> listBusinesses() {
 		//return Arrays.asList(businessRepository.findAll());
 		
-		List<Iterable<Business>> list = Arrays.asList(businessRepository.findAll());
+		List<Business> list =businessService.listBusinesses();
 		
-		return new ResponseEntity<List<Iterable<Business>>>( list, HttpStatus.OK);
+		return new ResponseEntity<List<Business>>( list, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = {"","/"},  method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> createBusiness(@RequestBody Business request) throws Exception
+	public ResponseEntity<Business> createBusiness(@RequestBody Business request) throws Exception
 	{
 		/*Address address_1 = new Address("Insys Street", "Denver", "CO", "80014");
 		Address address_2 = new Address("Luxoft Street", "Seattle", "WA", "70014");
@@ -52,7 +53,7 @@ public class BusinessController {
 		
 		*/
 		
-		Business business = businessRepository.save(request);
+		Business business = businessService.createBusiness(request);
 		HttpHeaders responseHeaders = new HttpHeaders();
         URI newBusinessUri = ServletUriComponentsBuilder
                                               .fromCurrentRequest()

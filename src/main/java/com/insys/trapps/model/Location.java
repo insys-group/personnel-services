@@ -13,6 +13,14 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;;
 
+/**
+ * {@link Location Entity} for PersonellServices.
+ *
+ * @author  Kris Krishna
+ * @since 1.0.0
+**/
+
+
 @Entity
 @Table(name = "location")
 public class Location {

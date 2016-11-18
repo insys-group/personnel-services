@@ -13,6 +13,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;;
 
+/**
+ * {@link Business Entity} for PersonellServices.
+ *
+ * @author  Kris Krishna
+ * @since 1.0.0
+**/
+
+
 @Entity
 @Table(name = "business_entity")
 public class Business {

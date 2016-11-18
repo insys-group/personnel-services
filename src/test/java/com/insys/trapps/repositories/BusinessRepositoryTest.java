@@ -1,6 +1,8 @@
 package com.insys.trapps.repositories;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +19,13 @@ import com.insys.trapps.model.Business;
 import com.insys.trapps.model.BusinessType;
 import com.insys.trapps.respositories.BusinessRepository;
 import com.insys.trapps.util.Builder;
+
+/**
+ * {@link BusinessRepositoryTest} for PersonellServices.
+ *
+ * @author  Kris Krishna
+ * @since 1.0.0
+**/
 
 @RunWith(SpringRunner.class)
 @DataJpaTest

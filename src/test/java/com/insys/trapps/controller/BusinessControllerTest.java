@@ -3,6 +3,7 @@ package com.insys.trapps.controller;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,19 +21,21 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insys.trapps.model.Address;
 import com.insys.trapps.model.Business;
 import com.insys.trapps.model.BusinessType;
-import com.insys.trapps.respositories.BusinessRepository;
+import com.insys.trapps.service.BusinessService;
 import com.insys.trapps.util.Builder;
 
 /**
@@ -42,7 +45,7 @@ import com.insys.trapps.util.Builder;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = MockServletContext.class)
-public class BusinessEntityControllerTest {
+public class BusinessControllerTest {
 
 	protected MockMvc mvc;
 
@@ -62,7 +65,7 @@ public class BusinessEntityControllerTest {
 	}
 
 	@Mock
-	private BusinessRepository businessRepository;
+	private BusinessService businessService;
 
 	private Business testBusiness;
 
@@ -80,19 +83,19 @@ public class BusinessEntityControllerTest {
 				.addLocation(address_1).addLocation(address_2).build();
 
 	}
-	
+
 	@Test
-	public void testlistClients() throws Exception {
-		Mockito.when(businessRepository.findAll()).then(new Answer() {
+	public void testlistBusinesses() throws Exception {
+		Mockito.when(businessService.listBusinesses()).then(new Answer() {
 			@Override
 			public List<Business> answer(InvocationOnMock invocation) throws Throwable {
 
-				return Arrays.asList(testBusiness);
+				return (Arrays.asList(testBusiness));
 			}
 
 		});
 
-		MvcResult result = mvc.perform(get("/business/")).andExpect(status().isOk())
+		MvcResult result = mvc.perform(get("/business")).andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith("application/json"))
 				.andReturn();
 
@@ -101,8 +104,8 @@ public class BusinessEntityControllerTest {
 	}
 
 	@Test
-	public void testCreateClient() throws Exception {
-		Mockito.when(businessRepository.save(any(Business.class))).then(new Answer() {
+	public void testCreateBusiness() throws Exception {
+		Mockito.when(businessService.createBusiness(any(Business.class))).then(new Answer() {
 			@Override
 			public Business answer(InvocationOnMock invocation) throws Throwable {
 
@@ -110,9 +113,9 @@ public class BusinessEntityControllerTest {
 			}
 
 		});
-		MvcResult result = mvc.perform(get("/business/create")).andExpect(status().isOk())
-				.andExpect(content().contentTypeCompatibleWith("application/json"))
-				.andReturn();
+		ResultActions resultActions = mvc.perform(post("/business").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(testBusiness)));
+		
+		 MvcResult result = resultActions.andExpect(status().isCreated()).andExpect(content().contentTypeCompatibleWith("application/json")).andReturn();
 
 		String content = result.getResponse().getContentAsString();
 		assertNotNull(content);

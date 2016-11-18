@@ -1,10 +1,9 @@
 package com.insys.trapps;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.junit.Ignore;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -27,6 +26,13 @@ import com.insys.trapps.model.Business;
 import com.insys.trapps.model.BusinessType;
 import com.insys.trapps.util.Builder;
 
+/**
+ * {@link Integration Test using RestTemplate} for PersonnelServices.
+ * 
+ * @author  Kris Krishna
+ * @since 1.0.0
+**/
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BusinessRestIntegrationTest {
@@ -39,13 +45,11 @@ public class BusinessRestIntegrationTest {
 	  protected ObjectMapper objectMapper = new ObjectMapper();
 
 	@Test
-	//@Ignore
 	public void getBusinessList() {
-		ResponseEntity<Business> responseEntity = restTemplate.getForEntity("/business",
-				Business.class);
-		Business client = responseEntity.getBody();
+		ResponseEntity<List> responseEntity = restTemplate.getForEntity("/business",
+				List.class);
+		List clients = responseEntity.getBody();
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-		assertEquals("Foo", client.getName());
 	}
 
 	@Test
@@ -63,14 +67,13 @@ public class BusinessRestIntegrationTest {
 
 		HttpEntity<String> entity = new HttpEntity<String>(objectMapper.writeValueAsString(testBuisness), headers);
 
-		ResponseEntity<String> responseEntity = restTemplate.exchange("/business/",
-				HttpMethod.POST, entity, String.class);
+		ResponseEntity<Business> responseEntity = restTemplate.exchange("/business/", HttpMethod.POST, entity, Business.class);
 
-		// ResponseEntity<Business> responseEntity =
-		// restTemplate.postForEntity("/business", entity, Business.class);
-		// Business client = responseEntity.getBody();
+		// ResponseEntity<Business> responseEntity =  restTemplate.postForEntity("/business", entity, Business.class);
+		
+		 Business client = responseEntity.getBody();
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-		// assertEquals("test", client.getName());
+		assertEquals("test", client.getName());
 	}
 
 }

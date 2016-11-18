@@ -2,6 +2,13 @@ package com.insys.trapps.util;
 
 import java.util.HashSet;
 
+/**
+ * {@link BusinessBuilder} for PersonnelServices.
+ * Use this to use a test business in all tests
+ * @author  Kris Krishna
+ * @since 1.0.0
+**/
+
 import com.insys.trapps.model.Address;
 import com.insys.trapps.model.Business;
 import com.insys.trapps.model.BusinessType;

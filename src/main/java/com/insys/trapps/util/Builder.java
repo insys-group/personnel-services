@@ -6,6 +6,14 @@ import com.insys.trapps.model.Address;
 import com.insys.trapps.model.Business;
 import com.insys.trapps.model.BusinessType;
 import com.insys.trapps.model.Location;
+import com.insys.trapps.respositories.LocationRepository;
+
+/**
+ * {@link Builder} for PersonellServices.
+ *
+ * @author  Kris Krishna
+ * @since 1.0.0
+**/
 
 public class Builder {
 	
