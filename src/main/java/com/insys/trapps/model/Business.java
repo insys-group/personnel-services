@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;;
 
@@ -23,7 +24,7 @@ import javax.persistence.Table;;
 
 
 @Entity
-@Table(name = "business_entity")
+@Table(name = "business")
 public class Business {
 
 	// Client, Location and Address
@@ -41,7 +42,8 @@ public class Business {
 	@Enumerated(EnumType.STRING)
 	private BusinessType businessType;
 
-	@OneToMany(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany( cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@JoinColumn(name = "business_id", nullable = false)
 	private Collection<Location> locations;
 
 	public Business() {
@@ -123,12 +125,9 @@ public class Business {
 
 	@Override
 	public String toString() {
-		return "Business [businessId=" + businessId + ", name=" + name + ", description="
-				+ description + ", businessType=" + businessType + ", locations="
-				+ locations + "]";
+		return "Business [name=" + name + ", description=" + description
+				+ ", businessType=" + businessType + ", locations=" + locations + "]";
 	}
-
-	
 
 	
 

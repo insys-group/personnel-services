@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;;
 
@@ -33,13 +34,18 @@ public class Location {
 	private Address address;
 
 	@ManyToOne
-	@JoinColumn(name = "business_id")
 	@JsonIgnore
 	private Business business;
 
 	public Location() {
 
 	}
+	
+	public Location(Address address) {
+		super();
+		this.address = address;
+	}
+
 
 	public Location(Address address, Business business) {
 		this.address = address;
@@ -60,6 +66,14 @@ public class Location {
 
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+	
+	public Business getBusiness() {
+		return business;
+	}
+
+	public void setBusiness(Business business) {
+		this.business = business;
 	}
 
 	@Override
@@ -90,10 +104,8 @@ public class Location {
 
 	@Override
 	public String toString() {
-		return "Location [locationId=" + locationId + ", address=" + address + "]";
+		return "Location [address=" + address + "]";
 	}
-
-	
 
 
 }
