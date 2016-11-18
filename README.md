@@ -6,7 +6,7 @@ Project
 Personnel  
 Skills  
  
-##develop branch works on CF right now. Haven't tested on pcf dev.  
+##develop branch works on CF right now.  
 
 ##Build and push to CF (for now) 
 mvn -Dmaven.test.skip=true clean package  
