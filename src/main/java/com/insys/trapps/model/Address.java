@@ -10,13 +10,12 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.insys.trapps.controller.BusinessController;
 
-
 /**
  * {@link Address Entity} for PersonellServices.
  *
- * @author  Kris Krishna
+ * @author Kris Krishna
  * @since 1.0.0
-**/
+ **/
 
 @Entity
 @Table(name = "address")
@@ -34,8 +33,7 @@ public class Address {
 	@Column(name = "ZIP_CODE", nullable = false)
 	private String zip;
 
-	
-	@OneToOne(mappedBy="address")
+	@OneToOne(mappedBy = "address")
 	@JsonIgnore
 	private Location location;
 
@@ -44,7 +42,6 @@ public class Address {
 	}
 
 	public Address(String street, String city, String state, String zip) {
-		super();
 		this.street = street;
 		this.city = city;
 		this.state = state;
@@ -124,47 +121,40 @@ public class Address {
 		if (addressId == null) {
 			if (other.addressId != null)
 				return false;
-		}
-		else if (!addressId.equals(other.addressId))
+		} else if (!addressId.equals(other.addressId))
 			return false;
 		if (city == null) {
 			if (other.city != null)
 				return false;
-		}
-		else if (!city.equals(other.city))
+		} else if (!city.equals(other.city))
 			return false;
 		if (location == null) {
 			if (other.location != null)
 				return false;
-		}
-		else if (!location.equals(other.location))
+		} else if (!location.equals(other.location))
 			return false;
 		if (state == null) {
 			if (other.state != null)
 				return false;
-		}
-		else if (!state.equals(other.state))
+		} else if (!state.equals(other.state))
 			return false;
 		if (street == null) {
 			if (other.street != null)
 				return false;
-		}
-		else if (!street.equals(other.street))
+		} else if (!street.equals(other.street))
 			return false;
 		if (zip == null) {
 			if (other.zip != null)
 				return false;
-		}
-		else if (!zip.equals(other.zip))
+		} else if (!zip.equals(other.zip))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Address [addressId=" + addressId + ", street=" + street + ", city=" + city
-				+ ", state=" + state + ", zip=" + zip + "]";
+		return "Address [addressId=" + addressId + ", street=" + street + ", city=" + city + ", state=" + state
+				+ ", zip=" + zip + "]";
 	}
-
 
 }
