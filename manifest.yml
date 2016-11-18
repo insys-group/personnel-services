@@ -5,6 +5,8 @@ applications:
   disk_quota: 512M
   stack: cflinuxfs2
   buildpack: java_buildpack
+  host: trapps
+  path: /api
   services:
     - mysqldb
   #env:
