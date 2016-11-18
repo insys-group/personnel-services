@@ -30,6 +30,13 @@ import com.insys.trapps.respositories.BusinessRepository;
 import com.insys.trapps.service.impl.BusinessServiceImpl;
 import com.insys.trapps.util.Builder;
 
+/**
+ * {@link BusinessService Implementation Test} for PersoneelServices.
+ *
+ * @author Kris Krishna
+ * @since 1.0.0
+ **/
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = MockServletContext.class)
