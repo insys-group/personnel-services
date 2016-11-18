@@ -42,7 +42,7 @@ public class Business {
 	@Enumerated(EnumType.STRING)
 	private BusinessType businessType;
 
-	@OneToMany( cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "business_id", nullable = false)
 	private Collection<Location> locations;
 

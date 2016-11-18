@@ -33,23 +33,13 @@ public class Location {
 	@JoinColumn(name = "address_id", nullable = false)
 	private Address address;
 
-	@ManyToOne
-	@JsonIgnore
-	private Business business;
 
 	public Location() {
 
 	}
 	
 	public Location(Address address) {
-		super();
 		this.address = address;
-	}
-
-
-	public Location(Address address, Business business) {
-		this.address = address;
-		this.business = business;
 	}
 
 	public Long getLocationId() {
@@ -68,13 +58,6 @@ public class Location {
 		this.address = address;
 	}
 	
-	public Business getBusiness() {
-		return business;
-	}
-
-	public void setBusiness(Business business) {
-		this.business = business;
-	}
 
 	@Override
 	public int hashCode() {
