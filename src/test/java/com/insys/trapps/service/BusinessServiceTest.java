@@ -28,7 +28,7 @@ import com.insys.trapps.model.Business;
 import com.insys.trapps.model.BusinessType;
 import com.insys.trapps.respositories.BusinessRepository;
 import com.insys.trapps.service.impl.BusinessServiceImpl;
-import com.insys.trapps.util.Builder;
+import com.insys.trapps.util.BusinessBuilder;
 
 /**
  * {@link BusinessService Implementation Test} for PersoneelServices.
@@ -71,7 +71,7 @@ public class BusinessServiceTest {
 		Address address_1 = new Address("Insys Street", "Denver", "CO", "80014");
 		Address address_2 = new Address("Luxoft Street", "Seattle", "WA", "70014");
 
-		testBusiness = Builder
+		testBusiness = BusinessBuilder
 				.buildBusiness("test", "testing-denver", BusinessType.Client)
 				.addLocation(address_1).addLocation(address_2).build();
 

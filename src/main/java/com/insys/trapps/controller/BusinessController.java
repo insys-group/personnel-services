@@ -44,16 +44,6 @@ public class BusinessController {
 
 	@RequestMapping(value = { "", "/" }, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Business> createBusiness(@RequestBody Business request) throws Exception {
-		/*
-		 * Address address_1 = new Address("Insys Street", "Denver", "CO",
-		 * "80014"); Address address_2 = new Address("Luxoft Street", "Seattle",
-		 * "WA", "70014");
-		 * 
-		 * Business client = Builder.buildBusiness("test", "testing-denver",
-		 * BusinessType.INSYS).addLocation(address_1).addLocation(address_2).
-		 * build();
-		 * 
-		 */
 
 		Business business = businessService.createBusiness(request);
 		HttpHeaders responseHeaders = new HttpHeaders();

@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -18,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,7 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insys.trapps.model.Address;
 import com.insys.trapps.model.Business;
 import com.insys.trapps.model.BusinessType;
-import com.insys.trapps.util.Builder;
+import com.insys.trapps.util.BusinessBuilder;
 
 /**
  * {@link Integration Test using Spring MVC } for PersonnelServices. One can load the real
@@ -99,7 +97,7 @@ public class BusinessSpringIntegrationTests {
 		Address address_1 = new Address("Insys Street", "Denver", "CO", "80014");
 		Address address_2 = new Address("Luxoft Street", "Seattle", "WA", "70014");
 
-		Business testBuisness = Builder
+		Business testBuisness = BusinessBuilder
 				.buildBusiness("test", "testing-denver", BusinessType.INSYS)
 				.addLocation(address_1).addLocation(address_2).build();
 
