@@ -2,37 +2,38 @@ package com.insys.trapps.util;
 
 import java.util.HashSet;
 
-/**
- * {@link BusinessBuilder} for PersonnelServices.
- * Use this to use a test business in all tests
- * @author  Kris Krishna
- * @since 1.0.0
-**/
-
 import com.insys.trapps.model.Address;
 import com.insys.trapps.model.Business;
 import com.insys.trapps.model.BusinessType;
 import com.insys.trapps.model.Location;
+import com.insys.trapps.respositories.LocationRepository;
 
-public class BusinessBuilder {
+/**
+ * {@link Builder} for PersonellServices.
+ *
+ * @author  Kris Krishna
+ * @since 1.0.0
+**/
 
+public class Builder {
+	
 	private Business business=new Business();
 	
-	public static BusinessBuilder buildBusiness(String name, String description, BusinessType businesType) {
-		BusinessBuilder builder = new BusinessBuilder();
+	public static Builder buildBusiness(String name, String description, BusinessType businesType) {
+		Builder builder = new Builder();
 		builder.business.setDescription(description);
 		builder.business.setName(name);
 		builder.business.setBusinessType(businesType);
 		return builder;
 	}
 	
-	public static BusinessBuilder buildBusiness(Business business) {
-		BusinessBuilder builder = new BusinessBuilder();
+	public static Builder buildBusiness(Business business) {
+		Builder builder = new Builder();
 		builder.business=business;
 		return builder;
 	}
 	
-	public BusinessBuilder addLocation(Address address) {
+	public Builder addLocation(Address address) {
 		if(business.getLocations()==null) {
 			business.setLocations(new HashSet<>());
 		}
@@ -52,4 +53,5 @@ public class BusinessBuilder {
 		return business;
 	}
 
+	
 }

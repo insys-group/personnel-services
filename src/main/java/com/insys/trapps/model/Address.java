@@ -4,9 +4,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.insys.trapps.controller.BusinessController;
+
+/**
+ * {@link Address Entity} for PersonellServices.
+ *
+ * @author Kris Krishna
+ * @since 1.0.0
+ **/
 
 @Entity
 @Table(name = "address")
@@ -24,15 +33,15 @@ public class Address {
 	@Column(name = "ZIP_CODE", nullable = false)
 	private String zip;
 
-	@OneToOne
-	@JoinColumn(name = "address_id", nullable = false)
+	@OneToOne(mappedBy = "address")
+	@JsonIgnore
 	private Location location;
 
 	public Address() {
+		super();
 	}
 
-	public Address(Long addressId, String street, String city, String state, String zip) {
-		this.addressId = addressId;
+	public Address(String street, String city, String state, String zip) {
 		this.street = street;
 		this.city = city;
 		this.state = state;
@@ -78,6 +87,7 @@ public class Address {
 	public void setZip(String zip) {
 		this.zip = zip;
 	}
+
 	public Location getLocation() {
 		return location;
 	}
@@ -85,6 +95,7 @@ public class Address {
 	public void setLocation(Location location) {
 		this.location = location;
 	}
+
 
 	@Override
 	public int hashCode() {
@@ -116,4 +127,5 @@ public class Address {
 		return "Address [address_id=" + addressId + ", street=" + street + ", city=" + city + ", state=" + state
 				+ ", zip=" + zip + "]";
 	}
+
 }

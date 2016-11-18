@@ -13,6 +13,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;;
 
+/**
+ * {@link Business Entity} for PersonellServices.
+ *
+ * @author  Kris Krishna
+ * @since 1.0.0
+**/
+
+
 @Entity
 @Table(name = "business_entity")
 public class Business {
@@ -30,20 +38,22 @@ public class Business {
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	private BusinessType type;
+	private BusinessType businessType;
 
-	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Collection<Location> locations;
 
 	public Business() {
 	}
 
-	public Business(String name, String description, BusinessType type, Collection<Location> locations) {
+	public Business(String name, String description, BusinessType businessType,
+			Collection<Location> locations) {
 		this.name = name;
 		this.description = description;
-		this.type = type;
+		this.businessType = businessType;
 		this.locations = locations;
 	}
+
 
 	public Long getBusinessId() {
 		return businessId;
@@ -69,12 +79,12 @@ public class Business {
 		this.description = description;
 	}
 
-	public BusinessType getEntityType() {
-		return type;
+	public BusinessType getBusinessType() {
+		return businessType;
 	}
 
-	public void setEntityType(BusinessType entityType) {
-		this.type = entityType;
+	public void setBusinessType(BusinessType businessType) {
+		this.businessType = businessType;
 	}
 
 	public Collection<Location> getLocations() {
@@ -112,8 +122,13 @@ public class Business {
 
 	@Override
 	public String toString() {
-		return "Client [business_entity_id=" + businessId + ", name=" + name + ", description=" + description
-				+ ", entity_type=" + type + ", locations=" + locations + "]";
+		return "Business [businessId=" + businessId + ", name=" + name + ", description="
+				+ description + ", businessType=" + businessType + ", locations="
+				+ locations + "]";
 	}
+
+	
+
+	
 
 }

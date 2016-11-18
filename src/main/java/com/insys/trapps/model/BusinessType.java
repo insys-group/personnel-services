@@ -1,7 +1,16 @@
 package com.insys.trapps.model;
 
+/**
+ * {@link Enum} for PersonellServices.
+ *
+ * @author  Kris Krishna
+ * @since 1.0.0
+**/
+
 public enum BusinessType {
-	CONSULTING_TYPE,
-    BUSINESS_TYPE,
-    DIRECT_CLIENT
+	Vendor,
+	Client,
+	Pivotal,
+	PivotalLabs, 
+	INSYS
 }
