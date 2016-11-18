@@ -48,7 +48,6 @@ public class Business {
 
 	public Business(String name, String description, BusinessType businessType,
 			Collection<Location> locations) {
-		super();
 		this.name = name;
 		this.description = description;
 		this.businessType = businessType;
