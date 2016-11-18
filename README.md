@@ -8,8 +8,8 @@ Skills
  
 ##develop branch works on CF right now.  
 
-##Build and push to CF (for now) 
-mvn -Dmaven.test.skip=true clean package  
+##Build and push to CF 
+mvn clean package  
 
 --next line for PWS  
 cf create-service cleardb spark mysqldb  
