@@ -5,7 +5,6 @@ instances: 1
 applications:
 - name: trapps-api
   host: trapps
-  path: /api
   buildpack: java_buildpack
   stack: cflinuxfs2
   services:

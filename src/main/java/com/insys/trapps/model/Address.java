@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.insys.trapps.controller.BusinessController;
@@ -19,35 +20,24 @@ import com.insys.trapps.controller.BusinessController;
  **/
 
 @Entity
-@Table(name = "address")
 public class Address {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long addressId;
-	@Column(nullable = false)
-	private String street;
-	@Column(nullable = false)
+	@NotNull
+	private String address1;
+	private String address2;
+	@NotNull
 	private String city;
-	@Column(nullable = false)
+	@NotNull
 	private String state;
-	@Column(name = "ZIP_CODE", nullable = false)
-	private String zip;
+	@NotNull
+	private String zipCode;
 
-	@OneToOne(mappedBy = "address")
 	@JsonIgnore
+	@OneToOne(mappedBy = "address")
 	private Location location;
-
-	public Address() {
-		super();
-	}
-
-	public Address(String street, String city, String state, String zip) {
-		this.street = street;
-		this.city = city;
-		this.state = state;
-		this.zip = zip;
-	}
 
 	public Long getAddressId() {
 		return addressId;
@@ -57,12 +47,20 @@ public class Address {
 		this.addressId = addressId;
 	}
 
-	public String getStreet() {
-		return street;
+	public String getAddress1() {
+		return address1;
 	}
 
-	public void setStreet(String street) {
-		this.street = street;
+	public void setAddress1(String address1) {
+		this.address1 = address1;
+	}
+
+	public String getAddress2() {
+		return address2;
+	}
+
+	public void setAddress2(String address2) {
+		this.address2 = address2;
 	}
 
 	public String getCity() {
@@ -81,12 +79,12 @@ public class Address {
 		this.state = state;
 	}
 
-	public String getZip() {
-		return zip;
+	public String getZipCode() {
+		return zipCode;
 	}
 
-	public void setZip(String zip) {
-		this.zip = zip;
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
 	}
 
 	public Location getLocation() {
@@ -102,7 +100,7 @@ public class Address {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((street == null) ? 0 : street.hashCode());
+		result = prime * result + ((address1 == null) ? 0 : address1.hashCode());
 		return result;
 	}
 
@@ -115,18 +113,18 @@ public class Address {
 		if (getClass() != obj.getClass())
 			return false;
 		Address other = (Address) obj;
-		if (street == null) {
-			if (other.street != null)
+		if (address1 == null) {
+			if (other.address1 != null)
 				return false;
-		} else if (!street.equals(other.street))
+		} else if (!address1.equals(other.address1))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Address [address_id=" + addressId + ", street=" + street + ", city=" + city + ", state=" + state
-				+ ", zip=" + zip + "]";
+		return "Address [address_id=" + addressId + ", street=" + address1 + ", city=" + city + ", state=" + state
+				+ ", zip=" + zipCode + "]";
 	}
 
 }

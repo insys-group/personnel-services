@@ -13,7 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;;
 
 /**
  * {@link Business Entity} for PersonellServices.
@@ -24,7 +25,6 @@ import javax.persistence.Table;;
 
 
 @Entity
-@Table(name = "business")
 public class Business {
 
 	// Client, Location and Address
@@ -32,31 +32,19 @@ public class Business {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long businessId;
 
-	@Column(nullable = false)
+	@NotNull
 	private String name;
 
-	@Column(nullable = false)
+	@NotNull
 	private String description;
 
-	@Column(nullable = false)
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private BusinessType businessType;
 
 	@OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "business_id", nullable = false)
 	private Collection<Location> locations;
-
-	public Business() {
-	}
-
-	public Business(String name, String description, BusinessType businessType,
-			Collection<Location> locations) {
-		this.name = name;
-		this.description = description;
-		this.businessType = businessType;
-		this.locations = locations;
-	}
-
 
 	public Long getBusinessId() {
 		return businessId;
@@ -128,7 +116,5 @@ public class Business {
 		return "Business [name=" + name + ", description=" + description
 				+ ", businessType=" + businessType + ", locations=" + locations + "]";
 	}
-
-	
 
 }

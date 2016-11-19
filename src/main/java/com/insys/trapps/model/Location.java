@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;;
  **/
 
 @Entity
-@Table(name = "location")
 public class Location {
 
 	@Id
@@ -89,6 +88,5 @@ public class Location {
 	public String toString() {
 		return "Location [address=" + address + "]";
 	}
-
 
 }
