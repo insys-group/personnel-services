@@ -2,6 +2,8 @@ package com.insys.trapps;
 
 import com.insys.trapps.model.*;
 import com.insys.trapps.repository.EngagementRepository;
+import com.insys.trapps.repository.RoleRepository;
+import com.insys.trapps.repository.SkillRepository;
 import com.insys.trapps.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -13,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * @author Vladiomir Nalitkin
- *         Unit tests for Engagement repository. It uses H2 as in-memory database.
+ *         Unit tests for Engagement engagementRepository. It uses H2 as in-memory database.
  *         These tests validates the save/update of the Engagement and related EngagementStep objects.
  */
 @RunWith(SpringRunner.class)
@@ -30,7 +33,13 @@ import static org.junit.Assert.assertTrue;
 public class EngagementRepositoryTests {
 
     @Autowired
-    private EngagementRepository repository;
+    private EngagementRepository engagementRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private SkillRepository skillRepository;
 
     private Engagement testEngagement;
     private EngagementOpening testEngagementOpening;
@@ -54,10 +63,12 @@ public class EngagementRepositoryTests {
         testSkill = SkillBuilder.buildSkill("Skill 1")
                 .name("Skill 1")
                 .build();
+        skillRepository.save(testSkill);
         testRole = RoleBuilder.buildRole("Role 1")
                 .name("Role 1")
                 .addSkill(testSkill)
                 .build();
+        roleRepository.save(testRole);
         testEngagementOpening = EngagementOpeningBuilder.buildEngagementOpening("EngagementOpening 1")
                 .rate(BigDecimal.TEN)
                 .addContract(testContract)
@@ -70,29 +81,31 @@ public class EngagementRepositoryTests {
     }
 
     private void saveAll() {
-        testEngagementList.forEach(item -> repository.save(item));
+        testEngagementList.forEach(item -> engagementRepository.save(item));
     }
 
     private void deleteAll() {
-        testEngagementList.forEach(item -> repository.delete(item));
+        testEngagementList.forEach(item -> engagementRepository.delete(item));
     }
 
     /*
      * Method to test Repository functionality for creating new.
      */
     @Test
-    public void testSaveContract() throws Exception {
-        log.debug("Enter: testSaveContract");
+    public void testSave() throws Exception {
+        log.debug("Enter: testSave " + engagementRepository.getClass().toString());
         saveAll();
 
-        repository.findAll().forEach(item -> assertNotNull(item.getId()));
-        List<Engagement> engagements = repository.findByComments("Engagement 1");
-        engagements.forEach(cont -> assertTrue(testEngagementList.indexOf(cont) > -1));
+        engagementRepository.findAll().forEach(item -> assertNotNull(item.getId()));
+        Set<Engagement> engagementsFromRepositorySet = new HashSet<>();
+        engagementRepository.findAll().forEach(engagementsFromRepositorySet::add);
+        testEngagementList.containsAll(engagementsFromRepositorySet);
+        engagementsFromRepositorySet.forEach(item -> item
+                .getEngagementOpenings()
+                .containsAll(testEngagementList.get(testEngagementList.indexOf(item)).getEngagementOpenings())
+        );
+        engagementsFromRepositorySet.forEach(item -> log.debug("Engagement : " + item.toString()));
 
-        Set<EngagementOpening> engagementOpenings = engagements.get(0).getEngagementOpenings();
-        assertTrue(engagementOpenings.size() == testEngagement.getEngagementOpenings().size());
-
-        log.debug("EngagementOpenings is " + engagements.get(0));
         deleteAll();
     }
 
@@ -100,24 +113,26 @@ public class EngagementRepositoryTests {
      * Method to test Repository functionality for update.
      */
     @Test
-    public void testUpdateOpportunity() throws Exception {
-        log.debug("Enter: testUpdateContract");
+    public void testUpdate() throws Exception {
+        log.debug("Enter: testUpdate " + engagementRepository.getClass().toString());
         saveAll();
 
-        repository.findAll().forEach(item -> assertNotNull(item.getId()));
-        List<Engagement> engagements = repository.findByComments("Engagement 1");
-        engagements.forEach(item -> assertTrue(testEngagementList.indexOf(item) > -1));
+        Set<Engagement> engagementsFromRepositorySet = new HashSet<>();
+        engagementRepository.findAll().forEach(engagementsFromRepositorySet::add);
 
-        Engagement testEngagement1 = EngagementBuilder.buildEngagement(engagements.get(0)).build();
-        testEngagement.setComments("Engagement 1 Updated");
-        repository.save(testEngagement);
+        Engagement testEngagementNew = (Engagement) engagementsFromRepositorySet.toArray()[0];
+        testEngagementNew.setComments("Engagement 1 Updated");
+        engagementRepository.save(testEngagementNew);
 
-        engagements = repository.findByComments("Engagement 1 Updated");
-        Set<EngagementOpening> details = engagements.get(0).getEngagementOpenings();
+        engagementsFromRepositorySet.clear();
+        engagementRepository.findAll().forEach(engagementsFromRepositorySet::add);
+        testEngagementList.containsAll(engagementsFromRepositorySet);
+        engagementsFromRepositorySet.forEach(item -> item
+                .getEngagementOpenings()
+                .containsAll(testEngagementList.get(testEngagementList.indexOf(item)).getEngagementOpenings())
+        );
 
-        assertTrue(details.size() == testEngagement.getEngagementOpenings().size());
-
-        log.debug("Engagements is " + engagements.get(0));
+        engagementsFromRepositorySet.forEach(item -> log.debug("Engagement : " + item.toString()));
 
         deleteAll();
     }

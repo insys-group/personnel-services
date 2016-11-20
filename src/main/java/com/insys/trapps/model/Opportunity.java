@@ -1,5 +1,6 @@
 package com.insys.trapps.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;

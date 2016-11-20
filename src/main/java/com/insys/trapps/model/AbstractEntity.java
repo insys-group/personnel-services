@@ -4,11 +4,12 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.security.Timestamp;
+import java.util.Date;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@ToString(exclude = "id")
-@EqualsAndHashCode(exclude = "id")
+@ToString(exclude = {"id","version"})
+@EqualsAndHashCode(exclude = {"id","version"})
 @AllArgsConstructor
 @NoArgsConstructor
 public abstract class AbstractEntity {
@@ -19,16 +20,12 @@ public abstract class AbstractEntity {
     @Setter
     protected Long id;
 
-    @Column(name = "CREATE_DATE")
-    @Getter
-    @Setter
-    protected Timestamp createDate;
-
-    @Column(name = "VERSION")
     @Getter
     @Setter
     @Version
-    protected Long version;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "VERSION")
+    private Date version;
 
     @Column(name = "COMMENTS")
     @Getter

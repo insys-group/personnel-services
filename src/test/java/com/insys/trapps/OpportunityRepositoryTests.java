@@ -3,6 +3,10 @@ package com.insys.trapps;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -23,8 +27,8 @@ import com.insys.trapps.util.OpportunityBuilder;
 
 /**
  * @author Muhammad Sabir
- * Unit tests for Opportunity repository. It uses H2 as in-memory database.
- * These tests validates the save/update of the Opportunity and related OpportunityStep objects.  
+ *         Unit tests for Opportunity repository. It uses H2 as in-memory database.
+ *         These tests validates the save/update of the Opportunity and related OpportunityStep objects.
  */
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -35,34 +39,41 @@ public class OpportunityRepositoryTests {
     private OpportunityRepository repository;
 
     private Opportunity testOpportunity;
-    
+
     /*
      * Initialize testOpportunity (a subject) before every test method execution.
      */
     @Before
     public void beforeEachMethod() {
-    	testOpportunity=OpportunityBuilder.buildOpportunity("Comcast opportunity").addStep("Step 1").addStep("Step 2").build();
+        testOpportunity = OpportunityBuilder.buildOpportunity("Comcast opportunity").addStep("Step 1").addStep("Step 2").build();
     }
-    
+
+
+    @Test
+    public void testEquals() {
+        Timestamp l = Timestamp.valueOf(LocalDateTime.now());
+        OpportunityStep s1 = new OpportunityStep(null, "Strp", l);
+        OpportunityStep s2 = new OpportunityStep(null, "Strp", l);
+        assertTrue(s1.equals(s2));
+        assertTrue(s1.hashCode() == s2.hashCode());
+    }
+
     /*
      * Method to test OpportunityRepository functionality for creating new opportunities.
      */
     @Test
     public void testSaveOpportunity() throws Exception {
-    	log.debug("Enter: testSaveOpportunity");
+        log.debug("Enter: testSaveOpportunity");
         this.repository.save(testOpportunity);
-        List<Opportunity> opportunities = this.repository.findByComments("Comcast opportunity");
-        
-        assertTrue(opportunities.size()==1);
-        assertNotNull(opportunities.get(0).getId());
-        
+        List<Opportunity> opportunitiesFromRepository = this.repository.findByComments("Comcast opportunity");
+
+        assertTrue(opportunitiesFromRepository.size() == 1);
+        assertNotNull(opportunitiesFromRepository.get(0).getId());
+
         //TODO Need to change this using hamcrest/mockito which can compare the whole list
-        Set<OpportunityStep> steps=opportunities.get(0).getSteps();
-        assertTrue(steps.size()==testOpportunity.getSteps().size());
-        steps.stream().forEach(step->{
-        	assertTrue(testOpportunity.getSteps().contains(step));
-        	assertNotNull(step.getStepTimestamp());
-        });
+        Set<OpportunityStep> stepsFromRepository = opportunitiesFromRepository.get(0).getSteps();
+        Set<OpportunityStep> testSteps = testOpportunity.getSteps();
+        assertTrue(stepsFromRepository.containsAll(testSteps));
         this.repository.delete(testOpportunity);
     }
     
@@ -71,28 +82,28 @@ public class OpportunityRepositoryTests {
 
     @Test
     public void testUpdateOpportunity() throws Exception {
-    	log.debug("Enter: testUpdateOpportunity");
-    	this.repository.save(testOpportunity);
+        log.debug("Enter: testUpdateOpportunity");
+        this.repository.save(testOpportunity);
         List<Opportunity> opportunities = this.repository.findByComments("Comcast opportunity");
-        assertTrue(opportunities.size()==1);
+        assertTrue(opportunities.size() == 1);
         assertNotNull(opportunities.get(0).getId());
-        
-        this.testOpportunity=OpportunityBuilder.buildOpportunity(opportunities.get(0)).addStep("Step 3").build();
+
+        this.testOpportunity = OpportunityBuilder.buildOpportunity(opportunities.get(0)).addStep("Step 3").build();
         this.testOpportunity.setComments("Comcast Opportunity Updated");
         this.repository.save(this.testOpportunity);
-        
+
         opportunities = this.repository.findByComments("Comcast Opportunity Updated");
-        Set<OpportunityStep> steps=opportunities.get(0).getSteps();
-        
-        assertTrue(steps.size()==testOpportunity.getSteps().size());
-        
+        Set<OpportunityStep> steps = opportunities.get(0).getSteps();
+
+        assertTrue(steps.size() == testOpportunity.getSteps().size());
+
         log.debug("Opportunity is " + opportunities.get(0));
-        
+
         //TODO Need to change this using hemcrest/mockito
-        steps.stream().forEach(step->{
-        	log.debug("Step is " + step.toString());
-        	assertTrue(testOpportunity.getSteps().contains(step));
-        	assertNotNull(step.getStepTimestamp());
+        steps.forEach(step -> {
+            log.debug("Step is " + step.toString());
+            assertTrue(testOpportunity.getSteps().contains(step));
+            assertNotNull(step.getStepTimestamp());
         });
         this.repository.delete(testOpportunity);
     }

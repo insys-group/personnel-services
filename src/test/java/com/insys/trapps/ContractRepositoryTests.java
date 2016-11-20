@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -68,11 +69,11 @@ public class ContractRepositoryTests {
         testContractList.add(testContract2);
     }
 
-    private void saveAll(){
+    private void saveAll() {
         testContractList.forEach(item -> repository.save(item));
     }
 
-    private void deleteAll(){
+    private void deleteAll() {
         testContractList.forEach(item -> repository.delete(item));
     }
 
@@ -80,17 +81,20 @@ public class ContractRepositoryTests {
      * Method to test ContractyRepository functionality for creating new Contracts.
      */
     @Test
-    public void testSaveContract() throws Exception {
-        log.debug("Enter: testSaveContract");
+    public void testSave() throws Exception {
+        log.debug("Enter: testSave " + repository.getClass().toString());
         saveAll();
-        repository.findAll().forEach(contract -> assertNotNull(contract.getId()));
-        List<Contract> contracts = repository.findByComments("Contract 2");
-        contracts.forEach(cont -> assertTrue(testContractList.indexOf(cont) > -1));
 
-        Set<ContractDetail> contractDetails = contracts.get(0).getContractDetails();
-        assertTrue(contractDetails.size() == testContract2.getContractDetails().size());
+        repository.findAll().forEach(item -> assertNotNull(item.getId()));
+        Set<Contract> contractsFromRepositorySet = new HashSet<>();
+        repository.findAll().forEach(contractsFromRepositorySet::add);
+        testContractList.containsAll(contractsFromRepositorySet);
+        contractsFromRepositorySet.forEach(item -> item
+                .getContractDetails()
+                .containsAll(testContractList.get(testContractList.indexOf(item)).getContractDetails())
+        );
+        contractsFromRepositorySet.forEach(item -> log.debug("contract : " + item.toString()));
 
-        log.debug("Opportunity is " + contracts.get(0));
         deleteAll();
     }
 
@@ -98,24 +102,26 @@ public class ContractRepositoryTests {
     * Method to test Repository functionality for update.
     */
     @Test
-    public void testUpdateOpportunity() throws Exception {
-        log.debug("Enter: testUpdateContract");
+    public void testUpdate() throws Exception {
+        log.debug("Enter: testUpdate " + repository.getClass().toString());
         saveAll();
 
-        List<Contract> contracts = this.repository.findByComments("Contract 1");
-        assertTrue(contracts.size() == 1);
-        assertNotNull(contracts.get(0).getId());
+        Set<Contract> contractsFromRepositorySet = new HashSet<>();
+        repository.findAll().forEach(contractsFromRepositorySet::add);
 
-        Contract testContract = ContractBuilder.buildContract(contracts.get(0)).addDetail(testContractDetail3).build();
-        testContract.setComments("Contract 1 Updated");
-        repository.save(testContract);
+        Contract testContractNew = (Contract) contractsFromRepositorySet.toArray()[0];
+        testContractNew.setComments("contract 1 Updated");
+        repository.save(testContractNew);
 
-        contracts = repository.findByComments("Contract 1 Updated");
-        Set<ContractDetail> details = contracts.get(0).getContractDetails();
+        contractsFromRepositorySet.clear();
+        repository.findAll().forEach(contractsFromRepositorySet::add);
+        testContractList.containsAll(contractsFromRepositorySet);
+        contractsFromRepositorySet.forEach(item -> item
+                .getContractDetails()
+                .containsAll(testContractList.get(testContractList.indexOf(item)).getContractDetails())
+        );
 
-        assertTrue(details.size() == testContract.getContractDetails().size());
-
-        log.debug("Contract is " + contracts.get(0));
+        contractsFromRepositorySet.forEach(item -> log.debug("contract : " + item.toString()));
 
         deleteAll();
     }

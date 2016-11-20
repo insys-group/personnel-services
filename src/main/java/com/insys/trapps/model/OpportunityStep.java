@@ -8,6 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "OPPORTUNITY_STEP")
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class OpportunityStep extends AbstractEntity{
