@@ -12,6 +12,7 @@ import java.util.Set;
 @Table(name = "LOCATION")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Location extends AbstractEntity {
 
     @Getter

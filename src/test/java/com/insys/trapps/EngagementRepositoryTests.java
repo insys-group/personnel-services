@@ -4,7 +4,6 @@ import com.insys.trapps.model.*;
 import com.insys.trapps.repository.EngagementRepository;
 import com.insys.trapps.repository.RoleRepository;
 import com.insys.trapps.repository.SkillRepository;
-import com.insys.trapps.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,14 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author Vladiomir Nalitkin
@@ -41,12 +37,6 @@ public class EngagementRepositoryTests {
     @Autowired
     private SkillRepository skillRepository;
 
-    private Engagement testEngagement;
-    private EngagementOpening testEngagementOpening;
-    private Contract testContract;
-    private ContractDetail testContractDetail;
-    private Role testRole;
-    private Skill testSkill;
     private List<Engagement> testEngagementList = new ArrayList<>();
 
     /*
@@ -54,30 +44,167 @@ public class EngagementRepositoryTests {
      */
     @Before
     public void beforeEachMethod() {
-        testContractDetail = ContractDetailBuilder.buildContractDetail("Contract Detail 1")
-                .rate(BigDecimal.TEN)
-                .build();
-        testContract = ContractBuilder.buildContract("Contract 1")
-                .addDetail(testContractDetail)
-                .build();
-        testSkill = SkillBuilder.buildSkill("Skill 1")
-                .name("Skill 1")
-                .build();
-        skillRepository.save(testSkill);
-        testRole = RoleBuilder.buildRole("Role 1")
+        Set<Skill> testSkillSet = new HashSet<>(
+                Arrays.asList(
+                        Skill.builder().name("Skill 1").build()
+                        , Skill.builder().name("Skill 2").build()
+                        , Skill.builder().name("Skill 3").build()
+                )
+        );
+        testSkillSet.forEach(skillRepository::save);
+
+        Role testRole = Role.builder()
                 .name("Role 1")
-                .addSkill(testSkill)
+                .skills(testSkillSet)
                 .build();
         roleRepository.save(testRole);
-        testEngagementOpening = EngagementOpeningBuilder.buildEngagementOpening("EngagementOpening 1")
-                .rate(BigDecimal.TEN)
-                .addContract(testContract)
-                .role(testRole)
-                .build();
-        testEngagement = EngagementBuilder.buildEngagement("Engagement 1")
-                .addEngagementOpening(testEngagementOpening)
-                .build();
-        testEngagementList.add(testEngagement);
+
+        testEngagementList = Arrays.asList(
+                Engagement.builder()
+                        .comments("Engagement 1")
+                        .engagementOpenings(new HashSet<>(
+                                        Arrays.asList(
+                                                EngagementOpening.builder()
+                                                        .comments("EngagementOpening E1EO1")
+                                                        .rate(BigDecimal.TEN)
+                                                        .role(testRole)
+                                                        .contracts(new HashSet<>(
+                                                                        Arrays.asList(
+                                                                                Contract.builder()
+                                                                                        .comments("Contract E1EO1C1")
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E1EO1C1CD1")
+                                                                                                .rate(BigDecimal.TEN)
+                                                                                                .build())
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E1EO1C1CD2")
+                                                                                                .rate(BigDecimal.ONE)
+                                                                                                .build())
+                                                                                        .build()
+                                                                                , Contract.builder()
+                                                                                        .comments("Contract E1EO1C2")
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E1EO1C2CD1")
+                                                                                                .rate(BigDecimal.TEN)
+                                                                                                .build())
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E1EO1C2CD2")
+                                                                                                .rate(BigDecimal.ONE)
+                                                                                                .build())
+                                                                                        .build()
+                                                                        )
+                                                                )
+                                                        )
+                                                        .build()
+                                                , EngagementOpening.builder()
+                                                        .comments("EngagementOpening E1EO2")
+                                                        .rate(BigDecimal.TEN)
+                                                        .role(testRole)
+                                                        .contracts(new HashSet<>(
+                                                                        Arrays.asList(
+                                                                                Contract.builder()
+                                                                                        .comments("Contract E1EO2C1")
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E1EO2C1CD1")
+                                                                                                .rate(BigDecimal.TEN)
+                                                                                                .build())
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E1EO2C1CD2")
+                                                                                                .rate(BigDecimal.ONE)
+                                                                                                .build())
+                                                                                        .build()
+                                                                                , Contract.builder()
+                                                                                        .comments("Contract E1EO2C2")
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E1EO2C2CD1")
+                                                                                                .rate(BigDecimal.TEN)
+                                                                                                .build())
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E1EO2C2CD2")
+                                                                                                .rate(BigDecimal.ONE)
+                                                                                                .build())
+                                                                                        .build()
+                                                                        )
+                                                                )
+                                                        )
+                                                        .build()
+                                        )
+                                )
+                        )
+                        .build()
+                , Engagement.builder()
+                        .comments("Engagement 2")
+                        .engagementOpenings(new HashSet<>(
+                                        Arrays.asList(
+                                                EngagementOpening.builder()
+                                                        .comments("EngagementOpening E2EO1")
+                                                        .rate(BigDecimal.TEN)
+                                                        .role(testRole)
+                                                        .contracts(new HashSet<>(
+                                                                        Arrays.asList(
+                                                                                Contract.builder()
+                                                                                        .comments("Contract E2EO1C1")
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E2EO1C1CD1")
+                                                                                                .rate(BigDecimal.TEN)
+                                                                                                .build())
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E2EO1C1CD2")
+                                                                                                .rate(BigDecimal.ONE)
+                                                                                                .build())
+                                                                                        .build()
+                                                                                , Contract.builder()
+                                                                                        .comments("Contract E2EO1C2")
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E2EO1C2CD1")
+                                                                                                .rate(BigDecimal.TEN)
+                                                                                                .build())
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E2EO1C2CD2")
+                                                                                                .rate(BigDecimal.ONE)
+                                                                                                .build())
+                                                                                        .build()
+                                                                        )
+                                                                )
+                                                        )
+                                                        .build()
+                                                , EngagementOpening.builder()
+                                                        .comments("EngagementOpening E2EO2")
+                                                        .rate(BigDecimal.TEN)
+                                                        .role(testRole)
+                                                        .contracts(new HashSet<>(
+                                                                        Arrays.asList(
+                                                                                Contract.builder()
+                                                                                        .comments("Contract E2EO2C1")
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E2EO2C1CD1")
+                                                                                                .rate(BigDecimal.TEN)
+                                                                                                .build())
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E2EO2C1CD2")
+                                                                                                .rate(BigDecimal.ONE)
+                                                                                                .build())
+                                                                                        .build()
+                                                                                , Contract.builder()
+                                                                                        .comments("Contract E2EO2C2")
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E2EO2C2CD1")
+                                                                                                .rate(BigDecimal.TEN)
+                                                                                                .build())
+                                                                                        .contractDetail(ContractDetail.builder()
+                                                                                                .comments("contractDetail E2EO2C2CD2")
+                                                                                                .rate(BigDecimal.ONE)
+                                                                                                .build())
+                                                                                        .build()
+                                                                        )
+                                                                )
+                                                        )
+                                                        .build()
+                                        )
+                                )
+                        )
+                        .build()
+        );
     }
 
     private void saveAll() {

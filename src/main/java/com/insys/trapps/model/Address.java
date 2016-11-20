@@ -12,6 +12,7 @@ import javax.xml.crypto.Data;
 @Table(name = "ADDRESS")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Address extends AbstractEntity {
 
     @Getter

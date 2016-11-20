@@ -10,6 +10,7 @@ import java.util.Set;
 @Table(name = "ENGAGEMENT_OPENING")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class EngagementOpening extends AbstractEntity {
 
     @Getter
@@ -34,6 +35,12 @@ public class EngagementOpening extends AbstractEntity {
     @Getter
     @Setter
     private BigDecimal rate;
+
+    @Column(name = "COMMENTS")
+    @Getter
+    @Setter
+    @NonNull
+    protected String comments;
 
     @Getter
     @Setter

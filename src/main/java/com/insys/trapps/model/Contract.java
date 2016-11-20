@@ -12,6 +12,7 @@ import java.util.Set;
 @Table(name = "CONTRACT")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Contract extends AbstractEntity {
 
     @Getter
@@ -26,8 +27,15 @@ public class Contract extends AbstractEntity {
     @JoinColumn(name = "PERSON_ID")
     private Person person;
 
+    @Column(name = "COMMENTS")
     @Getter
     @Setter
+    @NonNull
+    protected String comments;
+
+    @Getter
+    @Setter
+    @Singular
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
     private Set<ContractDetail> contractDetails;
 }

@@ -27,10 +27,4 @@ public abstract class AbstractEntity {
     @Column(name = "VERSION")
     private Date version;
 
-    @Column(name = "COMMENTS")
-    @Getter
-    @Setter
-    @NonNull
-    protected String comments;
-
 }

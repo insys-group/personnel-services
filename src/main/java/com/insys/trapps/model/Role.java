@@ -12,6 +12,7 @@ import java.util.Set;
 @Table(name = "ROLE")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Role extends AbstractEntity {
 
     @Getter

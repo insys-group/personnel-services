@@ -2,9 +2,6 @@ package com.insys.trapps;
 
 import com.insys.trapps.model.*;
 import com.insys.trapps.repository.ContractRepository;
-import com.insys.trapps.util.ContractBuilder;
-import com.insys.trapps.util.ContractDetailBuilder;
-import com.insys.trapps.util.OpportunityBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,10 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -33,13 +28,6 @@ public class ContractRepositoryTests {
     @Autowired
     private ContractRepository repository;
 
-    private Contract testContract1;
-    private Contract testContract2;
-
-    private ContractDetail testContractDetail1;
-    private ContractDetail testContractDetail2;
-    private ContractDetail testContractDetail3;
-
     private List<Contract> testContractList = new ArrayList<>();
 
     /*
@@ -47,26 +35,46 @@ public class ContractRepositoryTests {
      */
     @Before
     public void beforeEachMethod() {
-        testContractDetail1 = ContractDetailBuilder.buildContractDetail("Contract Detail 1")
-                .rate(BigDecimal.TEN)
-                .build();
-        testContractDetail2 = ContractDetailBuilder.buildContractDetail("Contract Detail 2")
-                .rate(BigDecimal.ZERO)
-                .build();
-        testContractDetail3 = ContractDetailBuilder.buildContractDetail("Contract Detail 3")
-                .rate(BigDecimal.ONE)
-                .build();
-
-        testContract1 = ContractBuilder.buildContract("Contract 1")
-                .addDetail(testContractDetail1)
-                .addDetail(testContractDetail2)
-                .build();
-        testContractList.add(testContract1);
-
-        testContract2 = ContractBuilder.buildContract("Contract 2")
-                .addDetail(testContractDetail1)
-                .build();
-        testContractList.add(testContract2);
+        testContractList = Arrays.asList(
+                Contract.builder()
+                        .comments("Contract 1")
+                        .contractDetails(new HashSet<>(
+                                        Arrays.asList(ContractDetail.builder()
+                                                        .comments("contractDetail C1CD1")
+                                                        .rate(BigDecimal.TEN)
+                                                        .startDate(LocalDate.now())
+                                                        .endDate(LocalDate.now().plusDays(20))
+                                                        .build()
+                                                , ContractDetail.builder()
+                                                        .comments("contractDetail C1CD2")
+                                                        .rate(BigDecimal.ONE)
+                                                        .startDate(LocalDate.now())
+                                                        .endDate(LocalDate.now().plusDays(20))
+                                                        .build()
+                                        )
+                                )
+                        )
+                        .build()
+                , Contract.builder()
+                        .comments("Contract 2")
+                        .contractDetails(new HashSet<>(
+                                        Arrays.asList(ContractDetail.builder()
+                                                        .comments("contractDetail C2CD1")
+                                                        .rate(BigDecimal.TEN)
+                                                        .startDate(LocalDate.now())
+                                                        .endDate(LocalDate.now().plusDays(20))
+                                                        .build()
+                                                , ContractDetail.builder()
+                                                        .comments("contractDetail C2CD2")
+                                                        .rate(BigDecimal.ONE)
+                                                        .startDate(LocalDate.now())
+                                                        .endDate(LocalDate.now().plusDays(20))
+                                                        .build()
+                                        )
+                                )
+                        )
+                        .build()
+        );
     }
 
     private void saveAll() {

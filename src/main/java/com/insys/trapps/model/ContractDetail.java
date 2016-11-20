@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Table(name = "CONTRACT_DETAIL")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ContractDetail extends AbstractEntity {
 
     @Getter
@@ -40,4 +41,9 @@ public class ContractDetail extends AbstractEntity {
     @Column(name = "END_DATE")
     private LocalDate endDate;
 
+    @Column(name = "COMMENTS")
+    @Getter
+    @Setter
+    @NonNull
+    protected String comments;
 }

@@ -6,16 +6,12 @@ import static org.junit.Assert.assertTrue;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -23,7 +19,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.insys.trapps.model.Opportunity;
 import com.insys.trapps.model.OpportunityStep;
 import com.insys.trapps.repository.OpportunityRepository;
-import com.insys.trapps.util.OpportunityBuilder;
 
 /**
  * @author Muhammad Sabir
@@ -36,76 +31,100 @@ import com.insys.trapps.util.OpportunityBuilder;
 public class OpportunityRepositoryTests {
 
     @Autowired
-    private OpportunityRepository repository;
+    private OpportunityRepository opportunityRepository;
 
-    private Opportunity testOpportunity;
+    private List<Opportunity> testOpportunityList = new ArrayList<>();
 
     /*
      * Initialize testOpportunity (a subject) before every test method execution.
      */
     @Before
     public void beforeEachMethod() {
-        testOpportunity = OpportunityBuilder.buildOpportunity("Comcast opportunity").addStep("Step 1").addStep("Step 2").build();
+        testOpportunityList = Arrays.asList(
+                Opportunity.builder()
+                        .comments("Comcast opportunity 1")
+                        .steps(new HashSet<>(
+                                Arrays.asList(
+                                        OpportunityStep.builder()
+                                                .comments("OpportunityStep O1OS1")
+                                                .build()
+                                        , OpportunityStep.builder()
+                                                .comments("OpportunityStep O1OS2")
+                                                .build()
+                                )))
+                        .build()
+                , Opportunity.builder()
+                        .comments("Comcast opportunity 2")
+                        .steps(new HashSet<>(
+                                Arrays.asList(
+                                        OpportunityStep.builder()
+                                                .comments("OpportunityStep O2OS1")
+                                                .stepTimestamp(LocalDate.now())
+                                                .build()
+                                        , OpportunityStep.builder()
+                                                .comments("OpportunityStep O2OS2")
+                                                .build()
+                                )))
+                        .build()
+        );
     }
 
 
-    @Test
-    public void testEquals() {
-        Timestamp l = Timestamp.valueOf(LocalDateTime.now());
-        OpportunityStep s1 = new OpportunityStep(null, "Strp", l);
-        OpportunityStep s2 = new OpportunityStep(null, "Strp", l);
-        assertTrue(s1.equals(s2));
-        assertTrue(s1.hashCode() == s2.hashCode());
+    private void saveAll() {
+        testOpportunityList.forEach(item -> opportunityRepository.save(item));
+    }
+
+    private void deleteAll() {
+        testOpportunityList.forEach(item -> opportunityRepository.delete(item));
     }
 
     /*
-     * Method to test OpportunityRepository functionality for creating new opportunities.
+     * Method to test Repository functionality for creating new.
      */
     @Test
-    public void testSaveOpportunity() throws Exception {
-        log.debug("Enter: testSaveOpportunity");
-        this.repository.save(testOpportunity);
-        List<Opportunity> opportunitiesFromRepository = this.repository.findByComments("Comcast opportunity");
+    public void testSave() throws Exception {
+        log.debug("Enter: testSave " + opportunityRepository.getClass().toString());
+        saveAll();
 
-        assertTrue(opportunitiesFromRepository.size() == 1);
-        assertNotNull(opportunitiesFromRepository.get(0).getId());
+        opportunityRepository.findAll().forEach(item -> assertNotNull(item.getId()));
+        Set<Opportunity> opportunitysFromRepositorySet = new HashSet<>();
+        opportunityRepository.findAll().forEach(opportunitysFromRepositorySet::add);
+        testOpportunityList.containsAll(opportunitysFromRepositorySet);
+        opportunitysFromRepositorySet.forEach(item -> item
+                .getSteps()
+                .containsAll(testOpportunityList.get(testOpportunityList.indexOf(item)).getSteps())
+        );
+        opportunitysFromRepositorySet.forEach(item -> log.debug("Opportunity : " + item.toString()));
 
-        //TODO Need to change this using hamcrest/mockito which can compare the whole list
-        Set<OpportunityStep> stepsFromRepository = opportunitiesFromRepository.get(0).getSteps();
-        Set<OpportunityStep> testSteps = testOpportunity.getSteps();
-        assertTrue(stepsFromRepository.containsAll(testSteps));
-        this.repository.delete(testOpportunity);
+        deleteAll();
     }
-    
-     /* Method to test OpportunityRepository functionality for updating existing opportunities.*/
 
-
+    /*
+     * Method to test Repository functionality for update.
+     */
     @Test
-    public void testUpdateOpportunity() throws Exception {
-        log.debug("Enter: testUpdateOpportunity");
-        this.repository.save(testOpportunity);
-        List<Opportunity> opportunities = this.repository.findByComments("Comcast opportunity");
-        assertTrue(opportunities.size() == 1);
-        assertNotNull(opportunities.get(0).getId());
+    public void testUpdate() throws Exception {
+        log.debug("Enter: testUpdate " + opportunityRepository.getClass().toString());
+        saveAll();
 
-        this.testOpportunity = OpportunityBuilder.buildOpportunity(opportunities.get(0)).addStep("Step 3").build();
-        this.testOpportunity.setComments("Comcast Opportunity Updated");
-        this.repository.save(this.testOpportunity);
+        Set<Opportunity> opportunitysFromRepositorySet = new HashSet<>();
+        opportunityRepository.findAll().forEach(opportunitysFromRepositorySet::add);
 
-        opportunities = this.repository.findByComments("Comcast Opportunity Updated");
-        Set<OpportunityStep> steps = opportunities.get(0).getSteps();
+        Opportunity testOpportunityNew = (Opportunity) opportunitysFromRepositorySet.toArray()[0];
+        testOpportunityNew.setComments("Opportunity 1 Updated");
+        opportunityRepository.save(testOpportunityNew);
 
-        assertTrue(steps.size() == testOpportunity.getSteps().size());
+        opportunitysFromRepositorySet.clear();
+        opportunityRepository.findAll().forEach(opportunitysFromRepositorySet::add);
+        testOpportunityList.containsAll(opportunitysFromRepositorySet);
+        opportunitysFromRepositorySet.forEach(item -> item
+                .getSteps()
+                .containsAll(testOpportunityList.get(testOpportunityList.indexOf(item)).getSteps())
+        );
 
-        log.debug("Opportunity is " + opportunities.get(0));
+        opportunitysFromRepositorySet.forEach(item -> log.debug("Opportunity : " + item.toString()));
 
-        //TODO Need to change this using hemcrest/mockito
-        steps.forEach(step -> {
-            log.debug("Step is " + step.toString());
-            assertTrue(testOpportunity.getSteps().contains(step));
-            assertNotNull(step.getStepTimestamp());
-        });
-        this.repository.delete(testOpportunity);
+        deleteAll();
     }
 
 }

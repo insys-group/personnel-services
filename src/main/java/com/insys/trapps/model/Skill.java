@@ -13,6 +13,7 @@ import javax.persistence.Table;
 @Table(name = "SKILL")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Skill extends AbstractEntity {
 
     @Getter

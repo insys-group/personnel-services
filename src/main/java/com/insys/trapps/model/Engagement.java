@@ -9,7 +9,14 @@ import java.util.Set;
 @Table(name = "ENGAGEMENT")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Engagement extends AbstractEntity {
+
+    @Column(name = "COMMENTS")
+    @Getter
+    @Setter
+    @NonNull
+    protected String comments;
 
     @Getter
     @Setter
