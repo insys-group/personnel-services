@@ -6,6 +6,7 @@ package com.insys.trapps.util;
  */
 
 import com.insys.trapps.model.Engagement;
+import com.insys.trapps.model.EngagementOpening;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -15,22 +16,43 @@ import java.util.HashSet;
  * @author vnalitkin
  */
 public class EngagementBuilder {
+    private Engagement engagement = new Engagement();
 
-/*
-    */
-/*
-     * This method is used to add step objects to the Engagement. It uses current time to be added to the step.
-     * @param comments This param is used to add the comment to the EngagementStep object
+    /*
+    * This is a factory method for the Builder which builds the Engagement object
+     * @param comments Creates the Engagement using the comments.
      * @return instance of EngagementBuilder so that it can be chained.
-     *//*
+     */
+    public static EngagementBuilder buildEngagement(String comments) {
+        EngagementBuilder builder = new EngagementBuilder();
+        builder.engagement.setComments(comments);
+        return builder;
+    }
 
-    public EngagementBuilder addStep(String comments) {
-        if (Engagement.getSteps() == null) {
-            Engagement.setSteps(new HashSet<>());
+    /*
+     * This is a factory method for the Builder which builds the Engagement object
+     * @param Engagement Creates the Engagement using existing object. It is used to add more stuff to the Engagement.
+     * @return instance of EngagementBuilder so that it can be chained.
+     */
+    public static EngagementBuilder buildEngagement(Engagement engagement) {
+        EngagementBuilder builder = new EngagementBuilder();
+        builder.engagement = engagement;
+        return builder;
+    }
+
+    public EngagementBuilder addEngagementOpening(EngagementOpening engagementOpening) {
+        if (engagement.getEngagementOpenings() == null) {
+            engagement.setEngagementOpenings(new HashSet<>());
         }
-        Engagement.getSteps().add(new EngagementStep(Engagement, comments, Timestamp.valueOf(LocalDateTime.now())));
+        engagement.getEngagementOpenings().add(engagementOpening);
         return this;
     }
-*/
 
+    /*
+    * This method returns the constructed Opportunity instance.
+     * @return Opportunity Constructed Opportunity instance.
+     */
+    public Engagement build() {
+        return engagement;
+    }
 }

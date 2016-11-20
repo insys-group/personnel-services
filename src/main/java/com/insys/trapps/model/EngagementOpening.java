@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 @Table(name = "ENGAGEMENT_OPENING")
@@ -33,4 +34,10 @@ public class EngagementOpening extends AbstractEntity {
     @Getter
     @Setter
     private BigDecimal rate;
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "engagementOpening", cascade = CascadeType.ALL)
+    private Set<Contract> contracts;
+
 }

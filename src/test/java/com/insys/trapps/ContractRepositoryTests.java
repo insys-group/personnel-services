@@ -69,11 +69,11 @@ public class ContractRepositoryTests {
     }
 
     private void saveAll(){
-        testContractList.forEach(cont -> repository.save(cont));
+        testContractList.forEach(item -> repository.save(item));
     }
 
     private void deleteAll(){
-        testContractList.forEach(cont -> repository.delete(cont));
+        testContractList.forEach(item -> repository.delete(item));
     }
 
     /*
@@ -94,6 +94,9 @@ public class ContractRepositoryTests {
         deleteAll();
     }
 
+    /*
+    * Method to test Repository functionality for update.
+    */
     @Test
     public void testUpdateOpportunity() throws Exception {
         log.debug("Enter: testUpdateContract");
