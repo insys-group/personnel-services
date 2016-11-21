@@ -25,7 +25,7 @@ public class Person {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
 	@NotNull
 	private String firstName;
 	@NotNull
@@ -38,18 +38,20 @@ public class Person {
 	private Set<PersonSkill> skills;
 	@OneToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
 	private Address address;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Document> documents;
 
 	/**
 	 * @return the id
 	 */
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -142,6 +144,20 @@ public class Person {
 	}
 
 	/**
+	 * @return the documents
+	 */
+	public Set<Document> getDocuments() {
+		return documents;
+	}
+
+	/**
+	 * @param documents the documents to set
+	 */
+	public void setDocuments(Set<Document> documents) {
+		this.documents = documents;
+	}
+
+	/**
 	 * Convenience method (remember to save after adding skill)
 	 * @param skill
 	 * @param level
@@ -154,6 +170,16 @@ public class Person {
 		if(skills == null)
 			skills = new HashSet<PersonSkill>();
 		skills.add(newSkill);
+	}
+	
+	/**
+	 * Convenience method (remember to save after adding a document)
+	 * @param doc
+	 */
+	public void addDocument(Document doc) {
+		if (documents == null)
+			documents = new HashSet<Document>();
+		documents.add(doc);
 	}
 
 	/*
