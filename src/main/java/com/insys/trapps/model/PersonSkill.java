@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -113,6 +115,16 @@ public class PersonSkill {
 	    return false;
 	PersonSkill rhs = (PersonSkill) obj;
 	return (this.getPerson().equals(rhs.getPerson()) && this.getSkill().equals(rhs.getSkill()));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+	return ReflectionToStringBuilder.toString(this);
     }
 
 }

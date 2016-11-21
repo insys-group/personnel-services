@@ -212,8 +212,8 @@ public class Person {
 	if (obj.getClass() != getClass())
 	    return false;
 	Person rhs = (Person) obj;
-	return new EqualsBuilder().appendSuper(super.equals(obj)).append(firstName, rhs.getFirstName())
-		.append(lastName, rhs.getLastName()).append(email, rhs.getEmail()).isEquals();
+	return new EqualsBuilder().append(firstName, rhs.getFirstName()).append(lastName, rhs.getLastName())
+		.append(email, rhs.getEmail()).isEquals();
     }
 
     /*

@@ -42,46 +42,86 @@ public class Business {
     @JoinColumn(name = "business_id", nullable = false)
     private Collection<Location> locations;
 
+    /**
+     * @return the businessId
+     */
     public Long getBusinessId() {
 	return businessId;
     }
 
+    /**
+     * @param businessId
+     *            the businessId to set
+     */
     public void setBusinessId(Long businessId) {
 	this.businessId = businessId;
     }
 
+    /**
+     * @return the name
+     */
     public String getName() {
 	return name;
     }
 
+    /**
+     * @param name
+     *            the name to set
+     */
     public void setName(String name) {
 	this.name = name;
     }
 
+    /**
+     * @return the description
+     */
     public String getDescription() {
 	return description;
     }
 
+    /**
+     * @param description
+     *            the description to set
+     */
     public void setDescription(String description) {
 	this.description = description;
     }
 
+    /**
+     * @return the businessType
+     */
     public BusinessType getBusinessType() {
 	return businessType;
     }
 
+    /**
+     * @param businessType
+     *            the businessType to set
+     */
     public void setBusinessType(BusinessType businessType) {
 	this.businessType = businessType;
     }
 
+    /**
+     * @return the locations
+     */
     public Collection<Location> getLocations() {
 	return locations;
     }
 
+    /**
+     * @param locations
+     *            the locations to set
+     */
     public void setLocations(Collection<Location> locations) {
 	this.locations = locations;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
 	final int prime = 31;
@@ -90,6 +130,11 @@ public class Business {
 	return result;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object obj) {
 	if (this == obj)
@@ -107,6 +152,11 @@ public class Business {
 	return true;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
 	return "Business [name=" + name + ", description=" + description + ", businessType=" + businessType

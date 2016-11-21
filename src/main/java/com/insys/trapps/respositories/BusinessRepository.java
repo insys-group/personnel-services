@@ -11,5 +11,5 @@ import com.insys.trapps.model.Business;
  * @since 1.0.0
  **/
 public interface BusinessRepository extends PagingAndSortingRepository<Business, Long> {
-    // TODO
+
 }

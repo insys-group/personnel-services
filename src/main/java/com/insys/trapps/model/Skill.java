@@ -79,7 +79,7 @@ public class Skill {
 	    return false;
 	}
 	Skill rhs = (Skill) obj;
-	return new EqualsBuilder().appendSuper(super.equals(obj)).append(skill, rhs.getSkill()).isEquals();
+	return new EqualsBuilder().append(skill, rhs.getSkill()).isEquals();
     }
 
     /*
