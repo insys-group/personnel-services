@@ -36,6 +36,6 @@ public class Contract extends AbstractEntity {
     @Getter
     @Setter
     @Singular
-    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<ContractDetail> contractDetails;
 }

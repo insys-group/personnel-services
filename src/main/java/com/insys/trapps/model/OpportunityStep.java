@@ -2,10 +2,7 @@ package com.insys.trapps.model;
 
 import lombok.*;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-
+import java.util.Date;
 import javax.persistence.*;
 
 @Entity

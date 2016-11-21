@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
@@ -21,12 +22,12 @@ import static org.junit.Assert.assertTrue;
  * Created by vnalitkin on 11/18/2016.
  */
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@SpringBootTest(classes = TrappsApiApplication.class)
 @Slf4j
 public class ContractRepositoryTests {
 
     @Autowired
-    private ContractRepository repository;
+    private ContractRepository contractRepository;
 
     private List<Contract> testContractList = new ArrayList<>();
 
@@ -78,11 +79,11 @@ public class ContractRepositoryTests {
     }
 
     private void saveAll() {
-        testContractList.forEach(item -> repository.save(item));
+        testContractList.forEach(item -> contractRepository.save(item));
     }
 
     private void deleteAll() {
-        testContractList.forEach(item -> repository.delete(item));
+        contractRepository.deleteAll();
     }
 
     /*
@@ -90,12 +91,12 @@ public class ContractRepositoryTests {
      */
     @Test
     public void testSave() throws Exception {
-        log.debug("Enter: testSave " + repository.getClass().toString());
+        log.debug("Enter: testSave " + contractRepository.getClass().toString());
         saveAll();
 
-        repository.findAll().forEach(item -> assertNotNull(item.getId()));
+        contractRepository.findAll().forEach(item -> assertNotNull(item.getId()));
         Set<Contract> contractsFromRepositorySet = new HashSet<>();
-        repository.findAll().forEach(contractsFromRepositorySet::add);
+        contractRepository.findAll().forEach(contractsFromRepositorySet::add);
         testContractList.containsAll(contractsFromRepositorySet);
         contractsFromRepositorySet.forEach(item -> item
                 .getContractDetails()
@@ -111,18 +112,15 @@ public class ContractRepositoryTests {
     */
     @Test
     public void testUpdate() throws Exception {
-        log.debug("Enter: testUpdate " + repository.getClass().toString());
+        log.debug("Enter: testUpdate " + contractRepository.getClass().toString());
         saveAll();
 
-        Set<Contract> contractsFromRepositorySet = new HashSet<>();
-        repository.findAll().forEach(contractsFromRepositorySet::add);
-
-        Contract testContractNew = (Contract) contractsFromRepositorySet.toArray()[0];
+        Contract testContractNew = contractRepository.findByComments("Contract 1").get(0);
         testContractNew.setComments("contract 1 Updated");
-        repository.save(testContractNew);
+        contractRepository.save(testContractNew);
 
-        contractsFromRepositorySet.clear();
-        repository.findAll().forEach(contractsFromRepositorySet::add);
+        Set<Contract> contractsFromRepositorySet = new HashSet<>();
+        contractRepository.findAll().forEach(contractsFromRepositorySet::add);
         testContractList.containsAll(contractsFromRepositorySet);
         contractsFromRepositorySet.forEach(item -> item
                 .getContractDetails()

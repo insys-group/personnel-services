@@ -10,10 +10,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
@@ -24,7 +26,7 @@ import static org.junit.Assert.assertNotNull;
  *         These tests validates the save/update of the Engagement and related EngagementStep objects.
  */
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@SpringBootTest(classes = TrappsApiApplication.class)
 @Slf4j
 public class EngagementRepositoryTests {
 
@@ -51,7 +53,6 @@ public class EngagementRepositoryTests {
                         , Skill.builder().name("Skill 3").build()
                 )
         );
-        testSkillSet.forEach(skillRepository::save);
 
         Role testRole = Role.builder()
                 .name("Role 1")
@@ -75,10 +76,14 @@ public class EngagementRepositoryTests {
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E1EO1C1CD1")
                                                                                                 .rate(BigDecimal.TEN)
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .build())
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E1EO1C1CD2")
                                                                                                 .rate(BigDecimal.ONE)
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .build())
                                                                                         .build()
                                                                                 , Contract.builder()
@@ -86,10 +91,14 @@ public class EngagementRepositoryTests {
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E1EO1C2CD1")
                                                                                                 .rate(BigDecimal.TEN)
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .build())
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E1EO1C2CD2")
                                                                                                 .rate(BigDecimal.ONE)
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .build())
                                                                                         .build()
                                                                         )
@@ -107,10 +116,14 @@ public class EngagementRepositoryTests {
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E1EO2C1CD1")
                                                                                                 .rate(BigDecimal.TEN)
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .build())
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E1EO2C1CD2")
                                                                                                 .rate(BigDecimal.ONE)
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .build())
                                                                                         .build()
                                                                                 , Contract.builder()
@@ -118,10 +131,14 @@ public class EngagementRepositoryTests {
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E1EO2C2CD1")
                                                                                                 .rate(BigDecimal.TEN)
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .build())
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E1EO2C2CD2")
                                                                                                 .rate(BigDecimal.ONE)
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .build())
                                                                                         .build()
                                                                         )
@@ -147,10 +164,14 @@ public class EngagementRepositoryTests {
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E2EO1C1CD1")
                                                                                                 .rate(BigDecimal.TEN)
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .build())
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E2EO1C1CD2")
                                                                                                 .rate(BigDecimal.ONE)
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .build())
                                                                                         .build()
                                                                                 , Contract.builder()
@@ -158,10 +179,14 @@ public class EngagementRepositoryTests {
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E2EO1C2CD1")
                                                                                                 .rate(BigDecimal.TEN)
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .build())
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E2EO1C2CD2")
                                                                                                 .rate(BigDecimal.ONE)
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .build())
                                                                                         .build()
                                                                         )
@@ -179,9 +204,13 @@ public class EngagementRepositoryTests {
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E2EO2C1CD1")
                                                                                                 .rate(BigDecimal.TEN)
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .build())
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E2EO2C1CD2")
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .rate(BigDecimal.ONE)
                                                                                                 .build())
                                                                                         .build()
@@ -189,11 +218,15 @@ public class EngagementRepositoryTests {
                                                                                         .comments("Contract E2EO2C2")
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E2EO2C2CD1")
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .rate(BigDecimal.TEN)
                                                                                                 .build())
                                                                                         .contractDetail(ContractDetail.builder()
                                                                                                 .comments("contractDetail E2EO2C2CD2")
                                                                                                 .rate(BigDecimal.ONE)
+                                                                                                .startDate(LocalDate.now())
+                                                                                                .endDate(LocalDate.now().plusDays(20))
                                                                                                 .build())
                                                                                         .build()
                                                                         )
@@ -212,7 +245,7 @@ public class EngagementRepositoryTests {
     }
 
     private void deleteAll() {
-        testEngagementList.forEach(item -> engagementRepository.delete(item));
+        engagementRepository.deleteAll();
     }
 
     /*

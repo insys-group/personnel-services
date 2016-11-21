@@ -1,11 +1,10 @@
 package com.insys.trapps;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.*;
 
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +13,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.insys.trapps.model.Opportunity;
 import com.insys.trapps.model.OpportunityStep;
 import com.insys.trapps.repository.OpportunityRepository;
+
+import javax.xml.crypto.Data;
 
 /**
  * @author Muhammad Sabir
@@ -26,7 +28,7 @@ import com.insys.trapps.repository.OpportunityRepository;
  *         These tests validates the save/update of the Opportunity and related OpportunityStep objects.
  */
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@SpringBootTest(classes = TrappsApiApplication.class)
 @Slf4j
 public class OpportunityRepositoryTests {
 
@@ -47,9 +49,11 @@ public class OpportunityRepositoryTests {
                                 Arrays.asList(
                                         OpportunityStep.builder()
                                                 .comments("OpportunityStep O1OS1")
+                                                .stepTimestamp(Timestamp.valueOf(LocalDate.now().atStartOfDay()))
                                                 .build()
                                         , OpportunityStep.builder()
                                                 .comments("OpportunityStep O1OS2")
+                                                .stepTimestamp(Timestamp.valueOf(LocalDate.now().atStartOfDay()))
                                                 .build()
                                 )))
                         .build()
@@ -59,10 +63,11 @@ public class OpportunityRepositoryTests {
                                 Arrays.asList(
                                         OpportunityStep.builder()
                                                 .comments("OpportunityStep O2OS1")
-                                                .stepTimestamp(LocalDate.now())
+                                                .stepTimestamp(Timestamp.valueOf(LocalDate.now().atStartOfDay()))
                                                 .build()
                                         , OpportunityStep.builder()
                                                 .comments("OpportunityStep O2OS2")
+                                                .stepTimestamp(Timestamp.valueOf(LocalDate.now().atStartOfDay()))
                                                 .build()
                                 )))
                         .build()
@@ -75,7 +80,7 @@ public class OpportunityRepositoryTests {
     }
 
     private void deleteAll() {
-        testOpportunityList.forEach(item -> opportunityRepository.delete(item));
+        opportunityRepository.deleteAll();
     }
 
     /*
