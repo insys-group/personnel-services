@@ -94,14 +94,34 @@ public class BusinessSpringIntegrationTests {
 	@Test
 	public void testCreateBusiness() throws Exception {
 
-		Address address_1 = new Address("Insys Street", "Denver", "CO", "80014");
-		Address address_2 = new Address("Luxoft Street", "Seattle", "WA", "70014");
+		Address address_1 = Address.builder()
+				.address1("Insys Street")
+				.city("Denver")
+				.state("CO")
+				.zipCode("80014")
+				.build();
+		Address address_2 =Address.builder()
+				.address1("Luxoft Street")
+				.city("Seattle")
+				.state("WA")
+				.zipCode("70014")
+				.build();
 
 		Business testBuisness = BusinessBuilder
 				.buildBusiness("test", "testing-denver", BusinessType.INSYS)
 				.addLocation(address_1).addLocation(address_2).build();
 
-		ResultActions resultActions = mvc
+        ResultActions resultActions = null;
+
+        resultActions = mvc
+                .perform(post("/address").contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(address_1)));
+        resultActions = mvc
+                .perform(post("/address").contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(address_2)));
+
+
+        resultActions = mvc
 				.perform(post("/businesses").contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(testBuisness)));
 
