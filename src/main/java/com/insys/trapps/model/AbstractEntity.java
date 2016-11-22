@@ -3,6 +3,9 @@ package com.insys.trapps.model;
 import lombok.*;
 
 import javax.persistence.*;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.security.Timestamp;
 import java.util.Date;
 
@@ -12,6 +15,7 @@ import java.util.Date;
 @EqualsAndHashCode(exclude = {"id","version"})
 @AllArgsConstructor
 @NoArgsConstructor
+@SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 public abstract class AbstractEntity {
 
     @Id

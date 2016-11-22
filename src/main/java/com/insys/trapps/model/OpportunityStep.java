@@ -5,12 +5,15 @@ import lombok.*;
 import java.util.Date;
 import javax.persistence.*;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 @Entity
 @Table(name = "OPPORTUNITY_STEP")
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 public class OpportunityStep extends AbstractEntity {
 
     @Getter
