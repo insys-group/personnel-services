@@ -8,4 +8,8 @@ spring:
     active: cloud,default
   jpa:
     database: MYSQL
-    
+---
+spring:
+  profiles: default
+  jpa:
+    database: HSQL
