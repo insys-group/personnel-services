@@ -30,6 +30,7 @@ import com.insys.trapps.model.BusinessType;
 import com.insys.trapps.model.Role;
 import com.insys.trapps.model.Skill;
 import com.insys.trapps.respositories.RoleRepository;
+import com.insys.trapps.service.impl.RoleServiceImpl;
 import com.insys.trapps.util.BusinessBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -78,9 +79,9 @@ public class RoleServiceTest {
 			}
 		});
 
-		List<Business> businesses = roleService.listBusinesses();
+		List<Role> role = roleService.listRoles();
 
-		assertNotNull(businesses);
+		assertNotNull(role);
 	}
 	
 }
