@@ -36,7 +36,7 @@ public class BusinessBuilder {
 		if(business.getLocations()==null) {
 			business.setLocations(new HashSet<>());
 		}
-		business.getLocations().add(new Location(address));
+		business.getLocations().add(Location.builder().address(address).build());
 		return this;
 	}
 
