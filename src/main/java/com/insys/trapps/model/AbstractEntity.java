@@ -11,8 +11,6 @@ import java.util.Date;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@ToString(exclude = {"id","version"})
-@EqualsAndHashCode(exclude = {"id","version"})
 @AllArgsConstructor
 @NoArgsConstructor
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})

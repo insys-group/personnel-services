@@ -11,10 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Table(name = "OPPORTUNITY")
+@EqualsAndHashCode(exclude = {"steps", "engagements", "businessEntity"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Opportunity extends AbstractEntity{
+public class Opportunity extends AbstractEntity {
 
     @Column(name = "COMMENTS")
     @Getter

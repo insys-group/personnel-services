@@ -11,6 +11,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "SKILL")
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
