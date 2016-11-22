@@ -6,5 +6,4 @@ import com.insys.trapps.model.Role;
 
 public interface RoleService {
 	List<Role>  listRoles();
-
 }

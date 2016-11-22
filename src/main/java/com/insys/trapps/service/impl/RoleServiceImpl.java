@@ -29,5 +29,4 @@ public class RoleServiceImpl implements RoleService {
 		Role savedRole = roleRepository.save(role);
 		return savedRole;
 	}
-
 }

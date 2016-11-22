@@ -24,14 +24,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.insys.trapps.model.Address;
-import com.insys.trapps.model.Business;
-import com.insys.trapps.model.BusinessType;
 import com.insys.trapps.model.Role;
 import com.insys.trapps.model.Skill;
 import com.insys.trapps.respositories.RoleRepository;
 import com.insys.trapps.service.impl.RoleServiceImpl;
-import com.insys.trapps.util.BusinessBuilder;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
