@@ -1,15 +1,13 @@
 package com.insys.trapps.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.insys.trapps.controller.BusinessController;
 
 /**
  * {@link Address Entity} for PersonellServices.
@@ -17,116 +15,175 @@ import com.insys.trapps.controller.BusinessController;
  * @author Kris Krishna
  * @since 1.0.0
  **/
-
 @Entity
-@Table(name = "address")
 public class Address {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long addressId;
-	@Column(nullable = false)
-	private String street;
-	@Column(nullable = false)
-	private String city;
-	@Column(nullable = false)
-	private String state;
-	@Column(name = "ZIP_CODE", nullable = false)
-	private String zip;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long addressId;
+    @NotNull
+    private String address1;
+    private String address2;
+    @NotNull
+    private String city;
+    @NotNull
+    private String state;
+    @NotNull
+    private String zipCode;
 
-	@OneToOne(mappedBy = "address")
-	@JsonIgnore
-	private Location location;
+    @JsonIgnore
+    @OneToOne(mappedBy = "address")
+    private Location location;
 
-	public Address() {
-		super();
-	}
+    /**
+     * @return the addressId
+     */
+    public Long getAddressId() {
+	return addressId;
+    }
 
-	public Address(String street, String city, String state, String zip) {
-		this.street = street;
-		this.city = city;
-		this.state = state;
-		this.zip = zip;
-	}
+    /**
+     * @param addressId
+     *            the addressId to set
+     */
+    public void setAddressId(Long addressId) {
+	this.addressId = addressId;
+    }
 
-	public Long getAddressId() {
-		return addressId;
-	}
+    /**
+     * @return the address1
+     */
+    public String getAddress1() {
+	return address1;
+    }
 
-	public void setAddressId(Long addressId) {
-		this.addressId = addressId;
-	}
+    /**
+     * @param address1
+     *            the address1 to set
+     */
+    public void setAddress1(String address1) {
+	this.address1 = address1;
+    }
 
-	public String getStreet() {
-		return street;
-	}
+    /**
+     * @return the address2
+     */
+    public String getAddress2() {
+	return address2;
+    }
 
-	public void setStreet(String street) {
-		this.street = street;
-	}
+    /**
+     * @param address2
+     *            the address2 to set
+     */
+    public void setAddress2(String address2) {
+	this.address2 = address2;
+    }
 
-	public String getCity() {
-		return city;
-	}
+    /**
+     * @return the city
+     */
+    public String getCity() {
+	return city;
+    }
 
-	public void setCity(String city) {
-		this.city = city;
-	}
+    /**
+     * @param city
+     *            the city to set
+     */
+    public void setCity(String city) {
+	this.city = city;
+    }
 
-	public String getState() {
-		return state;
-	}
+    /**
+     * @return the state
+     */
+    public String getState() {
+	return state;
+    }
 
-	public void setState(String state) {
-		this.state = state;
-	}
+    /**
+     * @param state
+     *            the state to set
+     */
+    public void setState(String state) {
+	this.state = state;
+    }
 
-	public String getZip() {
-		return zip;
-	}
+    /**
+     * @return the zipCode
+     */
+    public String getZipCode() {
+	return zipCode;
+    }
 
-	public void setZip(String zip) {
-		this.zip = zip;
-	}
+    /**
+     * @param zipCode
+     *            the zipCode to set
+     */
+    public void setZipCode(String zipCode) {
+	this.zipCode = zipCode;
+    }
 
-	public Location getLocation() {
-		return location;
-	}
+    /**
+     * @return the location
+     */
+    public Location getLocation() {
+	return location;
+    }
 
-	public void setLocation(Location location) {
-		this.location = location;
-	}
+    /**
+     * @param location
+     *            the location to set
+     */
+    public void setLocation(Location location) {
+	this.location = location;
+    }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((address1 == null) ? 0 : address1.hashCode());
+	return result;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((street == null) ? 0 : street.hashCode());
-		return result;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	Address other = (Address) obj;
+	if (address1 == null) {
+	    if (other.address1 != null)
+		return false;
+	} else if (!address1.equals(other.address1))
+	    return false;
+	return true;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Address other = (Address) obj;
-		if (street == null) {
-			if (other.street != null)
-				return false;
-		} else if (!street.equals(other.street))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Address [address_id=" + addressId + ", street=" + street + ", city=" + city + ", state=" + state
-				+ ", zip=" + zip + "]";
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+	return "Address [address_id=" + addressId + ", street=" + address1 + ", city=" + city + ", state=" + state
+		+ ", zip=" + zipCode + "]";
+    }
 
 }

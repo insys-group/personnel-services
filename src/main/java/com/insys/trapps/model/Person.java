@@ -1,7 +1,8 @@
 package com.insys.trapps.model;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,30 +20,33 @@ import javax.persistence.Table;
 public class Person implements Serializable {
 	private static final long serialVersionUID = 9002720247703144895L;
 
-	@Id 
-	@GeneratedValue(strategy = GenerationType.AUTO) 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
-	@Column (nullable = false)
+
+	@Column(nullable = false)
 	private String firstName;
-	
-	@Column (nullable = false)
+
+	@Column(nullable = false)
 	private String lastName;
-	
-	@Column 
-	private String phone;
-	
-	@Column (nullable = false) 
+
+	@Column
+	private String phoneNumber;
+
+	@Column(nullable = false)
 	private String email;
-	
-	@Column (nullable = false)
-	private PersonType personType;	
-	
-	//@OneToOne
-	//private Address address;
-	
-	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Collection<PersonDocument> documents;
+
+	@Column(nullable = false)
+	private PersonType personType;
+
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<PersonSkill> skills;
+
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Address address;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Document> documents;
 
 	public Long getId() {
 		return id;
@@ -67,12 +72,12 @@ public class Person implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public String getPhone() {
-		return phone;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public String getEmail() {
@@ -91,12 +96,76 @@ public class Person implements Serializable {
 		this.personType = personType;
 	}
 
-	public Collection<PersonDocument> getDocuments() {
+	/**
+	 * @return the skills
+	 */
+	public Set<PersonSkill> getSkills() {
+		return skills;
+	}
+
+	/**
+	 * @param skills
+	 *            the skills to set
+	 */
+	public void setSkills(Set<PersonSkill> skills) {
+		this.skills = skills;
+	}
+
+	/**
+	 * @return the address
+	 */
+	public Address getAddress() {
+		return address;
+	}
+
+	/**
+	 * @param address
+	 *            the address to set
+	 */
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	/**
+	 * @return the documents
+	 */
+	public Set<Document> getDocuments() {
 		return documents;
 	}
 
-	public void setDocuments(Collection<PersonDocument> documents) {
+	/**
+	 * @param documents
+	 *            the documents to set
+	 */
+	public void setDocuments(Set<Document> documents) {
 		this.documents = documents;
+	}
+
+	/**
+	 * Convenience method (remember to save after adding skill)
+	 * 
+	 * @param skill
+	 * @param level
+	 */
+	public void addSkill(Skill skill, int level) {
+		PersonSkill newSkill = new PersonSkill();
+		newSkill.setPerson(this);
+		newSkill.setSkill(skill);
+		newSkill.setLevel(level);
+		if (skills == null)
+			skills = new HashSet<PersonSkill>();
+		skills.add(newSkill);
+	}
+
+	/**
+	 * Convenience method (remember to save after adding a document)
+	 * 
+	 * @param doc
+	 */
+	public void addDocument(Document doc) {
+		if (documents == null)
+			documents = new HashSet<Document>();
+		documents.add(doc);
 	}
 
 	@Override
@@ -126,7 +195,8 @@ public class Person implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Person [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone
+		return "Person [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phoneNumber
 				+ ", email=" + email + ", personType=" + personType + "]";
-	}	
+	}
+
 }

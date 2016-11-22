@@ -11,8 +11,8 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
-@Table(name = "person_document")
+//@Entity
+//@Table(name = "person_document")
 public class PersonDocument {
 	@Id 
 	@GeneratedValue(strategy = GenerationType.AUTO) 

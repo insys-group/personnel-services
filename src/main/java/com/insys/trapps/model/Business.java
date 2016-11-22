@@ -3,7 +3,6 @@ package com.insys.trapps.model;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -13,122 +12,155 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;;
+import javax.validation.constraints.NotNull;;
 
 /**
  * {@link Business Entity} for PersonellServices.
  *
- * @author  Kris Krishna
+ * @author Kris Krishna
  * @since 1.0.0
-**/
-
-
+ **/
 @Entity
-@Table(name = "business")
 public class Business {
 
-	// Client, Location and Address
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long businessId;
+    // Client, Location and Address
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long businessId;
 
-	@Column(nullable = false)
-	private String name;
+    @NotNull
+    private String name;
 
-	@Column(nullable = false)
-	private String description;
+    @NotNull
+    private String description;
 
-	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
-	private BusinessType businessType;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private BusinessType businessType;
 
-	@OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "business_id", nullable = false)
-	private Collection<Location> locations;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "business_id", nullable = false)
+    private Collection<Location> locations;
 
-	public Business() {
-	}
+    /**
+     * @return the businessId
+     */
+    public Long getBusinessId() {
+	return businessId;
+    }
 
-	public Business(String name, String description, BusinessType businessType,
-			Collection<Location> locations) {
-		this.name = name;
-		this.description = description;
-		this.businessType = businessType;
-		this.locations = locations;
-	}
+    /**
+     * @param businessId
+     *            the businessId to set
+     */
+    public void setBusinessId(Long businessId) {
+	this.businessId = businessId;
+    }
 
+    /**
+     * @return the name
+     */
+    public String getName() {
+	return name;
+    }
 
-	public Long getBusinessId() {
-		return businessId;
-	}
+    /**
+     * @param name
+     *            the name to set
+     */
+    public void setName(String name) {
+	this.name = name;
+    }
 
-	public void setBusinessId(Long businessId) {
-		this.businessId = businessId;
-	}
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+	return description;
+    }
 
-	public String getName() {
-		return name;
-	}
+    /**
+     * @param description
+     *            the description to set
+     */
+    public void setDescription(String description) {
+	this.description = description;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     * @return the businessType
+     */
+    public BusinessType getBusinessType() {
+	return businessType;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * @param businessType
+     *            the businessType to set
+     */
+    public void setBusinessType(BusinessType businessType) {
+	this.businessType = businessType;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /**
+     * @return the locations
+     */
+    public Collection<Location> getLocations() {
+	return locations;
+    }
 
-	public BusinessType getBusinessType() {
-		return businessType;
-	}
+    /**
+     * @param locations
+     *            the locations to set
+     */
+    public void setLocations(Collection<Location> locations) {
+	this.locations = locations;
+    }
 
-	public void setBusinessType(BusinessType businessType) {
-		this.businessType = businessType;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((name == null) ? 0 : name.hashCode());
+	return result;
+    }
 
-	public Collection<Location> getLocations() {
-		return locations;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	Business other = (Business) obj;
+	if (name == null) {
+	    if (other.name != null)
+		return false;
+	} else if (!name.equals(other.name))
+	    return false;
+	return true;
+    }
 
-	public void setLocations(Collection<Location> locations) {
-		this.locations = locations;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Business other = (Business) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Business [name=" + name + ", description=" + description
-				+ ", businessType=" + businessType + ", locations=" + locations + "]";
-	}
-
-	
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+	return "Business [name=" + name + ", description=" + description + ", businessType=" + businessType
+		+ ", locations=" + locations + "]";
+    }
 
 }
