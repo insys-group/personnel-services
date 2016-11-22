@@ -1,6 +1,7 @@
 package com.insys.trapps.model;
 
-import java.util.Set;
+import java.io.Serializable;
+import java.util.Collection;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,13 +10,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "opportunity")
-public class Opportunity {
-	
+public class Opportunity implements Serializable {
+	private static final long serialVersionUID = -8477329760701271051L;
+
 	@Id 
 	@GeneratedValue(strategy = GenerationType.AUTO) 
 	private Long id;
@@ -23,8 +27,12 @@ public class Opportunity {
 	@Column 
 	private String comments; 
 	
-	@OneToMany(mappedBy = "opportunity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<OpportunityStep> steps;
+	@OneToMany(mappedBy = "opportunity", targetEntity=OpportunityStep.class, cascade = CascadeType.ALL)
+	private Collection<OpportunityStep> steps;
+	
+	@JoinTable(name="opportunity_contact")
+    @ManyToMany(targetEntity = Person.class, cascade = CascadeType.ALL)
+    private Collection<Person> contacts;
 
 	public Long getId() {
 		return id;
@@ -42,12 +50,21 @@ public class Opportunity {
 		this.comments = comments;
 	}
 
-	public Set<OpportunityStep> getSteps() {
+	public Collection<OpportunityStep> getSteps() {
 		return steps;
 	}
 
-	public void setSteps(Set<OpportunityStep> steps) {
+	public void setSteps(Collection<OpportunityStep> steps) {
 		this.steps = steps;
+	}
+
+	
+	public Collection<Person> getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(Collection<Person> contacts) {
+		this.contacts = contacts;
 	}
 
 	@Override
@@ -77,7 +94,7 @@ public class Opportunity {
 
 	@Override
 	public String toString() {
-		return "Opportunity [id=" + id + ", comments=" + comments + "]";
+		return "Opportunity [id=" + id + ", comments=" + comments + ", steps=" + steps + ", contacts=" + contacts + "]";
 	}
 
 }

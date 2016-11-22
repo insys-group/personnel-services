@@ -1,5 +1,6 @@
 package com.insys.trapps.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -11,9 +12,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "opportunity_step")
-public class OpportunityStep {
+public class OpportunityStep implements Serializable {
+	private static final long serialVersionUID = 4367950681319716072L;
+
 	@Id 
 	@GeneratedValue(strategy = GenerationType.AUTO) 
 	private Long id;
@@ -26,23 +31,9 @@ public class OpportunityStep {
 	
 	@ManyToOne
 	@JoinColumn(name = "opportunity_id")
+	@JsonIgnore
 	private Opportunity opportunity;
 
-	public OpportunityStep() {
-		
-	}
-	
-	public OpportunityStep(String comments, Timestamp stepTimestamp) {
-		this.comments=comments;
-		this.stepTimestamp=stepTimestamp;
-	}
-	
-	public OpportunityStep(Opportunity opportunity, String comments, Timestamp stepTimestamp) {
-		this.opportunity=opportunity;
-		this.comments=comments;
-		this.stepTimestamp=stepTimestamp;
-	}
-	
 	public Long getId() {
 		return id;
 	}
