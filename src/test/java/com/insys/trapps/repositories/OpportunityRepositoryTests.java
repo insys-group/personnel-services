@@ -1,4 +1,4 @@
-package com.insys.trapps;
+package com.insys.trapps.repositories;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.insys.trapps.TrappsApiApplication;
 import com.insys.trapps.model.Opportunity;
 import com.insys.trapps.model.OpportunityStep;
 import com.insys.trapps.respositories.OpportunityRepository;

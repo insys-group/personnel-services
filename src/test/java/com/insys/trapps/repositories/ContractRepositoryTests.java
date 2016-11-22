@@ -1,6 +1,7 @@
-package com.insys.trapps;
+package com.insys.trapps.repositories;
 
 import com.insys.trapps.util.ContractBuilder;
+import com.insys.trapps.TrappsApiApplication;
 import com.insys.trapps.model.*;
 import com.insys.trapps.respositories.ContractDetailRepository;
 import com.insys.trapps.respositories.ContractRepository;

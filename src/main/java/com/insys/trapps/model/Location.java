@@ -17,7 +17,7 @@ public class Location extends AbstractEntity {
 
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "ADDRESS_ID")
     private Address address;
 

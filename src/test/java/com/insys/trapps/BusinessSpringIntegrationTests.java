@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -42,6 +43,7 @@ import com.insys.trapps.util.BusinessBuilder;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(value = "classpath:clients-test-resource.xml")
+//@Ignore
 // Uncomment to test with real external MySQL database
 // @TestPropertySource(locations="classpath:test.properties")
 public class BusinessSpringIntegrationTests {
@@ -113,13 +115,13 @@ public class BusinessSpringIntegrationTests {
 
         ResultActions resultActions = null;
 
-        resultActions = mvc
+      /*  resultActions = mvc
                 .perform(post("/address").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(address_1)));
         resultActions = mvc
                 .perform(post("/address").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(address_2)));
-
+*/
 
         resultActions = mvc
 				.perform(post("/businesses").contentType(MediaType.APPLICATION_JSON)

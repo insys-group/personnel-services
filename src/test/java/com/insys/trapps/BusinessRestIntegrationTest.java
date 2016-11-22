@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ import com.insys.trapps.util.BusinessBuilder;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@Ignore
 public class BusinessRestIntegrationTest {
 	
 	 private static final Logger logger = LoggerFactory.getLogger(BusinessRestIntegrationTest.class);
@@ -61,6 +63,7 @@ public class BusinessRestIntegrationTest {
 				.state("CO")
 				.zipCode("80014")
 				.build();
+		
 		Address address_2 =Address.builder()
 				.address1("Luxoft Street")
 				.city("Seattle")

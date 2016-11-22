@@ -1,8 +1,9 @@
-package com.insys.trapps;
+package com.insys.trapps.repositories;
 
 import com.insys.trapps.respositories.ContractRepository;
 import com.insys.trapps.util.ContractBuilder;
 import com.insys.trapps.util.EngagementBuilder;
+import com.insys.trapps.TrappsApiApplication;
 import com.insys.trapps.model.*;
 import com.insys.trapps.respositories.EngagementRepository;
 import com.insys.trapps.respositories.RoleRepository;

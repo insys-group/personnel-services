@@ -12,13 +12,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.insys.trapps.TrappsApiApplication;
 import com.insys.trapps.model.Address;
 import com.insys.trapps.model.Business;
 import com.insys.trapps.model.BusinessType;
+import com.insys.trapps.respositories.AddressRepository;
 import com.insys.trapps.respositories.BusinessRepository;
 import com.insys.trapps.util.BusinessBuilder;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * {@link BusinessRepositoryTest} for PersonellServices.
@@ -36,8 +41,13 @@ public class BusinessRepositoryTest {
 
 	@Autowired
 	private TestEntityManager entityManager;
+	
 	@Autowired
 	private BusinessRepository businessRepository;
+	
+	@Autowired
+	private AddressRepository addressRepository;
+	
 	private Business testClient;
 
 	@Before
@@ -48,14 +58,17 @@ public class BusinessRepositoryTest {
 				.state("CO")
 				.zipCode("80014")
 				.build();
+		addressRepository.save(address_1);
 		Address address_2 =Address.builder()
 				.address1("Luxoft Street")
 				.city("Seattle")
 				.state("WA")
 				.zipCode("70014")
 				.build();
+		addressRepository.save(address_2);
 
 		testClient = BusinessBuilder.buildBusiness("test", "testing-denver",  BusinessType.INSYS).addLocation(address_1).addLocation(address_2).build();
+		
 	}
 
 	@Test
@@ -67,8 +80,8 @@ public class BusinessRepositoryTest {
 	}
 
 	@Test
-	public void testSaveClient() throws Exception {
-		logger.debug("Enter: testSaveClient");
+	public void testSaveBusiness() throws Exception {
+		logger.debug("Enter: testSaveBusiness "+ businessRepository.getClass().toString());
 		this.businessRepository.save(testClient);
 		Iterable<Business> businesses = this.businessRepository.findAll();
 		businesses.forEach(client -> {
