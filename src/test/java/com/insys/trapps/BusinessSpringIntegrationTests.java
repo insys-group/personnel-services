@@ -32,12 +32,12 @@ import com.insys.trapps.model.BusinessType;
 import com.insys.trapps.util.BusinessBuilder;
 
 /**
- * {@link Integration Test using Spring MVC } for PersonnelServices. One can load the real
- * database for testing
+ * {@link Integration Test using Spring MVC } for PersonnelServices. One can
+ * load the real database for testing
+ * 
  * @author Kris Krishna
  * @since 1.0.0
  **/
-
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -46,8 +46,7 @@ import com.insys.trapps.util.BusinessBuilder;
 // @TestPropertySource(locations="classpath:test.properties")
 public class BusinessSpringIntegrationTests {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(BusinessSpringIntegrationTests.class);
+	private static final Logger logger = LoggerFactory.getLogger(BusinessSpringIntegrationTests.class);
 
 	protected MockMvc mvc;
 
@@ -80,8 +79,7 @@ public class BusinessSpringIntegrationTests {
 		ResultActions resultActions = mvc.perform(get("/businesses"));
 
 		MvcResult result = resultActions.andExpect(status().isOk())
-				.andExpect(content().contentTypeCompatibleWith("application/json"))
-				.andReturn();
+				.andExpect(content().contentTypeCompatibleWith("application/json")).andReturn();
 
 		String content = result.getResponse().getContentAsString();
 
@@ -94,40 +92,26 @@ public class BusinessSpringIntegrationTests {
 	@Test
 	public void testCreateBusiness() throws Exception {
 
-		Address address_1 = Address.builder()
-				.address1("Insys Street")
-				.city("Denver")
-				.state("CO")
-				.zipCode("80014")
+		Address address_1 = Address.builder().address1("Insys Street").city("Denver").state("CO").zipCode("80014")
 				.build();
-		Address address_2 =Address.builder()
-				.address1("Luxoft Street")
-				.city("Seattle")
-				.state("WA")
-				.zipCode("70014")
+		Address address_2 = Address.builder().address1("Luxoft Street").city("Seattle").state("WA").zipCode("70014")
 				.build();
 
-		Business testBuisness = BusinessBuilder
-				.buildBusiness("test", "testing-denver", BusinessType.INSYS)
+		Business testBuisness = BusinessBuilder.buildBusiness("test", "testing-denver", BusinessType.INSYS)
 				.addLocation(address_1).addLocation(address_2).build();
 
-        ResultActions resultActions = null;
+		ResultActions resultActions = null;
 
-        resultActions = mvc
-                .perform(post("/address").contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(address_1)));
-        resultActions = mvc
-                .perform(post("/address").contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(address_2)));
+		resultActions = mvc.perform(post("/address").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(address_1)));
+		resultActions = mvc.perform(post("/address").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(address_2)));
 
-
-        resultActions = mvc
-				.perform(post("/businesses").contentType(MediaType.APPLICATION_JSON)
-						.content(objectMapper.writeValueAsString(testBuisness)));
+		resultActions = mvc.perform(post("/businesses").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(testBuisness)));
 
 		MvcResult result = resultActions.andExpect(status().isCreated())
-				.andExpect(content().contentTypeCompatibleWith("application/json"))
-				.andReturn();
+				.andExpect(content().contentTypeCompatibleWith("application/json")).andReturn();
 
 		String content = result.getResponse().getContentAsString();
 

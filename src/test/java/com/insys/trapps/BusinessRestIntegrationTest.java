@@ -29,25 +29,24 @@ import com.insys.trapps.util.BusinessBuilder;
 /**
  * {@link Integration Test using RestTemplate} for PersonnelServices.
  * 
- * @author  Kris Krishna
+ * @author Kris Krishna
  * @since 1.0.0
-**/
+ **/
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BusinessRestIntegrationTest {
-	
-	 private static final Logger logger = LoggerFactory.getLogger(BusinessRestIntegrationTest.class);
+
+	private static final Logger logger = LoggerFactory.getLogger(BusinessRestIntegrationTest.class);
 
 	@Autowired
 	private TestRestTemplate restTemplate;
-	
-	  protected ObjectMapper objectMapper = new ObjectMapper();
+
+	protected ObjectMapper objectMapper = new ObjectMapper();
 
 	@Test
 	public void getBusinessList() {
-		ResponseEntity<List> responseEntity = restTemplate.getForEntity("/businesses",
-				List.class);
+		ResponseEntity<List> responseEntity = restTemplate.getForEntity("/businesses", List.class);
 		List clients = responseEntity.getBody();
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 	}
@@ -55,33 +54,28 @@ public class BusinessRestIntegrationTest {
 	@Test
 	public void createBusiness() throws JsonProcessingException {
 
-		Address address_1 = Address.builder()
-				.address1("Insys Street")
-				.city("Denver")
-				.state("CO")
-				.zipCode("80014")
+		Address address_1 = Address.builder().address1("Insys Street").city("Denver").state("CO").zipCode("80014")
 				.build();
-		Address address_2 =Address.builder()
-				.address1("Luxoft Street")
-				.city("Seattle")
-				.state("WA")
-				.zipCode("70014")
+		Address address_2 = Address.builder().address1("Luxoft Street").city("Seattle").state("WA").zipCode("70014")
 				.build();
 
-		Business testBuisness = BusinessBuilder.buildBusiness("test", "testing-denver",  BusinessType.INSYS).addLocation(address_1).addLocation(address_2).build();
-		
+		Business testBuisness = BusinessBuilder.buildBusiness("test", "testing-denver", BusinessType.INSYS)
+				.addLocation(address_1).addLocation(address_2).build();
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		
+
 		logger.debug("jsonString :" + objectMapper.writeValueAsString(testBuisness));
 
 		HttpEntity<String> entity = new HttpEntity<String>(objectMapper.writeValueAsString(testBuisness), headers);
 
-		ResponseEntity<Business> responseEntity = restTemplate.exchange("/businesses/", HttpMethod.POST, entity, Business.class);
+		ResponseEntity<Business> responseEntity = restTemplate.exchange("/businesses/", HttpMethod.POST, entity,
+				Business.class);
 
-		// ResponseEntity<Business> responseEntity =  restTemplate.postForEntity("/business", entity, Business.class);
-		
-		 Business client = responseEntity.getBody();
+		// ResponseEntity<Business> responseEntity =
+		// restTemplate.postForEntity("/business", entity, Business.class);
+
+		Business client = responseEntity.getBody();
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 		assertEquals("test", client.getName());
 	}

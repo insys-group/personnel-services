@@ -41,7 +41,6 @@ import com.insys.trapps.util.BusinessBuilder;
 @WebAppConfiguration
 @ContextConfiguration(classes = MockServletContext.class)
 public class BusinessServiceTest {
-	
 
 	@InjectMocks
 	BusinessServiceImpl businessService;
@@ -62,31 +61,22 @@ public class BusinessServiceTest {
 	private BusinessRepository businessRepository;
 
 	private Business testBusiness;
-	
+
 	@Before
 	public void setUpMock() throws Exception {
 		MockitoAnnotations.initMocks(this);
 		objectMapper = new ObjectMapper();
 
-		Address address_1 = Address.builder()
-				.address1("Insys Street")
-				.city("Denver")
-				.state("CO")
-				.zipCode("80014")
+		Address address_1 = Address.builder().address1("Insys Street").city("Denver").state("CO").zipCode("80014")
 				.build();
-		Address address_2 =Address.builder()
-				.address1("Luxoft Street")
-				.city("Seattle")
-				.state("WA")
-				.zipCode("70014")
+		Address address_2 = Address.builder().address1("Luxoft Street").city("Seattle").state("WA").zipCode("70014")
 				.build();
 
-		testBusiness = BusinessBuilder
-				.buildBusiness("test", "testing-denver", BusinessType.Client)
+		testBusiness = BusinessBuilder.buildBusiness("test", "testing-denver", BusinessType.Client)
 				.addLocation(address_1).addLocation(address_2).build();
 
 	}
-	
+
 	@Test
 	public void testlistBusinesses() throws Exception {
 		Mockito.when(businessRepository.findAll()).then(new Answer() {
@@ -98,12 +88,11 @@ public class BusinessServiceTest {
 
 		});
 
-		List<Business>  businesses = businessService.listBusinesses();
-		
+		List<Business> businesses = businessService.listBusinesses();
+
 		assertNotNull(businesses);
 	}
-	
-	
+
 	@Test
 	public void testCreateBusiness() throws Exception {
 		Mockito.when(businessRepository.save(any(Business.class))).then(new Answer() {
@@ -114,9 +103,9 @@ public class BusinessServiceTest {
 			}
 
 		});
-	
+
 		Business savedBusiness = businessService.createBusiness(testBusiness);
-		
+
 		assertNotNull(savedBusiness);
 	}
 
