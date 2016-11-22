@@ -7,6 +7,7 @@ import java.sql.SQLData;
 
 @Entity
 @Table(name = "PERSON_DOCUMENT")
+@EqualsAndHashCode(exclude = {"person"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 public class PersonDocument extends AbstractEntity {

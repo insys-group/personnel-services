@@ -10,6 +10,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "BUSINESS_ENTITY")
+@EqualsAndHashCode(exclude = {"persons", "opportunities" , "locations"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 public class BusinessEntity extends AbstractEntity {

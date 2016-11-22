@@ -7,6 +7,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "ENGAGEMENT")
+@EqualsAndHashCode(exclude = {"opportunity", "engagementOpenings"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

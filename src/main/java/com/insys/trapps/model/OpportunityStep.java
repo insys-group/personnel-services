@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "OPPORTUNITY_STEP")
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(exclude = {"opportunity"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

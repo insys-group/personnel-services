@@ -8,8 +8,6 @@ import java.util.Date;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@ToString(exclude = {"id","version"})
-@EqualsAndHashCode(exclude = {"id","version"})
 @AllArgsConstructor
 @NoArgsConstructor
 public abstract class AbstractEntity {

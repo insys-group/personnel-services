@@ -10,6 +10,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "CONTRACT")
+@EqualsAndHashCode(exclude = {"engagementOpening","person", "contractDetails"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

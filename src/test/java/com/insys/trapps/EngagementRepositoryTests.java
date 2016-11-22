@@ -20,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Vladiomir Nalitkin
@@ -78,9 +79,11 @@ public class EngagementRepositoryTests {
         Set<Engagement> engagementsFromRepositorySet = new HashSet<>();
         engagementRepository.findAll().forEach(engagementsFromRepositorySet::add);
         testEngagementList.containsAll(engagementsFromRepositorySet);
-        engagementsFromRepositorySet.forEach(item -> item
-                .getEngagementOpenings()
-                .containsAll(testEngagementList.get(testEngagementList.indexOf(item)).getEngagementOpenings())
+        engagementsFromRepositorySet.forEach(item -> {
+                    assertTrue(testEngagementList.indexOf(item) != -1);
+                    item.getEngagementOpenings()
+                        .containsAll(testEngagementList.get(testEngagementList.indexOf(item)).getEngagementOpenings());
+                }
         );
         engagementsFromRepositorySet.forEach(item -> log.debug("Engagement : " + item.toString()));
 
@@ -93,21 +96,18 @@ public class EngagementRepositoryTests {
     @Test
     public void testUpdate() throws Exception {
         log.debug("Enter: testUpdate " + engagementRepository.getClass().toString());
+
+        testEngagementList.forEach(item-> item.setComments(item.getComments() + " upd"));
         saveAll();
 
         Set<Engagement> engagementsFromRepositorySet = new HashSet<>();
         engagementRepository.findAll().forEach(engagementsFromRepositorySet::add);
-
-        Engagement testEngagementNew = (Engagement) engagementsFromRepositorySet.toArray()[0];
-        testEngagementNew.setComments("Engagement 1 Updated");
-        engagementRepository.save(testEngagementNew);
-
-        engagementsFromRepositorySet.clear();
-        engagementRepository.findAll().forEach(engagementsFromRepositorySet::add);
         testEngagementList.containsAll(engagementsFromRepositorySet);
-        engagementsFromRepositorySet.forEach(item -> item
-                .getEngagementOpenings()
-                .containsAll(testEngagementList.get(testEngagementList.indexOf(item)).getEngagementOpenings())
+        engagementsFromRepositorySet.forEach(item -> {
+                    assertTrue(testEngagementList.indexOf(item) != -1);
+                    item.getEngagementOpenings()
+                            .containsAll(testEngagementList.get(testEngagementList.indexOf(item)).getEngagementOpenings());
+                }
         );
 
         engagementsFromRepositorySet.forEach(item -> log.debug("Engagement : " + item.toString()));
