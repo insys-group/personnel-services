@@ -1,6 +1,5 @@
 package com.insys.trapps.model;
 
-import java.util.Collection;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -8,15 +7,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -32,9 +30,15 @@ import lombok.Setter;;
 
 @Entity
 @Table(name = "BUSINESS")
+@EqualsAndHashCode(of = {"name"})
 @AllArgsConstructor
 @NoArgsConstructor
-public class Business  extends AbstractEntity {
+public class Business {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
+    @Setter
+    protected Long id;
 
     @Getter
     @Setter
@@ -51,26 +55,25 @@ public class Business  extends AbstractEntity {
     @Getter
     @Setter
     @NonNull
-    @Column(name = "ENTITY_TYPE", nullable = false)
+    @Column(name = "BUSINESS_TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
     private BusinessType businessType;
 
+    //TODO - Enable when needed.
+    /*
     @Getter
     @Setter
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
     private Set<Person> persons;
-
+    
+    //TODO - Enable when needed.
     @Getter
     @Setter
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
     private Set<Opportunity> opportunities;
-
+     */
     @Getter
     @Setter
-	@OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "business_id", nullable = false)
-	private Collection<Location> locations;
-
-	
-
+    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
+    private Set<Location> locations;
 }

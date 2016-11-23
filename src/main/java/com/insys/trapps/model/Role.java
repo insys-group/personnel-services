@@ -10,10 +10,16 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "ROLE")
+@EqualsAndHashCode(exclude = {"skills", "engagementOpenings"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Role extends AbstractEntity {
+public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
+    @Setter
+    protected Long id;
 
     @Getter
     @Setter

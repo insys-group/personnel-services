@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by vnalitkin on 11/21/2016.
@@ -76,22 +77,20 @@ public class RoleRepositoryTests {
     @Test
     public void testUpdate() throws Exception {
         log.debug("Enter: testUpdate " + roleRepository.getClass().toString());
-        saveAll();
 
-        Role testRoleNew = roleRepository.findByName("Role 1").get(0);
-        testRoleNew.setName("Role 1 Updated");
-        roleRepository.save(testRoleNew);
+        testRoleList.forEach(item-> item.setName(item.getName() + " upd"));
+        saveAll();
 
         Set<Role> rolesFromRepositorySet = new HashSet<>();
         roleRepository.findAll().forEach(rolesFromRepositorySet::add);
         testRoleList.containsAll(rolesFromRepositorySet);
-        rolesFromRepositorySet.forEach(item -> item
-                .getSkills()
-                .containsAll(testRoleList.get(testRoleList.indexOf(item)).getSkills())
+        rolesFromRepositorySet.forEach(item -> {
+                    assertTrue(testRoleList.indexOf(item) != -1);
+                }
         );
 
         rolesFromRepositorySet.forEach(item -> log.debug("Role : " + item.toString()));
 
-        deleteAll();
+        //deleteAll();
     }
 }

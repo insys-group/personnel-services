@@ -1,6 +1,7 @@
 package com.insys.trapps.repositories;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -83,28 +84,18 @@ public class OpportunityRepositoryTests {
     @Test
     public void testUpdate() throws Exception {
         log.debug("Enter: testUpdate " + opportunityRepository.getClass().toString());
+
+        testOpportunityList.forEach(item -> item.setComments(item.getComments() + " upd"));
         saveAll();
 
         Set<Opportunity> opportunitysFromRepositorySet = new HashSet<>();
         opportunityRepository.findAll().forEach(opportunitysFromRepositorySet::add);
-
-        Opportunity testOpportunityNew = (Opportunity) opportunitysFromRepositorySet.toArray()[0];
-        testOpportunityNew.setComments("Opportunity 1 Updated");
-        testOpportunityNew.getSteps().add(
-                OpportunityStep.builder()
-                        .comments("OpportunityStep O2OS3")
-                        .stepTimestamp(Timestamp.valueOf(LocalDate.now().atStartOfDay()))
-                        .opportunity(testOpportunityNew)
-                        .build()
-        );
-        opportunityRepository.save(testOpportunityNew);
-
-        opportunitysFromRepositorySet.clear();
-        opportunityRepository.findAll().forEach(opportunitysFromRepositorySet::add);
         testOpportunityList.containsAll(opportunitysFromRepositorySet);
-        opportunitysFromRepositorySet.forEach(item -> item
-                .getSteps()
-                .containsAll(testOpportunityList.get(testOpportunityList.indexOf(item)).getSteps())
+        opportunitysFromRepositorySet.forEach(item -> {
+                    assertTrue(testOpportunityList.indexOf(item) != -1);
+                    item.getSteps()
+                            .containsAll(testOpportunityList.get(testOpportunityList.indexOf(item)).getSteps());
+                }
         );
 
         opportunitysFromRepositorySet.forEach(item -> log.debug("Opportunity : " + item.toString()));

@@ -15,11 +15,11 @@ import com.insys.trapps.model.OpportunityStep;
 public class OpportunityBuilder {
     private Opportunity opportunity;
 
-    public static OpportunityBuilder buildOpportunity(String comment, Business businessEntity) {
+    public static OpportunityBuilder buildOpportunity(String comment, Business business) {
         OpportunityBuilder builder = new OpportunityBuilder();
         builder.opportunity = Opportunity.builder()
                 .comments(comment)
-                .business(businessEntity)
+                //.businessEntity(businessEntity)
                 .build();
         builder.opportunity
                 .setSteps(new HashSet<>(

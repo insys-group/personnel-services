@@ -83,18 +83,18 @@ public class ContractRepositoryTests {
     @Test
     public void testUpdate() throws Exception {
         log.debug("Enter: testUpdate " + contractRepository.getClass().toString());
-        saveAll();
 
-        Contract testContractNew = contractRepository.findByComments("Contract 1").get(0);
-        testContractNew.setComments("contract 1 Updated");
-        contractRepository.save(testContractNew);
+        testContractList.forEach(item-> item.setComments(item.getComments() + " upd"));
+        saveAll();
 
         Set<Contract> contractsFromRepositorySet = new HashSet<>();
         contractRepository.findAll().forEach(contractsFromRepositorySet::add);
         testContractList.containsAll(contractsFromRepositorySet);
-        contractsFromRepositorySet.forEach(item -> item
-                .getContractDetails()
-                .containsAll(testContractList.get(testContractList.indexOf(item)).getContractDetails())
+        contractsFromRepositorySet.forEach(item -> {
+                    assertTrue(testContractList.indexOf(item) != -1);
+                    item.getContractDetails()
+                        .containsAll(testContractList.get(testContractList.indexOf(item)).getContractDetails());
+                }
         );
 
         contractsFromRepositorySet.forEach(item -> log.debug("contract : " + item.toString()));

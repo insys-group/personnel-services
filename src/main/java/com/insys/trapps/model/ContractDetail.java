@@ -12,11 +12,16 @@ import java.time.LocalDate;
  */
 @Entity
 @Table(name = "CONTRACT_DETAIL")
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(exclude = {"contract"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ContractDetail extends AbstractEntity {
+public class ContractDetail {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
+    @Setter
+    protected Long id;
 
     @Getter
     @Setter

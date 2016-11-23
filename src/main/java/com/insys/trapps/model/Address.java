@@ -10,10 +10,16 @@ import javax.xml.crypto.Data;
  */
 @Entity
 @Table(name = "ADDRESS")
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Address extends AbstractEntity {
+public class Address {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
+    @Setter
+    protected Long id;
 
     @Getter
     @Setter

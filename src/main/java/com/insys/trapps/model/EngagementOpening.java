@@ -8,10 +8,16 @@ import java.util.Set;
 
 @Entity
 @Table(name = "ENGAGEMENT_OPENING")
+@EqualsAndHashCode(exclude = {"engagement", "role", "location", "contracts"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EngagementOpening extends AbstractEntity {
+public class EngagementOpening {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
+    @Setter
+    protected Long id;
 
     @Getter
     @Setter
