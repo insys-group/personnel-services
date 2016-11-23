@@ -1,6 +1,7 @@
 package com.insys.trapps.model;
 
 import java.util.Collection;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,7 +14,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;;
 
 /**
  * {@link Business Entity} for PersonellServices.
@@ -24,110 +31,45 @@ import javax.persistence.Table;;
 
 
 @Entity
-@Table(name = "business")
-public class Business {
+@Table(name = "BUSINESS")
+@AllArgsConstructor
+@NoArgsConstructor
+public class Business  extends AbstractEntity {
 
-	// Client, Location and Address
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long businessId;
+    @Getter
+    @Setter
+    @NonNull
+    @Column(name = "NAME", nullable = false)
+    private String name;
 
-	@Column(nullable = false)
-	private String name;
+    @Getter
+    @Setter
+    @NonNull
+    @Column(name = "DESCR", nullable = false)
+    private String descr;
 
-	@Column(nullable = false)
-	private String description;
+    @Getter
+    @Setter
+    @NonNull
+    @Column(name = "ENTITY_TYPE", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BusinessType businessType;
 
-	@Column(nullable = false)
-	@Enumerated(EnumType.STRING)
-	private BusinessType businessType;
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
+    private Set<Person> persons;
 
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
+    private Set<Opportunity> opportunities;
+
+    @Getter
+    @Setter
 	@OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "business_id", nullable = false)
 	private Collection<Location> locations;
-
-	public Business() {
-	}
-
-	public Business(String name, String description, BusinessType businessType,
-			Collection<Location> locations) {
-		this.name = name;
-		this.description = description;
-		this.businessType = businessType;
-		this.locations = locations;
-	}
-
-
-	public Long getBusinessId() {
-		return businessId;
-	}
-
-	public void setBusinessId(Long businessId) {
-		this.businessId = businessId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public BusinessType getBusinessType() {
-		return businessType;
-	}
-
-	public void setBusinessType(BusinessType businessType) {
-		this.businessType = businessType;
-	}
-
-	public Collection<Location> getLocations() {
-		return locations;
-	}
-
-	public void setLocations(Collection<Location> locations) {
-		this.locations = locations;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Business other = (Business) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Business [name=" + name + ", description=" + description
-				+ ", businessType=" + businessType + ", locations=" + locations + "]";
-	}
 
 	
 

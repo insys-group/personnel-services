@@ -1,15 +1,13 @@
 package com.insys.trapps.util;
 
-import com.insys.trapps.model.BusinessEntity;
-import com.insys.trapps.model.Opportunity;
-import com.insys.trapps.model.OpportunityStep;
-
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
+
+import com.insys.trapps.model.Business;
+import com.insys.trapps.model.Opportunity;
+import com.insys.trapps.model.OpportunityStep;
 
 /**
  * Created by vnalitkin on 11/21/2016.
@@ -17,11 +15,11 @@ import java.util.List;
 public class OpportunityBuilder {
     private Opportunity opportunity;
 
-    public static OpportunityBuilder buildOpportunity(String comment, BusinessEntity businessEntity) {
+    public static OpportunityBuilder buildOpportunity(String comment, Business businessEntity) {
         OpportunityBuilder builder = new OpportunityBuilder();
         builder.opportunity = Opportunity.builder()
                 .comments(comment)
-                .businessEntity(businessEntity)
+                .business(businessEntity)
                 .build();
         builder.opportunity
                 .setSteps(new HashSet<>(

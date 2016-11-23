@@ -87,7 +87,7 @@ public class BusinessRepositoryTest {
 		businesses.forEach(client -> {
 			logger.debug("@@@  Client is " + client.toString());
 			assertTrue(testClient.getName().contains(client.getName()));
-			assertNotNull(client.getDescription());
+			assertNotNull(client.getDescr());
 		});
 
 		// this.clientRepository.delete(testClient);
@@ -100,7 +100,7 @@ public class BusinessRepositoryTest {
 		businesses.forEach(client -> {
 			logger.debug("@@@  Client is " + client.toString());
 			assertTrue(testClient.getName().contains(client.getName()));
-			assertNotNull(client.getDescription());
+			assertNotNull(client.getDescr());
 		});
 
 		// this.clientRepository.delete(testClient);

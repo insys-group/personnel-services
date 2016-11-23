@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -30,21 +32,39 @@ import com.insys.trapps.util.BusinessBuilder;
 /**
  * {@link Integration Test using RestTemplate} for PersonnelServices.
  * 
- * @author  Kris Krishna
+ * @author Kris Krishna
  * @since 1.0.0
-**/
+ **/
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@Ignore
+// @Ignore
 public class BusinessRestIntegrationTest {
-	
-	 private static final Logger logger = LoggerFactory.getLogger(BusinessRestIntegrationTest.class);
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(BusinessRestIntegrationTest.class);
 
 	@Autowired
 	private TestRestTemplate restTemplate;
-	
-	  protected ObjectMapper objectMapper = new ObjectMapper();
+
+	protected ObjectMapper objectMapper = new ObjectMapper();
+
+	@Test
+	public void getBusinesses() {
+		String businessUrl = "/businesses";
+
+		ParameterizedTypeReference<Resource<Business>> responseType = new ParameterizedTypeReference<Resource<Business>>() {
+		};
+
+		ResponseEntity<Resource<Business>> responseEntity = restTemplate.exchange(businessUrl,
+				HttpMethod.GET, null, responseType);
+
+		Business business = responseEntity.getBody().getContent();
+		assertEquals("test", business.getName());
+
+		// more assertions
+
+	}
 
 	@Test
 	public void getBusinessList() {
@@ -57,36 +77,49 @@ public class BusinessRestIntegrationTest {
 	@Test
 	public void createBusiness() throws JsonProcessingException {
 
-		Address address_1 = Address.builder()
-				.address1("Insys Street")
-				.city("Denver")
-				.state("CO")
-				.zipCode("80014")
-				.build();
-		
-		Address address_2 =Address.builder()
-				.address1("Luxoft Street")
-				.city("Seattle")
-				.state("WA")
-				.zipCode("70014")
-				.build();
+		Address address_1 = Address.builder().address1("Insys Street").city("Denver")
+				.state("CO").zipCode("80014").build();
 
-		Business testBuisness = BusinessBuilder.buildBusiness("test", "testing-denver",  BusinessType.INSYS).addLocation(address_1).addLocation(address_2).build();
-		
+		Address address_2 = Address.builder().address1("Luxoft Street").city("Seattle")
+				.state("WA").zipCode("70014").build();
+
+		Business testBuisness = BusinessBuilder
+				.buildBusiness("test", "testing-denver", BusinessType.INSYS)
+				.addLocation(address_1).addLocation(address_2).build();
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		
+
 		logger.debug("jsonString :" + objectMapper.writeValueAsString(testBuisness));
 
-		HttpEntity<String> entity = new HttpEntity<String>(objectMapper.writeValueAsString(testBuisness), headers);
-
-		ResponseEntity<Business> responseEntity = restTemplate.exchange("/businesses/", HttpMethod.POST, entity, Business.class);
-
-		// ResponseEntity<Business> responseEntity =  restTemplate.postForEntity("/business", entity, Business.class);
+		HttpEntity<String> entity = new HttpEntity<String>(
+				objectMapper.writeValueAsString(testBuisness), headers);
 		
-		 Business client = responseEntity.getBody();
+		//String businessUrl = "http://localhost:8080/businesses";
+		
+		String businessUrl = "/businesses";
+
+		ParameterizedTypeReference<Resource<Business>> responseType = new ParameterizedTypeReference<Resource<Business>>() {};
+		
+		ResponseEntity<Resource<Business>> responseEntity = restTemplate.exchange(businessUrl,
+				HttpMethod.POST, entity, responseType);
+
+		/*ResponseEntity<Business> responseEntity = restTemplate.exchange("/businesses",
+				HttpMethod.POST, entity, Business.class);*/
+
+		// ResponseEntity<Business> responseEntity =
+		// restTemplate.postForEntity("/business", entity, Business.class);
+
+		//Business client = responseEntity.getBody();
+		
+		Resource<Business> businessResource = responseEntity.getBody();
+		
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-		assertEquals("test", client.getName());
+		Business savedBusiness = businessResource.getContent();
+		assertEquals("test", savedBusiness.getName());
+		
+		
+		
 	}
 
 }

@@ -51,5 +51,5 @@ public class Person extends AbstractEntity{
 
 	@ManyToOne
 	@JoinColumn(name = "person")
-	private BusinessEntity businessEntity;
+	private Business business;
 }

@@ -20,7 +20,7 @@ public class BusinessBuilder {
 	
 	public static BusinessBuilder buildBusiness(String name, String description, BusinessType businesType) {
 		BusinessBuilder builder = new BusinessBuilder();
-		builder.business.setDescription(description);
+		builder.business.setDescr(description);
 		builder.business.setName(name);
 		builder.business.setBusinessType(businesType);
 		return builder;

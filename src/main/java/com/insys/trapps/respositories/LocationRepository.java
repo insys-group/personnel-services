@@ -1,6 +1,7 @@
 package com.insys.trapps.respositories;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import com.insys.trapps.model.Location;
 
@@ -10,7 +11,7 @@ import com.insys.trapps.model.Location;
  * @author  Kris Krishna
  * @since 1.0.0
 **/
-
-public interface LocationRepository extends PagingAndSortingRepository<Location, Long> {
+@RepositoryRestResource
+public interface LocationRepository extends JpaRepository<Location, Long> {
 
 }

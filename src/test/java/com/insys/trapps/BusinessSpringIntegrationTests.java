@@ -115,16 +115,16 @@ public class BusinessSpringIntegrationTests {
 
         ResultActions resultActions = null;
 
-      /*  resultActions = mvc
-                .perform(post("/address").contentType(MediaType.APPLICATION_JSON)
+        /*resultActions = mvc
+                .perform(post("/addresses").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(address_1)));
         resultActions = mvc
-                .perform(post("/address").contentType(MediaType.APPLICATION_JSON)
+                .perform(post("/addresses").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(address_2)));
 */
 
         resultActions = mvc
-				.perform(post("/businesses").contentType(MediaType.APPLICATION_JSON)
+				.perform(post("/businesses").contentType(MediaType.ALL)
 						.content(objectMapper.writeValueAsString(testBuisness)));
 
 		MvcResult result = resultActions.andExpect(status().isCreated())

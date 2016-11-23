@@ -35,7 +35,7 @@ public class Opportunity extends AbstractEntity{
     private Set<Engagement> engagements;
 
     @ManyToOne
-    @JoinColumn(name = "BUSINESS_ENTITY_ID")
-    private BusinessEntity businessEntity;
+    @JoinColumn(name = "BUSINESS_ID")
+    private Business business;
 
 }
