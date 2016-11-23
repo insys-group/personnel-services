@@ -13,7 +13,12 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Location extends AbstractEntity {
+public class Location {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
+    @Setter
+    protected Long id;
 
     @Getter
     @Setter
@@ -24,12 +29,6 @@ public class Location extends AbstractEntity {
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "BUSINESSENTITY_ID")
-    private BusinessEntity businessEntity;
-
-    @Getter
-    @Setter
-    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<EngagementOpening> engagementOpenings;
-
+    @JoinColumn(name = "BUSINESS_ID")
+    private Business business;
 }

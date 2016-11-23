@@ -14,7 +14,12 @@ import javax.persistence.Table;
 @Table(name = "OPPORTUNITY_CONTACT")
 @AllArgsConstructor
 @NoArgsConstructor
-public class OpportunityContact extends AbstractEntity{
+public class OpportunityContact {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
+    @Setter
+    protected Long id;
 
 	@ManyToOne
 	@JoinColumn(name = "opportunity_id")

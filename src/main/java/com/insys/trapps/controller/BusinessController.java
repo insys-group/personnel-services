@@ -48,7 +48,7 @@ public class BusinessController {
 		Business business = businessService.createBusiness(request);
 		HttpHeaders responseHeaders = new HttpHeaders();
 		URI newBusinessUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(business.getBusinessId()).toUri();
+				.buildAndExpand(business.getId()).toUri();
 		responseHeaders.setLocation(newBusinessUri);
 
 		return new ResponseEntity<Business>(business, responseHeaders, HttpStatus.CREATED);

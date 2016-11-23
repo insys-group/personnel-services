@@ -14,7 +14,12 @@ import javax.xml.crypto.Data;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Address extends AbstractEntity {
+public class Address {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
+    @Setter
+    protected Long id;
 
     @Getter
     @Setter

@@ -8,10 +8,15 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "PERSON")
-@EqualsAndHashCode(exclude = {"documents", "businessEntity"}, callSuper = false)
+@EqualsAndHashCode(of = {"email"})
 @AllArgsConstructor
 @NoArgsConstructor
-public class Person extends AbstractEntity {
+public class Person {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter
+    @Setter
+    protected Long id;
 
     @Getter
     @Setter
@@ -43,14 +48,14 @@ public class Person extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private PersonType personType;
 
-    //@OneToOne
-    //private Address address;
-
     @Getter
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PersonDocument> documents;
-
+    
+    //TODO - Enable when needed.
+    /*
     @ManyToOne
     @JoinColumn(name = "person")
-    private BusinessEntity businessEntity;
+    private Business business;
+    */
 }
