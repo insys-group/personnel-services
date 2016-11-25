@@ -3,9 +3,8 @@ package com.insys.trapps.model;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.*;
 
-import java.util.Date;
 import javax.persistence.*;
-
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "OPPORTUNITY_STEP")
@@ -18,9 +17,8 @@ public class OpportunityStep extends AbstractEntity {
     @Getter
     @Setter
     @NonNull
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "STEP_TIMESTAMP", nullable = false)
-    private Date stepTimestamp;
+    @Column(name = "STEP_TIMESTAMP" , nullable = false)
+    private Timestamp stepTimestamp;
 
     @Column(name = "COMMENTS")
     @Getter

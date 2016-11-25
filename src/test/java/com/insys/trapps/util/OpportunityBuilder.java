@@ -24,7 +24,7 @@ public class OpportunityBuilder {
                 .businessEntity(businessEntity)
                 .build();
         builder.opportunity
-                .setSteps(new HashSet<>(
+                .setOpportunitySteps(new HashSet<>(
                                 Arrays.asList(
                                         OpportunityStep.builder()
                                                 .comments("OpportunityStep 1 " + builder.opportunity.getComments())

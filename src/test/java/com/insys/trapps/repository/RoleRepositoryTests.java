@@ -1,5 +1,6 @@
-package com.insys.trapps;
+package com.insys.trapps.repository;
 
+import com.insys.trapps.TrappsApiApplication;
 import com.insys.trapps.model.Role;
 import com.insys.trapps.respositories.RoleRepository;
 import com.insys.trapps.util.RoleBuilder;

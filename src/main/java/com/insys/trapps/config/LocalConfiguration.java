@@ -3,6 +3,7 @@ package com.insys.trapps.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 
 import javax.sql.DataSource;
@@ -13,9 +14,11 @@ import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.
  * Created by vnalitkin on 11/23/2016.
  */
 @Configuration
-@Profile("in-memory")
+@Profile("default")
+@PropertySource(value = {"classpath:app.properties"})
 public class LocalConfiguration {
 
+/*
     @Bean
     public DataSource dataSource() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
@@ -25,5 +28,6 @@ public class LocalConfiguration {
                 .addScript("data.sql");
         return builder.build();
     }
+*/
 
 }

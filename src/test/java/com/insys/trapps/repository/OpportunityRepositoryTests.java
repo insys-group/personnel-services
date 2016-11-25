@@ -1,4 +1,4 @@
-package com.insys.trapps;
+package com.insys.trapps.repository;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.*;
 
+import com.insys.trapps.TrappsApiApplication;
 import com.insys.trapps.util.OpportunityBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -69,8 +70,8 @@ public class OpportunityRepositoryTests {
         opportunityRepository.findAll().forEach(opportunitysFromRepositorySet::add);
         testOpportunityList.containsAll(opportunitysFromRepositorySet);
         opportunitysFromRepositorySet.forEach(item -> item
-                .getSteps()
-                .containsAll(testOpportunityList.get(testOpportunityList.indexOf(item)).getSteps())
+                .getOpportunitySteps()
+                .containsAll(testOpportunityList.get(testOpportunityList.indexOf(item)).getOpportunitySteps())
         );
         opportunitysFromRepositorySet.forEach(item -> log.debug("Opportunity : " + item.toString()));
 
@@ -92,8 +93,8 @@ public class OpportunityRepositoryTests {
         testOpportunityList.containsAll(opportunitysFromRepositorySet);
         opportunitysFromRepositorySet.forEach(item -> {
                     assertTrue(testOpportunityList.indexOf(item) != -1);
-                    item.getSteps()
-                            .containsAll(testOpportunityList.get(testOpportunityList.indexOf(item)).getSteps());
+                    item.getOpportunitySteps()
+                            .containsAll(testOpportunityList.get(testOpportunityList.indexOf(item)).getOpportunitySteps());
                 }
         );
 

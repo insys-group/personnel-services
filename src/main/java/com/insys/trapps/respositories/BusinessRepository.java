@@ -10,7 +10,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @author  Kris Krishna
  * @since 1.0.0
 **/
-@RepositoryRestResource
+@RepositoryRestResource(path = "businesses")
 public interface BusinessRepository extends PagingAndSortingRepository<BusinessEntity, Long> {
 	// TODO
 }

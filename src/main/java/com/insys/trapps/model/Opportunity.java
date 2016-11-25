@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @Table(name = "OPPORTUNITY")
-@EqualsAndHashCode(exclude = {"steps", "engagements", "businessEntity"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"opportunitySteps", "engagements", "businessEntity"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -26,7 +26,7 @@ public class Opportunity extends AbstractEntity {
     @Setter
     @Singular
     @OneToMany(mappedBy = "opportunity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<OpportunityStep> steps;
+    private Set<OpportunityStep> opportunitySteps;
 
     @Getter
     @Setter

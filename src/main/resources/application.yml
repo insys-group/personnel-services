@@ -1,7 +1,0 @@
-spring:
-  jpa:
-    generate-ddl: true
-    show-sql: true
-  data:
-    rest:
-      basePath: /api/v1

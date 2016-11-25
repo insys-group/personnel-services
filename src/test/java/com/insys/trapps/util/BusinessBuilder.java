@@ -3,54 +3,58 @@ package com.insys.trapps.util;
 import java.util.HashSet;
 
 /**
- * {@link BusinessBuilder} for PersonnelServices.
- * Use this to use a test business in all tests
- * @author  Kris Krishna
+ * {@link BusinessEntityBuilder} for PersonnelServices.
+ * Use this to use a test BusinessEntity in all tests
+ * @author Kris Krishna
  * @since 1.0.0
-**/
+ **/
 
 import com.insys.trapps.model.Address;
-import com.insys.trapps.model.BusinessType;
+import com.insys.trapps.model.BusinessEntity;
+import com.insys.trapps.model.BusinessEntityType;
 import com.insys.trapps.model.Location;
 
 public class BusinessBuilder {
 
-/*
-	private Business business=new Business();
-	
-	public static BusinessBuilder buildBusiness(String name, String description, BusinessType businesType) {
-		BusinessBuilder builder = new BusinessBuilder();
-		builder.business.setDescription(description);
-		builder.business.setName(name);
-		builder.business.setBusinessType(businesType);
-		return builder;
-	}
-	
-	public static BusinessBuilder buildBusiness(Business business) {
-		BusinessBuilder builder = new BusinessBuilder();
-		builder.business=business;
-		return builder;
-	}
-	
-	public BusinessBuilder addLocation(Address address) {
-		if(business.getLocations()==null) {
-			business.setLocations(new HashSet<>());
-		}
-		business.getLocations().add(Location.builder().address(address).build());
-		return this;
-	}
+    private BusinessEntity businessEntity;
 
-	public Business getClient() {
-		return business;
-	}
+    public static BusinessBuilder buildBusiness(String name, String description, BusinessEntityType businesType) {
+        BusinessBuilder builder = new BusinessBuilder();
+        builder.businessEntity = BusinessEntity.builder()
+                .descr(description)
+                .entityType(businesType)
+                .name(name)
+                .build();
+        return builder;
+    }
 
-	public void setClient(Business business) {
-		this.business = business;
-	}
+    public static BusinessBuilder buildBusiness(BusinessEntity BusinessEntity) {
+        BusinessBuilder builder = new BusinessBuilder();
+        builder.businessEntity = BusinessEntity;
+        return builder;
+    }
 
-	public Business build() {
-		return business;
-	}
-*/
+    public BusinessBuilder addLocation(Address address) {
+        if (businessEntity.getLocations() == null) {
+            businessEntity.setLocations(new HashSet<>());
+        }
+        businessEntity.getLocations().add(Location.builder()
+                .address(address)
+                .businessEntity(businessEntity)
+                .build());
+        return this;
+    }
+
+    public BusinessEntity getClient() {
+        return businessEntity;
+    }
+
+    public void setClient(BusinessEntity businessEntity) {
+        this.businessEntity = businessEntity;
+    }
+
+    public BusinessEntity build() {
+        return businessEntity;
+    }
 
 }
