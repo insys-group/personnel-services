@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by vnalitkin on 11/21/2016.
@@ -23,67 +24,72 @@ import static org.junit.Assert.assertNotNull;
 @Slf4j
 public class RoleRepositoryTests {
 
-	@Autowired
-	private RoleRepository roleRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
-	private List<Role> testRoleList = new ArrayList<>();
+    private List<Role> testRoleList = new ArrayList<>();
 
-	/*
-	 * Initialize testRole1 (a subject) before every test method execution.
-	 */
-	@Before
-	public void beforeEachMethod() {
-		testRoleList = Arrays.asList(RoleBuilder.buildRole("Role 1").build(), RoleBuilder.buildRole("Role 2").build());
-	}
+    /*
+     * Initialize testRole1 (a subject) before every test method execution.
+     */
+    @Before
+    public void beforeEachMethod() {
+        testRoleList = Arrays.asList(
+                RoleBuilder.buildRole("Role 1").build()
+                , RoleBuilder.buildRole("Role 2").build()
+        );
+    }
 
-	private void saveAll() {
-		deleteAll();
-		testRoleList.forEach(item -> roleRepository.save(item));
-	}
+    private void saveAll() {
+        deleteAll();
+        testRoleList.forEach(item -> roleRepository.save(item));
+    }
 
-	private void deleteAll() {
-		roleRepository.deleteAll();
-	}
+    private void deleteAll() {
+        roleRepository.deleteAll();
+    }
 
-	/*
-	 * Method to test RoleyRepository functionality for creating new Roles.
-	 */
-	@Test
-	public void testSave() throws Exception {
-		log.debug("Enter: testSave " + roleRepository.getClass().toString());
-		saveAll();
+    /*
+     * Method to test RoleyRepository functionality for creating new Roles.
+     */
+    @Test
+    public void testSave() throws Exception {
+        log.debug("Enter: testSave " + roleRepository.getClass().toString());
+        saveAll();
 
-		roleRepository.findAll().forEach(item -> assertNotNull(item.getId()));
-		Set<Role> rolesFromRepositorySet = new HashSet<>();
-		roleRepository.findAll().forEach(rolesFromRepositorySet::add);
-		testRoleList.containsAll(rolesFromRepositorySet);
-		rolesFromRepositorySet.forEach(
-				item -> item.getSkills().containsAll(testRoleList.get(testRoleList.indexOf(item)).getSkills()));
-		rolesFromRepositorySet.forEach(item -> log.debug("Role : " + item.toString()));
+        roleRepository.findAll().forEach(item -> assertNotNull(item.getId()));
+        Set<Role> rolesFromRepositorySet = new HashSet<>();
+        roleRepository.findAll().forEach(rolesFromRepositorySet::add);
+        testRoleList.containsAll(rolesFromRepositorySet);
+        rolesFromRepositorySet.forEach(item -> item
+                .getSkills()
+                .containsAll(testRoleList.get(testRoleList.indexOf(item)).getSkills())
+        );
+        rolesFromRepositorySet.forEach(item -> log.debug("Role : " + item.toString()));
 
-		deleteAll();
-	}
+        deleteAll();
+    }
 
-	/*
-	 * Method to test Repository functionality for update.
-	 */
-	@Test
-	public void testUpdate() throws Exception {
-		log.debug("Enter: testUpdate " + roleRepository.getClass().toString());
-		saveAll();
+    /*
+    * Method to test Repository functionality for update.
+    */
+    @Test
+    public void testUpdate() throws Exception {
+        log.debug("Enter: testUpdate " + roleRepository.getClass().toString());
 
-		Role testRoleNew = roleRepository.findByName("Role 1").get(0);
-		testRoleNew.setName("Role 1 Updated");
-		roleRepository.save(testRoleNew);
+        testRoleList.forEach(item-> item.setName(item.getName() + " upd"));
+        saveAll();
 
-		Set<Role> rolesFromRepositorySet = new HashSet<>();
-		roleRepository.findAll().forEach(rolesFromRepositorySet::add);
-		testRoleList.containsAll(rolesFromRepositorySet);
-		rolesFromRepositorySet.forEach(
-				item -> item.getSkills().containsAll(testRoleList.get(testRoleList.indexOf(item)).getSkills()));
+        Set<Role> rolesFromRepositorySet = new HashSet<>();
+        roleRepository.findAll().forEach(rolesFromRepositorySet::add);
+        testRoleList.containsAll(rolesFromRepositorySet);
+        rolesFromRepositorySet.forEach(item -> {
+                    assertTrue(testRoleList.indexOf(item) != -1);
+                }
+        );
 
-		rolesFromRepositorySet.forEach(item -> log.debug("Role : " + item.toString()));
+        rolesFromRepositorySet.forEach(item -> log.debug("Role : " + item.toString()));
 
-		deleteAll();
-	}
+        //deleteAll();
+    }
 }

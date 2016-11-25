@@ -24,74 +24,79 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest(classes = TrappsApiApplication.class)
 @Slf4j
 public class ContractRepositoryTests {
+    @Autowired
+    private ContractRepository contractRepository;
 
-	@Autowired
-	private ContractRepository contractRepository;
+    @Autowired
+    private ContractDetailRepository contractDetailRepository;
 
-	@Autowired
-	private ContractDetailRepository contractDetailRepository;
 
-	private List<Contract> testContractList = new ArrayList<>();
+    private List<Contract> testContractList = new ArrayList<>();
 
-	/*
-	 * Initialize testContract1 (a subject) before every test method execution.
-	 */
-	@Before
-	public void beforeEachMethod() {
-		testContractList = Arrays.asList(ContractBuilder.buildContract("Contract 1", null, null).build(),
-				ContractBuilder.buildContract("Contract 2", null, null).build());
-	}
+    /*
+     * Initialize testContract1 (a subject) before every test method execution.
+     */
+    @Before
+    public void beforeEachMethod() {
+        testContractList = Arrays.asList(
+                ContractBuilder.buildContract("Contract 1", null, null).build()
+                , ContractBuilder.buildContract("Contract 2", null, null).build()
+        );
+    }
 
-	private void saveAll() {
-		deleteAll();
-		testContractList.forEach(item -> contractRepository.save(item));
-	}
+    private void saveAll() {
+        deleteAll();
+        testContractList.forEach(item -> contractRepository.save(item));
+    }
 
-	private void deleteAll() {
-		contractDetailRepository.deleteAll();
-		contractRepository.deleteAll();
-	}
+    private void deleteAll() {
+        contractDetailRepository.deleteAll();
+        contractRepository.deleteAll();
+    }
 
-	/*
-	 * Method to test ContractyRepository functionality for creating new
-	 * Contracts.
-	 */
-	@Test
-	public void testSave() throws Exception {
-		log.debug("Enter: testSave " + contractRepository.getClass().toString());
-		saveAll();
+    /*
+     * Method to test ContractyRepository functionality for creating new Contracts.
+     */
+    @Test
+    public void testSave() throws Exception {
+        log.debug("Enter: testSave " + contractRepository.getClass().toString());
+        saveAll();
 
-		contractRepository.findAll().forEach(item -> assertNotNull(item.getId()));
-		Set<Contract> contractsFromRepositorySet = new HashSet<>();
-		contractRepository.findAll().forEach(contractsFromRepositorySet::add);
-		testContractList.containsAll(contractsFromRepositorySet);
-		contractsFromRepositorySet.forEach(item -> item.getContractDetails()
-				.containsAll(testContractList.get(testContractList.indexOf(item)).getContractDetails()));
-		contractsFromRepositorySet.forEach(item -> log.debug("contract : " + item.toString()));
+        contractRepository.findAll().forEach(item -> assertNotNull(item.getId()));
+        Set<Contract> contractsFromRepositorySet = new HashSet<>();
+        contractRepository.findAll().forEach(contractsFromRepositorySet::add);
+        testContractList.containsAll(contractsFromRepositorySet);
+        contractsFromRepositorySet.forEach(item -> item
+                .getContractDetails()
+                .containsAll(testContractList.get(testContractList.indexOf(item)).getContractDetails())
+        );
+        contractsFromRepositorySet.forEach(item -> log.debug("contract : " + item.toString()));
 
-		deleteAll();
-	}
+        deleteAll();
+    }
 
-	/*
-	 * Method to test Repository functionality for update.
-	 */
-	@Test
-	public void testUpdate() throws Exception {
-		log.debug("Enter: testUpdate " + contractRepository.getClass().toString());
-		saveAll();
+    /*
+    * Method to test Repository functionality for update.
+    */
+    @Test
+    public void testUpdate() throws Exception {
+        log.debug("Enter: testUpdate " + contractRepository.getClass().toString());
 
-		Contract testContractNew = contractRepository.findByComments("Contract 1").get(0);
-		testContractNew.setComments("contract 1 Updated");
-		contractRepository.save(testContractNew);
+        testContractList.forEach(item-> item.setComments(item.getComments() + " upd"));
+        saveAll();
 
-		Set<Contract> contractsFromRepositorySet = new HashSet<>();
-		contractRepository.findAll().forEach(contractsFromRepositorySet::add);
-		testContractList.containsAll(contractsFromRepositorySet);
-		contractsFromRepositorySet.forEach(item -> item.getContractDetails()
-				.containsAll(testContractList.get(testContractList.indexOf(item)).getContractDetails()));
+        Set<Contract> contractsFromRepositorySet = new HashSet<>();
+        contractRepository.findAll().forEach(contractsFromRepositorySet::add);
+        testContractList.containsAll(contractsFromRepositorySet);
+        contractsFromRepositorySet.forEach(item -> {
+                    assertTrue(testContractList.indexOf(item) != -1);
+                    item.getContractDetails()
+                        .containsAll(testContractList.get(testContractList.indexOf(item)).getContractDetails());
+                }
+        );
 
-		contractsFromRepositorySet.forEach(item -> log.debug("contract : " + item.toString()));
+        contractsFromRepositorySet.forEach(item -> log.debug("contract : " + item.toString()));
 
-		deleteAll();
-	}
+        deleteAll();
+    }
 }

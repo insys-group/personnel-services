@@ -10,6 +10,7 @@ import javax.xml.crypto.Data;
  */
 @Entity
 @Table(name = "ADDRESS")
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

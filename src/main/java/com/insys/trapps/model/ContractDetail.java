@@ -12,7 +12,7 @@ import java.time.LocalDate;
  */
 @Entity
 @Table(name = "CONTRACT_DETAIL")
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(exclude = {"contract"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

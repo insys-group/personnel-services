@@ -20,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Vladiomir Nalitkin Unit tests for Engagement engagementRepository. It
@@ -31,87 +32,92 @@ import static org.junit.Assert.assertNotNull;
 @Slf4j
 public class EngagementRepositoryTests {
 
-	@Autowired
-	private EngagementRepository engagementRepository;
+    @Autowired
+    private EngagementRepository engagementRepository;
 
-	@Autowired
-	private RoleRepository roleRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
-	@Autowired
-	private ContractRepository contractRepository;
+    @Autowired
+    private ContractRepository contractRepository;
 
-	private List<Engagement> testEngagementList = new ArrayList<>();
 
-	/*
-	 * Initialize testContract1 (a subject) before every test method execution.
-	 */
-	@Before
-	public void beforeEachMethod() {
-		Role role = RoleBuilder.buildRole("Role 1").build();
-		roleRepository.save(role);
+    private List<Engagement> testEngagementList = new ArrayList<>();
 
-		testEngagementList = Arrays.asList(EngagementBuilder.buildEngagement("Engagement 1", null, role, null).build(),
-				EngagementBuilder.buildEngagement("Engagement 1", null, role, null).build());
-	}
+    /*
+     * Initialize testContract1 (a subject) before every test method execution.
+     */
+    @Before
+    public void beforeEachMethod() {
+        Role role = RoleBuilder.buildRole("Role 1").build();
+        roleRepository.save(role);
 
-	private void saveAll() {
-		deleteAll();
-		testEngagementList.forEach(item -> engagementRepository.save(item));
-	}
+        testEngagementList = Arrays.asList(
+                EngagementBuilder.buildEngagement("Engagement 1", null, role, null).build()
+                , EngagementBuilder.buildEngagement("Engagement 1", null, role, null).build()
+        );
+    }
 
-	private void deleteAll() {
-		engagementRepository.deleteAll();
-	}
+    private void saveAll() {
+        deleteAll();
+        testEngagementList.forEach(item -> engagementRepository.save(item));
+    }
 
-	/*
-	 * Method to test Repository functionality for creating new.
-	 */
-	@Test
-	public void testSave() throws Exception {
-		log.debug("Enter: testSave " + engagementRepository.getClass().toString());
-		saveAll();
+    private void deleteAll() {
+        engagementRepository.deleteAll();
+    }
 
-		engagementRepository.findAll().forEach(item -> assertNotNull(item.getId()));
-		Set<Engagement> engagementsFromRepositorySet = new HashSet<>();
-		engagementRepository.findAll().forEach(engagementsFromRepositorySet::add);
-		testEngagementList.containsAll(engagementsFromRepositorySet);
-		engagementsFromRepositorySet.forEach(item -> item.getEngagementOpenings()
-				.containsAll(testEngagementList.get(testEngagementList.indexOf(item)).getEngagementOpenings()));
-		engagementsFromRepositorySet.forEach(item -> log.debug("Engagement : " + item.toString()));
+    /*
+     * Method to test Repository functionality for creating new.
+     */
+    @Test
+    public void testSave() throws Exception {
+        log.debug("Enter: testSave " + engagementRepository.getClass().toString());
+        saveAll();
 
-		deleteAll();
-	}
+        engagementRepository.findAll().forEach(item -> assertNotNull(item.getId()));
+        Set<Engagement> engagementsFromRepositorySet = new HashSet<>();
+        engagementRepository.findAll().forEach(engagementsFromRepositorySet::add);
+        testEngagementList.containsAll(engagementsFromRepositorySet);
+        engagementsFromRepositorySet.forEach(item -> {
+                    assertTrue(testEngagementList.indexOf(item) != -1);
+                    item.getEngagementOpenings()
+                        .containsAll(testEngagementList.get(testEngagementList.indexOf(item)).getEngagementOpenings());
+                }
+        );
+        engagementsFromRepositorySet.forEach(item -> log.debug("Engagement : " + item.toString()));
 
-	/*
-	 * Method to test Repository functionality for update.
-	 */
-	@Test
-	public void testUpdate() throws Exception {
-		log.debug("Enter: testUpdate " + engagementRepository.getClass().toString());
-		saveAll();
+        deleteAll();
+    }
 
-		Set<Engagement> engagementsFromRepositorySet = new HashSet<>();
-		engagementRepository.findAll().forEach(engagementsFromRepositorySet::add);
+    /*
+     * Method to test Repository functionality for update.
+     */
+    @Test
+    public void testUpdate() throws Exception {
+        log.debug("Enter: testUpdate " + engagementRepository.getClass().toString());
 
-		Engagement testEngagementNew = (Engagement) engagementsFromRepositorySet.toArray()[0];
-		testEngagementNew.setComments("Engagement 1 Updated");
-		engagementRepository.save(testEngagementNew);
+        testEngagementList.forEach(item-> item.setComments(item.getComments() + " upd"));
+        saveAll();
 
-		engagementsFromRepositorySet.clear();
-		engagementRepository.findAll().forEach(engagementsFromRepositorySet::add);
-		testEngagementList.containsAll(engagementsFromRepositorySet);
-		engagementsFromRepositorySet.forEach(item -> item.getEngagementOpenings()
-				.containsAll(testEngagementList.get(testEngagementList.indexOf(item)).getEngagementOpenings()));
+        Set<Engagement> engagementsFromRepositorySet = new HashSet<>();
+        engagementRepository.findAll().forEach(engagementsFromRepositorySet::add);
+        testEngagementList.containsAll(engagementsFromRepositorySet);
+        engagementsFromRepositorySet.forEach(item -> {
+                    assertTrue(testEngagementList.indexOf(item) != -1);
+                    item.getEngagementOpenings()
+                            .containsAll(testEngagementList.get(testEngagementList.indexOf(item)).getEngagementOpenings());
+                }
+        );
 
-		engagementsFromRepositorySet.forEach(item -> log.debug("Engagement : " + item.toString()));
+        engagementsFromRepositorySet.forEach(item -> log.debug("Engagement : " + item.toString()));
 
-		deleteAll();
-	}
+        deleteAll();
+    }
 
-	@After
-	public void afterTests() {
-		roleRepository.deleteAll();
-		contractRepository.deleteAll();
-	}
-
+    @After
+    public void afterTests() {
+        roleRepository.deleteAll();
+        contractRepository.deleteAll();
+    }
 }

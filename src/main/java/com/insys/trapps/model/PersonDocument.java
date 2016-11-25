@@ -10,6 +10,7 @@ import java.sql.SQLData;
 
 @Entity
 @Table(name = "PERSON_DOCUMENT")
+@EqualsAndHashCode(exclude = {"person"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
