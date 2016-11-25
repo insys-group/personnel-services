@@ -22,7 +22,7 @@ public class LocalConfiguration {
         builder
                 .setType(H2)
                 .generateUniqueName(true)
-                .addScript("localData.sql");
+                .addScript("data.sql");
         return builder.build();
     }
 
