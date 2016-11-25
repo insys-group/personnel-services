@@ -1,7 +1,6 @@
 package com.insys.trapps;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.insys.trapps.model.Business;
 import com.insys.trapps.model.Engagement;
 import com.insys.trapps.util.EngagementBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +14,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

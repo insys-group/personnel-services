@@ -49,12 +49,9 @@ public class EngagementRepositoryTests {
      */
     @Before
     public void beforeEachMethod() {
-        Role role = RoleBuilder.buildRole("Role 1").build();
-        roleRepository.save(role);
-
         testEngagementList = Arrays.asList(
-                EngagementBuilder.buildEngagement("Engagement 1", null, role, null).build()
-                , EngagementBuilder.buildEngagement("Engagement 1", null, role, null).build()
+                EngagementBuilder.buildEngagement("Engagement 1", null, null, null).build()
+                , EngagementBuilder.buildEngagement("Engagement 1", null, null, null).build()
         );
     }
 

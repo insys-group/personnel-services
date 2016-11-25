@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor
 @Builder
 public class Opportunity extends AbstractEntity {
-
     @Column(name = "COMMENTS")
     @Getter
     @Setter

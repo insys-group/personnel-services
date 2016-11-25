@@ -2,9 +2,7 @@ package com.insys.trapps.model;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by vnalitkin on 11/17/2016.
@@ -16,7 +14,6 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Builder
 public class Skill extends AbstractEntity {
-
     @Getter
     @Setter
     @NonNull

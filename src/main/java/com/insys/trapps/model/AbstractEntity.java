@@ -21,8 +21,7 @@ public abstract class AbstractEntity {
     @Getter
     @Setter
     @Version
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "VERSION")
-    private Date version;
+    private Long version = 1L;
 
 }

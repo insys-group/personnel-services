@@ -13,6 +13,7 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {"persons", "opportunities" , "locations"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BusinessEntity extends AbstractEntity {
     @Getter
     @Setter

@@ -13,7 +13,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class EngagementOpening extends AbstractEntity {
-
     @Getter
     @Setter
     @ManyToOne

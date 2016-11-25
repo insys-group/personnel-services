@@ -12,7 +12,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Person extends AbstractEntity {
-
     @Getter
     @Setter
     @NonNull

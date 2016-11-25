@@ -15,7 +15,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class Role extends AbstractEntity {
-
     @Getter
     @Setter
     @NonNull

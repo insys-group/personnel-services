@@ -90,6 +90,6 @@ public class RoleRepositoryTests {
 
         rolesFromRepositorySet.forEach(item -> log.debug("Role : " + item.toString()));
 
-        //deleteAll();
+        deleteAll();
     }
 }

@@ -14,7 +14,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class Location extends AbstractEntity {
-
     @Getter
     @Setter
     @ManyToOne
@@ -24,7 +23,7 @@ public class Location extends AbstractEntity {
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "BUSINESSENTITY_ID")
+    @JoinColumn(name = "BUSINESS_ENTITY_ID")
     private BusinessEntity businessEntity;
 
     @Getter
