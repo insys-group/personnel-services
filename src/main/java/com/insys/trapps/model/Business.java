@@ -7,21 +7,27 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.insys.trapps.model.Opportunity.OpportunityBuilder;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Setter;;
+import lombok.Setter;
+import lombok.ToString;;
 
 /**
- * {@link Business Entity} for PersonellServices.
+ * {@link Business Entity} for PersonnelServices.
  *
  * @author  Kris Krishna
  * @since 1.0.0
@@ -33,6 +39,8 @@ import lombok.Setter;;
 @EqualsAndHashCode(of = {"name"})
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@Builder
 public class Business {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -59,21 +67,18 @@ public class Business {
     @Enumerated(EnumType.STRING)
     private BusinessType businessType;
 
-    //TODO - Enable when needed.
-    /*
-    @Getter
+    /*@Getter
     @Setter
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
     private Set<Person> persons;
     
-    //TODO - Enable when needed.
     @Getter
     @Setter
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
-    private Set<Opportunity> opportunities;
-     */
-    @Getter
-    @Setter
-    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
+    private Set<Opportunity> opportunities;*/
+     
+   @Getter
+   @Setter
+   @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Location> locations;
 }
