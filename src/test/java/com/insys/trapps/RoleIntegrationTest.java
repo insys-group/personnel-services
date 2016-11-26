@@ -14,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insys.trapps.model.Role;
 import com.insys.trapps.util.RoleBuilder;
 import com.jayway.restassured.RestAssured;
@@ -40,11 +42,15 @@ public class RoleIntegrationTest {
 	}
 
 	@Test
-	public void testCreateRole() {
+	public void testCreateRole() throws JsonProcessingException {
+		
+		ObjectMapper mapper=new ObjectMapper();
 
 		Role role = RoleBuilder.buildRole("Role 1").build();
 		
 		logger.debug("-------------------------------------------");
+		
+		logger.debug("Creating role = " + mapper.writeValueAsString(role));
 		
 		given().contentType("application/json").body(role).log().everything().when()
 				.post("/api/roles").then()

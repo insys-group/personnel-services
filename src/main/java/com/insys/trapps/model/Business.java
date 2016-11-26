@@ -79,6 +79,8 @@ public class Business {
      
    @Getter
    @Setter
-   @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+   //@OneToMany(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+   @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+   @JoinColumn(name = "BUSINESS_ID")
     private Set<Location> locations;
 }

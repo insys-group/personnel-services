@@ -73,7 +73,6 @@ public class BusinessIntegrationTest {
 		
 		given().contentType("application/json").body(business).log().everything().when()
 				.get("api/locations").then()
-				.log().all().body(containsString("name"))
 				.statusCode(HttpStatus.OK.value());
 		
 		logger.debug("-------------------------------------------");

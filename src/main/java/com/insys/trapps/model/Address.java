@@ -1,9 +1,23 @@
 package com.insys.trapps.model;
 
-import lombok.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
-import javax.persistence.*;
-import javax.xml.crypto.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
 
 /**
  * Created by vnalitkin on 11/17/2016.
@@ -49,4 +63,8 @@ public class Address {
     @NonNull
     @Column(name = "ZIP_CODE", nullable = false)
     private String zipCode;
+    
+    @OneToOne(mappedBy = "address")
+    @JoinColumn(name = "ADDRESS_ID")
+	private Location location;
 }
