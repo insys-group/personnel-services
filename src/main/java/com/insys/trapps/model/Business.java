@@ -78,8 +78,7 @@ public class Business {
     private Set<Opportunity> opportunities;*/
      
    @Getter
-   @Setter
-   //@OneToMany(mappedBy = "business", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+   @Setter  
    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
    @JoinColumn(name = "BUSINESS_ID")
     private Set<Location> locations;
