@@ -98,7 +98,7 @@ public class OpportunityRestIntegrationTests {
                 .then()
                 .statusCode(HttpStatus.CREATED.value());
 
-        given()
+  /*      given()
                 .contentType("application/json")
                 .body(OpportunityStep.builder()
                         .comments("Step 2")
@@ -109,7 +109,7 @@ public class OpportunityRestIntegrationTests {
                 .when()
                 .post(basePath + OPP_STEP_PATH)
                 .then()
-                .statusCode(HttpStatus.CREATED.value());
+                .statusCode(HttpStatus.CREATED.value());*/
     }
 
     @Test
