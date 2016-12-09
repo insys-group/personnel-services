@@ -28,8 +28,8 @@ public class EngagementOpening extends AbstractEntity {
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "LOCATION_ID")
-    private Location location;
+    @JoinColumn(name = "ADDRESS_ID")
+    private Address address;
 
     @Column(name = "RATE")
     @Getter

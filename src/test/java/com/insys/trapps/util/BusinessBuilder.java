@@ -12,7 +12,6 @@ import java.util.HashSet;
 import com.insys.trapps.model.Address;
 import com.insys.trapps.model.BusinessEntity;
 import com.insys.trapps.model.BusinessEntityType;
-import com.insys.trapps.model.Location;
 
 public class BusinessBuilder {
 
@@ -34,14 +33,11 @@ public class BusinessBuilder {
         return builder;
     }
 
-    public BusinessBuilder addLocation(Address address) {
-        if (businessEntity.getLocations() == null) {
-            businessEntity.setLocations(new HashSet<>());
+    public BusinessBuilder addAddress(Address address) {
+        if (businessEntity.getAddresses() == null) {
+            businessEntity.setAddresses(new HashSet<>());
         }
-        businessEntity.getLocations().add(Location.builder()
-                .address(address)
-                .businessEntity(businessEntity)
-                .build());
+        businessEntity.getAddresses().add(address);
         return this;
     }
 

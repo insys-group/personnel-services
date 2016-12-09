@@ -10,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -78,8 +76,8 @@ public class BusinessRestIntegrationTest {
                 .build();
 
         BusinessEntity testBuisness = BusinessBuilder.buildBusiness("test", "testing-denver", BusinessEntityType.INSYS)
-                .addLocation(address_1)
-                .addLocation(address_2)
+                .addAddress(address_1)
+                .addAddress(address_2)
                 .build();
 
         HttpHeaders headers = new HttpHeaders();

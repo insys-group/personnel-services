@@ -46,6 +46,10 @@ public class BusinessEntity extends AbstractEntity {
 
     @Getter
     @Setter
-    @OneToMany(mappedBy = "businessEntity", cascade = CascadeType.ALL)
-    private Set<Location> locations;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "LOCATION"
+            , joinColumns = @JoinColumn(name = "BUSINESS_ENTITY_ID", referencedColumnName = "ID")
+            , inverseJoinColumns = @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "ID")
+    )
+    private Set<Address> addresses;
 }

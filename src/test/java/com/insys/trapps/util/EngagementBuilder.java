@@ -12,7 +12,7 @@ import java.util.*;
 public class EngagementBuilder {
     private Engagement engagement;
 
-    public static EngagementBuilder buildEngagement(String comment, Opportunity opportunity, Role role , Location location) {
+    public static EngagementBuilder buildEngagement(String comment, Opportunity opportunity, Role role , Address address) {
         EngagementBuilder builder = new EngagementBuilder();
         builder.engagement = Engagement.builder()
                 .comments("Engagement 1")
@@ -27,14 +27,14 @@ public class EngagementBuilder {
                                                 .engagement(builder.engagement)
                                                 .rate(BigDecimal.TEN)
                                                 .role(role)
-                                                .location(location)
+                                                .address(address)
                                                 .build()
                                         , EngagementOpening.builder()
                                                 .comments("EngagementOpening 1 " + builder.engagement.getComments())
                                                 .engagement(builder.engagement)
                                                 .rate(BigDecimal.TEN)
                                                 .role(role)
-                                                .location(location)
+                                                .address(address)
                                                 .build()
 
                                 )
