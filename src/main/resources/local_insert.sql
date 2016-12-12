@@ -1,6 +1,6 @@
 insert into ADDRESS(id, address_1 , city , state, zip_code, version) values(7, 'address 1' , 'Paramus' , 'NJ' , '34343', 1);
 insert into ADDRESS(id, address_1 , city , state, zip_code, version) values(18, 'address 2' , 'Paramus2' , 'NS' , '37743', 1);
-insert into BUSINESS_ENTITY(id, name , descr, entity_type, version) values(15, 'business_entity 1', 'business_entity 1' , 'INSYS', 1);
+insert into BUSINESS_ENTITY(id, name , description, entity_type, version) values(15, 'business_entity 1', 'business_entity 1' , 'INSYS', 1);
 insert into LOCATION(business_entity_id , address_id) values(15 , 7);
 insert into LOCATION(business_entity_id , address_id) values(15 , 18);
 

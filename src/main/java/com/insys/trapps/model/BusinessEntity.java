@@ -10,7 +10,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "BUSINESS_ENTITY")
-@EqualsAndHashCode(exclude = {"persons", "opportunities" , "locations"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"persons", "opportunities"    }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -24,8 +24,8 @@ public class BusinessEntity extends AbstractEntity {
     @Getter
     @Setter
     @NonNull
-    @Column(name = "DESCR", nullable = false)
-    private String descr;
+    @Column(name = "DESCRIPTION", nullable = false)
+    private String description;
 
     @Getter
     @Setter

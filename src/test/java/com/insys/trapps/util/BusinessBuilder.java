@@ -20,7 +20,7 @@ public class BusinessBuilder {
     public static BusinessBuilder buildBusiness(String name, String description, BusinessEntityType businesType) {
         BusinessBuilder builder = new BusinessBuilder();
         builder.businessEntity = BusinessEntity.builder()
-                .descr(description)
+                .description(description)
                 .entityType(businesType)
                 .name(name)
                 .build();
