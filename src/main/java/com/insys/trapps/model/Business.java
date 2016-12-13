@@ -9,46 +9,43 @@ import java.util.Set;
  * Created by vnalitkin on 11/17/2016.
  */
 @Entity
-@Table(name = "BUSINESS_ENTITY")
-@EqualsAndHashCode(exclude = {"persons", "opportunities" , "locations"}, callSuper = false)
+@Table(name = "BUSINESS")
+@EqualsAndHashCode(exclude = {"name"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BusinessEntity extends AbstractEntity {
+public class Business extends AbstractEntity {
     @Getter
     @Setter
-    @NonNull
     @Column(name = "NAME", nullable = false)
     private String name;
 
     @Getter
     @Setter
-    @NonNull
-    @Column(name = "DESCR", nullable = false)
-    private String descr;
+    @Column(name = "DESCRIPTION", nullable = false)
+    private String description;
 
     @Getter
     @Setter
-    @NonNull
-    @Column(name = "ENTITY_TYPE", nullable = false)
+    @Column(name = "BUSINESS_TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
-    private BusinessEntityType entityType;
+    private BusinessType businessType;
 
     @Getter
     @Setter
-    @OneToMany(mappedBy = "businessEntity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
     private Set<Person> persons;
 
     @Getter
     @Setter
-    @OneToMany(mappedBy = "businessEntity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
     private Set<Opportunity> opportunities;
 
     @Getter
     @Setter
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "LOCATION"
-            , joinColumns = @JoinColumn(name = "BUSINESS_ENTITY_ID", referencedColumnName = "ID")
+            , joinColumns = @JoinColumn(name = "BUSINESS_ID", referencedColumnName = "ID")
             , inverseJoinColumns = @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "ID")
     )
     private Set<Address> addresses;

@@ -56,8 +56,8 @@ public class Person extends AbstractEntity {
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "BUSINESS_ENTITY_ID", nullable = false)
-    private BusinessEntity businessEntity;
+    @JoinColumn(name = "BUSINESS_ID", nullable = false)
+    private Business business;
 
     @Getter
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

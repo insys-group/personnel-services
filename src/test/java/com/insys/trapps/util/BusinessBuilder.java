@@ -10,47 +10,47 @@ import java.util.HashSet;
  **/
 
 import com.insys.trapps.model.Address;
-import com.insys.trapps.model.BusinessEntity;
-import com.insys.trapps.model.BusinessEntityType;
+import com.insys.trapps.model.Business;
+import com.insys.trapps.model.BusinessType;
 
 public class BusinessBuilder {
 
-    private BusinessEntity businessEntity;
+    private Business business;
 
-    public static BusinessBuilder buildBusiness(String name, String description, BusinessEntityType businesType) {
+    public static BusinessBuilder buildBusiness(String name, String description, BusinessType businesType) {
         BusinessBuilder builder = new BusinessBuilder();
-        builder.businessEntity = BusinessEntity.builder()
-                .descr(description)
-                .entityType(businesType)
+        builder.business = Business.builder()
+                .description(description)
+                .businessType(businesType)
                 .name(name)
                 .build();
         return builder;
     }
 
-    public static BusinessBuilder buildBusiness(BusinessEntity BusinessEntity) {
+    public static BusinessBuilder buildBusiness(Business Business) {
         BusinessBuilder builder = new BusinessBuilder();
-        builder.businessEntity = BusinessEntity;
+        builder.business = Business;
         return builder;
     }
 
     public BusinessBuilder addAddress(Address address) {
-        if (businessEntity.getAddresses() == null) {
-            businessEntity.setAddresses(new HashSet<>());
+        if (business.getAddresses() == null) {
+            business.setAddresses(new HashSet<>());
         }
-        businessEntity.getAddresses().add(address);
+        business.getAddresses().add(address);
         return this;
     }
 
-    public BusinessEntity getClient() {
-        return businessEntity;
+    public Business getClient() {
+        return business;
     }
 
-    public void setClient(BusinessEntity businessEntity) {
-        this.businessEntity = businessEntity;
+    public void setClient(Business business) {
+        this.business = business;
     }
 
-    public BusinessEntity build() {
-        return businessEntity;
+    public Business build() {
+        return business;
     }
 
 }

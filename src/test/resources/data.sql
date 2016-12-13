@@ -1,1 +1,0 @@
-insert into SEQUENCES(gen_key, gen_value) values('SEQUENCE_ID', 1);

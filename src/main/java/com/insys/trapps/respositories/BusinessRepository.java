@@ -1,6 +1,6 @@
 package com.insys.trapps.respositories;
 
-import com.insys.trapps.model.BusinessEntity;
+import com.insys.trapps.model.Business;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
@@ -11,6 +11,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  * @since 1.0.0
 **/
 @RepositoryRestResource(path = "businesses")
-public interface BusinessRepository extends PagingAndSortingRepository<BusinessEntity, Long> {
+public interface BusinessRepository extends PagingAndSortingRepository<Business, Long> {
 	// TODO
 }

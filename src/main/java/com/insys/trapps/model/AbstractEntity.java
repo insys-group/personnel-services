@@ -36,16 +36,14 @@ public abstract class AbstractEntity {
     @Setter
     private Long id;
 
-    /*
-    @Getter
-    @Setter
     @Version
     @Column(name = "VERSION")
     private Long version = 1L;
-     */
-    
+
+    /*
     @Version
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "VERSION")
     private Date version;
+    */
 }

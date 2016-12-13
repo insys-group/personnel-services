@@ -3,13 +3,11 @@ package com.insys.trapps.repository;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import com.insys.trapps.TrappsApiApplication;
-import com.insys.trapps.util.OpportunityBuilder;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.insys.trapps.TrappsApiApplication;
 import com.insys.trapps.model.Opportunity;
-import com.insys.trapps.model.OpportunityStep;
 import com.insys.trapps.respositories.OpportunityRepository;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Muhammad Sabir
@@ -41,11 +41,12 @@ public class OpportunityRepositoryTests {
      */
     @Before
     public void beforeEachMethod() {
+    	/*
         testOpportunityList = Arrays.asList(
                 OpportunityBuilder.buildOpportunity("Opportunity 1", null).build()
                 , OpportunityBuilder.buildOpportunity("Opportunity 2", null).build()
                 , OpportunityBuilder.buildOpportunity("Opportunity 3", null).build()
-        );
+        );*/
     }
 
     private void saveAll() {

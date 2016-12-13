@@ -18,7 +18,6 @@ public class Address extends AbstractEntity {
 
     @Getter
     @Setter
-    @NonNull
     @Column(name = "ADDRESS_1", nullable = false)
     private String address1;
 
@@ -29,19 +28,16 @@ public class Address extends AbstractEntity {
 
     @Getter
     @Setter
-    @NonNull
     @Column(name = "CITY", nullable = false)
     private String city;
 
     @Getter
     @Setter
-    @NonNull
     @Column(name = "STATE", nullable = false)
     private String state;
 
     @Getter
     @Setter
-    @NonNull
     @Column(name = "ZIP_CODE", nullable = false)
     private String zipCode;
 }

@@ -3,21 +3,12 @@ package com.insys.trapps.integration;
 
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.when;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertEquals;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
-import com.insys.trapps.util.Utils;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insys.trapps.model.Opportunity;
 import com.insys.trapps.model.OpportunityStep;
 import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.response.Response;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Muhammad Sabir
@@ -83,7 +75,7 @@ public class OpportunityRestIntegrationTests {
                         .statusCode(HttpStatus.CREATED.value())
                         .extract().jsonPath().get("_links.self.href").toString();
 
-        opportunity.setId(Utils.getId(url));
+        //opportunity.setId(Utils.getId(url));
 
         given()
                 .contentType("application/json")
@@ -128,7 +120,7 @@ public class OpportunityRestIntegrationTests {
                         .then()
                         .statusCode(HttpStatus.CREATED.value())
                         .extract().jsonPath().get("_links.self.href").toString();
-        opportunity.setId(Utils.getId(url));
+        //opportunity.setId(Utils.getId(url));
 
         given()
                 .contentType("application/json")

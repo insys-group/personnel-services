@@ -2,11 +2,10 @@ package com.insys.trapps.integration;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import com.insys.trapps.model.BusinessEntity;
-import com.insys.trapps.model.BusinessEntityType;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +24,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insys.trapps.model.Address;
-import com.insys.trapps.util.BusinessBuilder;
+import com.insys.trapps.model.Business;
+import com.insys.trapps.model.BusinessType;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * {@link Integration Test using RestTemplate} for PersonnelServices.
@@ -74,10 +76,14 @@ public class BusinessRestIntegrationTest {
                 .state("WA")
                 .zipCode("70014")
                 .build();
-
-        BusinessEntity testBuisness = BusinessBuilder.buildBusiness("test", "testing-denver", BusinessEntityType.INSYS)
-                .addAddress(address_1)
-                .addAddress(address_2)
+        Set<Address> addresses=new HashSet<Address>();
+        addresses.add(address_1);
+        addresses.add(address_2);
+        
+        Business testBuisness = Business.builder().name("test")
+        		.description("testing-denver")
+        		.businessType(BusinessType.INSYS)
+                .addresses(addresses)
                 .build();
 
         HttpHeaders headers = new HttpHeaders();
@@ -87,11 +93,11 @@ public class BusinessRestIntegrationTest {
 
         HttpEntity<String> entity = new HttpEntity<String>(objectMapper.writeValueAsString(testBuisness), headers);
 
-        ResponseEntity<BusinessEntity> responseEntity = restTemplate.exchange("/businesses/", HttpMethod.POST, entity, BusinessEntity.class);
+        ResponseEntity<Business> responseEntity = restTemplate.exchange("/businesses/", HttpMethod.POST, entity, Business.class);
 
         // ResponseEntity<Business> responseEntity =  restTemplate.postForEntity("/business", entity, Business.class);
 
-        BusinessEntity client = responseEntity.getBody();
+        Business client = responseEntity.getBody();
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals("test", client.getName());
     }

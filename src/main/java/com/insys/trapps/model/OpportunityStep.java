@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "OPPORTUNITY_STEP")
-@EqualsAndHashCode(exclude = {"opportunity"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"comments", "stepTimestamp"}, callSuper = false)
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @AllArgsConstructor
 @NoArgsConstructor
