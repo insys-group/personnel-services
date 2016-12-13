@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "PERSON")
-@EqualsAndHashCode(exclude = {"documents", "businessEntity"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"email"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 public class Person extends AbstractEntity {
