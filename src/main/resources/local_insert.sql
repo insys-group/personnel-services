@@ -24,6 +24,6 @@ insert into ROLE_SKILL(ROLE_ID, SKILL_ID) values(2, 4);
 insert into ENGAGEMENT_OPENING(id, engagement_id , role_id , address_id , rate , comments, version)  values(13, 11 , 1, 7, 2343.4415, 'engagement_opening 1', 1);
 insert into ENGAGEMENT_OPENING(id, engagement_id , role_id , address_id , rate , comments, version)  values(14, 12 , 2, 18, 44.215, 'engagement_opening 2', 1);
 
-insert into PERSON(id, first_name, last_name , phone, email, title ,person_type, address_id, business_entity_id) values(17, 'Muhammad', 'Sabir', '631-983-9075', 'msabir@insys.com', 'Architect', 'EMPLOYEE' , 7, 15);
+insert into PERSON(id, first_name, last_name , phone, email, title ,person_type, address_id, business_entity_id, version) values(17, 'Muhammad', 'Sabir', '631-983-9075', 'msabir@insys.com', 'Architect', 'Employee' , 7, 15 , 1);
 
 insert into SEQUENCES(gen_key, gen_value) values('SEQUENCE_ID', 30);

@@ -31,6 +31,7 @@ public abstract class AbstractEntity {
     @Getter
     @Setter
     @Version
+    @NonNull
     @Column(name = "VERSION")
     private Long version = 1L;
 
