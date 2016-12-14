@@ -10,22 +10,26 @@ Skills
 Please install Lombok Plugin in IDE
 https://projectlombok.org/features/index.html
 
-##Build and push to CF 
+## Build and push to CF 
 mvn clean package  
 
---next line for PWS  
+### PWS database setup  
 cf create-service cleardb spark mysqldb  
---use this line for PCF Dev  
+
+### PCF Dev database setup  
 cf create-service p-mysql 512mb mysqldb  
 
-cf push trapps-api -p target/trapps-api-0.0.1-SNAPSHOT.jar  
+### Push to PCF Dev (using manifest file)
+cf push trapps-api  
 
+### Running locally
+mvn -Dspring.profiles.active=local spring-boot:run   
 
 ##Steps to clone, create branch, made changes and push 
 git clone https://github.com/insys-group/trapps-api.git  
 git checkout develop  
 git branch feature/TRAP-<story number>  
 git add .  
-git commit -m "<some description about your changes>"  
-git push origin feature/TRAP-<story number>  
+git commit -m "description about your changes"  
+git push origin feature/TRAP-NN  
  
