@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insys.trapps.model.Opportunity;
 import com.insys.trapps.model.OpportunityStep;
+import com.insys.trapps.util.Utils;
 import com.jayway.restassured.RestAssured;
 
 import lombok.extern.slf4j.Slf4j;
@@ -75,7 +76,7 @@ public class OpportunityRestIntegrationTests {
                         .statusCode(HttpStatus.CREATED.value())
                         .extract().jsonPath().get("_links.self.href").toString();
 
-        //opportunity.setId(Utils.getId(url));
+        opportunity.setId(Utils.getId(url));
 
         given()
                 .contentType("application/json")
