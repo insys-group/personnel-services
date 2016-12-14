@@ -1,4 +1,28 @@
 spring:
+  profiles: cloud
   jpa:
     generate-ddl: true
     show-sql: true
+server: 
+  port: 0
+---
+spring:
+  profiles: local
+  jpa:
+    properties:
+      hibernate:
+        hbm2ddl:
+          import_files: local_insert.sql
+  h2:
+    console:
+      enabled: true
+      path: /console
+server: 
+  port: 8081
+---
+spring:
+  profiles: local,cloud
+  data:
+    rest:
+      basePath: /api/v1
+      defaultMediaType: application/json

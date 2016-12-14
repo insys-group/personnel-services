@@ -12,5 +12,5 @@ public enum BusinessType {
 	Client,
 	Pivotal,
 	PivotalLabs, 
-	INSYS
+	INSYS;
 }

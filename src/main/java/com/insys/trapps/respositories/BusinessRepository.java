@@ -1,9 +1,8 @@
 package com.insys.trapps.respositories;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
-
-import com.insys.trapps.model.Address;
 import com.insys.trapps.model.Business;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
  * {@link BusinessRepository} for PersonellServices.
@@ -11,7 +10,7 @@ import com.insys.trapps.model.Business;
  * @author  Kris Krishna
  * @since 1.0.0
 **/
-
+@RepositoryRestResource(path = "businesses")
 public interface BusinessRepository extends PagingAndSortingRepository<Business, Long> {
 	// TODO
 }

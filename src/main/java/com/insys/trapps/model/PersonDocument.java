@@ -1,5 +1,6 @@
 package com.insys.trapps.model;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,7 +16,6 @@ import java.sql.SQLData;
 @NoArgsConstructor
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 public class PersonDocument extends AbstractEntity {
-
     @Getter
     @Setter
     @ManyToOne
@@ -30,6 +30,7 @@ public class PersonDocument extends AbstractEntity {
 
     @Getter
     @Setter
+    @SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
     @Lob
     @Column(name = "DOCUMENT", nullable = false)
     private byte[] document;

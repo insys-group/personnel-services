@@ -17,7 +17,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class ContractDetail extends AbstractEntity {
-
     @Getter
     @Setter
     @ManyToOne

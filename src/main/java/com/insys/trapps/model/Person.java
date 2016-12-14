@@ -8,11 +8,10 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "PERSON")
-@EqualsAndHashCode(exclude = {"documents", "businessEntity"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"email"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 public class Person extends AbstractEntity {
-
     @Getter
     @Setter
     @NonNull
@@ -38,19 +37,29 @@ public class Person extends AbstractEntity {
 
     @Getter
     @Setter
+    @Column(name = "TITLE", nullable = true)
+    private String title;
+
+    @Getter
+    @Setter
     @NonNull
     @Column(name = "PERSON_TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
     private PersonType personType;
 
-    //@OneToOne
-    //private Address address;
+    @Getter
+    @Setter
+    @OneToOne
+    @JoinColumn(name = "ADDRESS_ID", nullable = false)
+    private Address address;
+
+    @Getter
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "BUSINESS_ID", nullable = false)
+    private Business business;
 
     @Getter
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PersonDocument> documents;
-
-    @ManyToOne
-    @JoinColumn(name = "person")
-    private BusinessEntity businessEntity;
 }

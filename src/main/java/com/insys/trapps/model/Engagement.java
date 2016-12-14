@@ -12,7 +12,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class Engagement extends AbstractEntity {
-
     @Column(name = "COMMENTS")
     @Getter
     @Setter

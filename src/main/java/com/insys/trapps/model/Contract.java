@@ -10,12 +10,11 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "CONTRACT")
-@EqualsAndHashCode(exclude = {"engagementOpening","person", "contractDetails"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"engagementOpening", "person", "contractDetails"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Contract extends AbstractEntity {
-
     @Getter
     @Setter
     @ManyToOne

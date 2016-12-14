@@ -1,5 +1,6 @@
-package com.insys.trapps;
+package com.insys.trapps.repository;
 
+import com.insys.trapps.TrappsApiApplication;
 import com.insys.trapps.respositories.ContractRepository;
 import com.insys.trapps.util.ContractBuilder;
 import com.insys.trapps.util.EngagementBuilder;
@@ -49,12 +50,9 @@ public class EngagementRepositoryTests {
      */
     @Before
     public void beforeEachMethod() {
-        Role role = RoleBuilder.buildRole("Role 1").build();
-        roleRepository.save(role);
-
         testEngagementList = Arrays.asList(
-                EngagementBuilder.buildEngagement("Engagement 1", null, role, null).build()
-                , EngagementBuilder.buildEngagement("Engagement 1", null, role, null).build()
+                EngagementBuilder.buildEngagement("Engagement 1", null, null, null).build()
+                , EngagementBuilder.buildEngagement("Engagement 1", null, null, null).build()
         );
     }
 
