@@ -1,16 +1,22 @@
 package com.insys.trapps.model;
 
-import lombok.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-import javax.persistence.*;
-import javax.xml.crypto.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Created by vnalitkin on 11/17/2016.
  */
 @Entity
 @Table(name = "ADDRESS")
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(of = {"address1", "city", "state"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

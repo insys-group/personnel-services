@@ -4,6 +4,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.*;
 
 import javax.persistence.*;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.sql.SQLData;
 
 @Entity
@@ -11,6 +14,7 @@ import java.sql.SQLData;
 @EqualsAndHashCode(exclude = {"person"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
+@SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 public class PersonDocument extends AbstractEntity {
     @Getter
     @Setter
