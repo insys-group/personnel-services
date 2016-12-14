@@ -25,6 +25,9 @@ cf push trapps-api
 ### Running locally
 mvn -Dspring.profiles.active=local spring-boot:run   
 
+### Accessing H2 query console (available when you run using local profile)
+http://localhost:8081/console/
+
 ##Steps to clone, create branch, made changes and push 
 git clone https://github.com/insys-group/trapps-api.git  
 git checkout develop  
