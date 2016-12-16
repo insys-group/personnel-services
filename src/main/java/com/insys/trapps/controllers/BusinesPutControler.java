@@ -24,46 +24,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 public class BusinesPutControler {
 
     @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
     private BusinessRepository businessRepository;
-
-  /*  @RequestMapping(method = GET)
-    String add() {
-        LocalDateTime timePoint = LocalDateTime.now();
-        Role role = roleRepository.findByName("Developer").get(0);
-        role.getSkills().add(Skill.builder().name("Eser" + timePoint.toString()).build());
-        roleRepository.save(role);
-        role = roleRepository.findByName("Developer").get(0);
-        return "";
-    }*/
-
-    /*
-        @RequestMapping(path="/del" ,method = RequestMethod.GET)
-        String del() {
-            Role role = roleRepository.findByName("Developer").get(0);
-            Iterator<Skill> iterator = role.getSkills().iterator();
-            iterator.remove();
-            roleRepository.save(role);
-            role = roleRepository.findByName("Developer").get(0);
-            return "";
-        }
-
-        @RequestMapping(path="/roles/put/" ,method = RequestMethod.PUT)
-        String del(@RequestBody Role role) {
-            Role roleOld = roleRepository.findByName(role.getName()).get(0);
-            Iterator<Skill> iterator = role.getSkills().iterator();
-            while (iterator.hasNext()){
-                Skill skill = iterator.next();
-                if(!roleOld.getSkills().contains(skill)){
-                    roleOld.getSkills().add(skill);
-                };
-            }
-            roleRepository.save(roleOld);
-            roleOld = roleRepository.findByName(role.getName()).get(0);
-            return "";
-        }
-      */
 
     @RequestMapping
     public @ResponseBody Resource<Business> businessesPut(@RequestBody Business business) {
