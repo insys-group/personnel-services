@@ -2,6 +2,7 @@ package com.insys.trapps.repository;
 
 import com.insys.trapps.TrappsApiApplication;
 import com.insys.trapps.model.Role;
+import com.insys.trapps.model.Skill;
 import com.insys.trapps.respositories.RoleRepository;
 import com.insys.trapps.util.RoleBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -78,7 +79,7 @@ public class RoleRepositoryTests {
     public void testUpdate() throws Exception {
         log.debug("Enter: testUpdate " + roleRepository.getClass().toString());
 
-        testRoleList.forEach(item-> item.setName(item.getName() + " upd"));
+        testRoleList.forEach(item -> item.setName(item.getName() + " upd"));
         saveAll();
 
         Set<Role> rolesFromRepositorySet = new HashSet<>();
@@ -91,6 +92,22 @@ public class RoleRepositoryTests {
 
         rolesFromRepositorySet.forEach(item -> log.debug("Role : " + item.toString()));
 
+        deleteAll();
+    }
+
+    @Test
+    public void testUpdateSub() throws Exception {
+        log.debug("Enter: testUpdateSub " + roleRepository.getClass().toString());
+        saveAll();
+
+        Role role = roleRepository.findByName("Role 1").get(0);
+        Iterator<Skill> iterator = role.getSkills().iterator();
+        Skill skill = iterator.next();
+        iterator.remove();
+
+        roleRepository.save(role);
+        role = roleRepository.findByName("Role 1").get(0);
+        log.debug("Finish: testUpdateSub " + roleRepository.getClass().toString());
         deleteAll();
     }
 }
