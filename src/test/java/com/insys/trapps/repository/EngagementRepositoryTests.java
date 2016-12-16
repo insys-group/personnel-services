@@ -2,13 +2,10 @@ package com.insys.trapps.repository;
 
 import com.insys.trapps.TrappsApiApplication;
 import com.insys.trapps.respositories.ContractRepository;
-import com.insys.trapps.util.ContractBuilder;
 import com.insys.trapps.util.EngagementBuilder;
 import com.insys.trapps.model.*;
 import com.insys.trapps.respositories.EngagementRepository;
 import com.insys.trapps.respositories.RoleRepository;
-import com.insys.trapps.respositories.SkillRepository;
-import com.insys.trapps.util.RoleBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;

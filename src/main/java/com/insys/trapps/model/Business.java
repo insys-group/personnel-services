@@ -43,7 +43,7 @@ public class Business extends AbstractEntity {
 
     @Getter
     @Setter
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "LOCATION"
             , joinColumns = @JoinColumn(name = "BUSINESS_ID", referencedColumnName = "ID")
             , inverseJoinColumns = @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "ID")
