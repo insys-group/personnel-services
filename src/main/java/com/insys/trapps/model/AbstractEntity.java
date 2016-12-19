@@ -10,10 +10,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -28,6 +25,8 @@ public abstract class AbstractEntity {
 
     @Version
     @NonNull
+    @Getter
+    @Setter
     @Column(name = "VERSION")
     private Long version = 1L;
 }

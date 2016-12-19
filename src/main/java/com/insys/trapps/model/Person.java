@@ -49,14 +49,14 @@ public class Person extends AbstractEntity {
 
     @Getter
     @Setter
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval=true)
     @JoinColumn(name = "ADDRESS_ID", nullable = false)
     private Address address;
 
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "BUSINESS_ID", nullable = false)
+    @JoinColumn(name = "BUSINESS_ID", nullable = true)
     private Business business;
 
     @Getter
