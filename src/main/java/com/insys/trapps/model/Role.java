@@ -11,7 +11,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "ROLE")
-@EqualsAndHashCode(exclude = {"skills", "engagementOpenings"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"engagementOpenings"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -24,12 +24,9 @@ public class Role extends AbstractEntity {
 
     @Getter
     @Setter
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval=true)
-    @JoinTable(name = "ROLE_SKILL"
-            , joinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")
-            , inverseJoinColumns = @JoinColumn(name = "SKILL_ID", referencedColumnName = "ID")
-    )
-    private Set<Skill> skills;
+    @NonNull
+    @Column(name = "SKILL", nullable = false)
+    private String skill;
 
     @Getter
     @Setter

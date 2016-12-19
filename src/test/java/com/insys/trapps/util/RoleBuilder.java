@@ -12,20 +12,13 @@ import java.util.*;
 public class RoleBuilder {
     private Role role;
 
-    public static RoleBuilder buildRole(String name) {
+    public static RoleBuilder buildRole(String name, String skill) {
         RoleBuilder builder = new RoleBuilder();
-        builder.role = Role.builder()
+		builder.role = Role.builder()
                 .name(name)
+                .skill(skill)
                 .build();
-        builder.role.setSkills(
-                new HashSet<>(
-                        Arrays.asList(
-                                Skill.builder().name("Skill 1 " + builder.role.getName()).build()
-                                , Skill.builder().name("Skill 2" + builder.role.getName()).build()
-                                , Skill.builder().name("Skill 3" + builder.role.getName()).build()
-                        )
-                )
-        );
+
         return builder;
     }
 

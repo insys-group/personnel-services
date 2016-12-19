@@ -36,10 +36,7 @@ public class RoleRepositoryTests {
      */
     @Before
     public void beforeEachMethod() {
-        testRoleList = Arrays.asList(
-                RoleBuilder.buildRole("Role 1").build()
-                , RoleBuilder.buildRole("Role 2").build()
-        );
+        
     }
 
     private void saveAll() {
@@ -63,10 +60,7 @@ public class RoleRepositoryTests {
         Set<Role> rolesFromRepositorySet = new HashSet<>();
         roleRepository.findAll().forEach(rolesFromRepositorySet::add);
         testRoleList.containsAll(rolesFromRepositorySet);
-        rolesFromRepositorySet.forEach(item -> item
-                .getSkills()
-                .containsAll(testRoleList.get(testRoleList.indexOf(item)).getSkills())
-        );
+        
         rolesFromRepositorySet.forEach(item -> log.debug("Role : " + item.toString()));
 
         deleteAll();
@@ -101,9 +95,7 @@ public class RoleRepositoryTests {
         saveAll();
 
         Role role = roleRepository.findByName("Role 1").get(0);
-        Iterator<Skill> iterator = role.getSkills().iterator();
-        Skill skill = iterator.next();
-        iterator.remove();
+        
 
         roleRepository.save(role);
         role = roleRepository.findByName("Role 1").get(0);
