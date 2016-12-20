@@ -25,10 +25,13 @@ insert into PERSON(id, first_name, last_name , phone, email, title, person_type,
 insert into PERSON(id, first_name, last_name , phone, email, title, person_type, address_id, business_id, version) values(15, 'Chris', 'Umbel', '297-28-1276', 'cumbel@pivotal.com', 'Architect', 'Pivotal', 5, 17, 1);
 
 
-insert into Role(id, name, skill, version) values(8, 'Mobile Developer', 'Objective c', 1);
-insert into Role(id, name, skill, version) values(9, 'Web Developer', 'Angular', 1);
-insert into Role(id, name, skill, version) values(10, 'Full Stack Developer', 'java', 1);
+insert into Role(id, name, skill, version) values(8, 'Mobile Developer ios', 'Objective c, Swift', 1);
+insert into Role(id, name, skill, version) values(9, 'Web Developer', 'Angular, HTML, Java Script', 1);
+insert into Role(id, name, skill, version) values(10, 'Full Stack Developer', 'java, Swift, C', 1);
+insert into Role(id, name, skill, version) values(11, 'Mobile Developer Android', 'java', 1);
 
-insert into ROLE_SKILL(ROLE_ID) values (8);
-insert into ROLE_SKILL(ROLE_ID) values (9);
-insert into ROLE_SKILL(ROLE_ID) values (10);
+insert into ROLE_SKILL(ROLE_ID) values (8 );
+insert into ROLE_SKILL(ROLE_ID) values (9 );
+insert into ROLE_SKILL(ROLE_ID) values (10 );
+insert into ROLE_SKILL(ROLE_ID) values (11 );
+
