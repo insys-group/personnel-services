@@ -9,7 +9,7 @@ import com.insys.trapps.model.PersonSkill;
  * @author msabir
  *
  */
-@RepositoryRestResource(path="/personskills", collectionResourceRel="personskills")
+//@RepositoryRestResource(path="/personskills", collectionResourceRel="personskills")
 public interface PersonSkillRepository extends JpaRepository<PersonSkill, Long> {
 
 }
