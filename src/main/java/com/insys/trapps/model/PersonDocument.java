@@ -8,10 +8,11 @@ import javax.persistence.*;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.sql.SQLData;
+import java.util.Date;
 
 @Entity
 @Table(name = "PERSON_DOCUMENT")
-@EqualsAndHashCode(exclude = {"person"}, callSuper = false)
+@EqualsAndHashCode(of = {"fileName"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
@@ -24,10 +25,14 @@ public class PersonDocument extends AbstractEntity {
 
     @Getter
     @Setter
-    @Column(name = "DOCUMENT_TYPE", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private DocumentType documentType;
+    @Column(name = "FILE_NAME", nullable = false)
+    private String fileName;
 
+    @Getter
+    @Setter
+    @Column(name = "UPLOAD_TIMESTAMP", nullable = false)
+    private Date uploadTimestamp;
+    
     @Getter
     @Setter
     @SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})

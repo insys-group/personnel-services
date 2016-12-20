@@ -8,19 +8,17 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "PERSON")
-@EqualsAndHashCode(exclude = {"email"}, callSuper = false)
+@EqualsAndHashCode(of = {"email"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 public class Person extends AbstractEntity {
     @Getter
     @Setter
-    @NonNull
     @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;
 
     @Getter
     @Setter
-    @NonNull
     @Column(name = "LAST_NAME", nullable = false)
     private String lastName;
 
@@ -31,7 +29,6 @@ public class Person extends AbstractEntity {
 
     @Getter
     @Setter
-    @NonNull
     @Column(name = "EMAIL", nullable = false)
     private String email;
 
@@ -42,7 +39,6 @@ public class Person extends AbstractEntity {
 
     @Getter
     @Setter
-    @NonNull
     @Column(name = "PERSON_TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
     private PersonType personType;
@@ -50,7 +46,7 @@ public class Person extends AbstractEntity {
     @Getter
     @Setter
     @OneToOne
-    @JoinColumn(name = "ADDRESS_ID", nullable = false)
+    @JoinColumn(name = "ADDRESS_ID")
     private Address address;
 
     @Getter
@@ -60,6 +56,12 @@ public class Person extends AbstractEntity {
     private Business business;
 
     @Getter
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     private Set<PersonDocument> documents;
+    
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+    private Set<PersonSkill> skills;
+
 }
