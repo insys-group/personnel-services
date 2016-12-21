@@ -1,11 +1,11 @@
-insert into ADDRESS(id, address_1 , city , state, zip_code, version) values(1, '10 Park Ave' , 'Manhatten' , 'NY' , '10010', 1);
-insert into ADDRESS(id, address_1 , city , state, zip_code, version) values(2, '100 Business Ave', 'Manhatten' , 'NY' , '10012', 1);
-insert into ADDRESS(id, address_1 , city , state, zip_code, version) values(3, '100 Comcast Ave', 'Philadelphia', 'PA', '88790', 1);
-insert into ADDRESS(id, address_1 , city , state, zip_code, version) values(4, '10 INSYS Ave', 'Rochelle Park', 'NJ', '06786', 1);
-insert into ADDRESS(id, address_1 , city , state, zip_code, version) values(5, '3 Gerson Rd', 'Robbinsville', 'NJ', '08691', 1);
-insert into ADDRESS(id, address_1 , city , state, zip_code, version) values(6, '9 Tindal Ave', 'Rochelle Park', 'NJ', '08796', 1);
-insert into ADDRESS(id, address_1 , city , state, zip_code, version) values(7, '21 Sesame St', 'Raleigh', 'NC', '77796', 1);
-insert into ADDRESS(id, address_1 , city , state, zip_code, version) values(8, '88 100th St', 'Herndon', 'VA', '59877', 1);
+insert into ADDRESS(id, address_1 , city , state, zip_code, country, version) values(1, '10 Park Ave' , 'Manhatten' , 'NY' , '10010', 'USA', 1);
+insert into ADDRESS(id, address_1 , city , state, zip_code, country, version) values(2, '100 Business Ave', 'Manhatten' , 'NY' , '10012', 'USA', 1);
+insert into ADDRESS(id, address_1 , city , state, zip_code, country, version) values(3, '100 Comcast Ave', 'Philadelphia', 'PA', '88790', 'USA', 1);
+insert into ADDRESS(id, address_1 , city , state, zip_code, country, version) values(4, '10 INSYS Ave', 'Rochelle Park', 'NJ', '06786', 'USA', 1);
+insert into ADDRESS(id, address_1 , city , state, zip_code, country, version) values(5, '3 Gerson Rd', 'Robbinsville', 'NJ', '08691', 'USA', 1);
+insert into ADDRESS(id, address_1 , city , state, zip_code, country, version) values(6, '9 Tindal Ave', 'Rochelle Park', 'NJ', '08796', 'USA', 1);
+insert into ADDRESS(id, address_1 , city , state, zip_code, country, version) values(7, '21 Sesame St', 'Raleigh', 'NC', '77796', 'USA', 1);
+insert into ADDRESS(id, address_1 , city , state, zip_code, country, version) values(8, '88 100th St', 'Herndon', 'VA', '59877', 'USA', 1);
 
 insert into BUSINESS(id, name, description, business_type, version) values(15, 'Comcast Inc', 'Comcast' , 'Client', 1);
 insert into BUSINESS(id, name, description, business_type, version) values(16, 'INSYS Group Inc', 'INSYS Group Pivotal Practice', 'INSYS', 1);

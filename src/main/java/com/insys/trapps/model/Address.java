@@ -45,4 +45,11 @@ public class Address extends AbstractEntity {
     @NonNull
     @Column(name = "ZIP_CODE", nullable = false)
     private String zipCode;
+    
+    @Getter
+    @Setter
+    @NonNull
+    @Column(name = "COUNTRY", nullable = false)
+    private String country;
+    
 }
