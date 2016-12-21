@@ -1,9 +1,29 @@
 package com.insys.trapps.model;
 
-import lombok.*;
-
-import javax.persistence.*;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Version;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
 
 /**
  * Created by vnalitkin on 11/17/2016.
@@ -14,7 +34,21 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Business extends AbstractEntity {
+//@JsonFilter("restBusinessFilter")
+public class Business {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Getter
+    @Setter
+    private Long id;
+
+    @Version
+    @NonNull
+    @Getter
+    @Setter
+    @Column(name = "VERSION")
+    private Long version;
+
     @Getter
     @Setter
     @Column(name = "NAME", nullable = false)
@@ -31,9 +65,9 @@ public class Business extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private BusinessType businessType;
 
-    @Getter
     @Setter
-    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
+    @Getter
+    @OneToMany(mappedBy = "business", fetch = FetchType.LAZY)
     private Set<Person> persons;
 
     @Getter
@@ -43,10 +77,17 @@ public class Business extends AbstractEntity {
 
     @Getter
     @Setter
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = { CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(name = "LOCATION"
             , joinColumns = @JoinColumn(name = "BUSINESS_ID", referencedColumnName = "ID")
             , inverseJoinColumns = @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "ID")
     )
     private Set<Address> addresses;
+
+	@Override
+	public String toString() {
+		return "Business [name=" + name + ", description=" + description + ", businessType=" + businessType
+				+ ", persons=" + persons + ", opportunities=" + opportunities + ", addresses=" + addresses
+				+ ", getId()=" + getId() + ", getVersion()=" + getVersion() + "]";
+	}
 }

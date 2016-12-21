@@ -1,17 +1,53 @@
 package com.insys.trapps.model;
 
-import lombok.*;
-
+import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.persistence.Version;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
 
 @Entity
 @Table(name = "PERSON")
 @EqualsAndHashCode(of = {"email"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-public class Person extends AbstractEntity {
+@Builder
+public class Person {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Getter
+    @Setter
+    private Long id;
+
+    @Version
+    @NonNull
+    @Getter
+    @Setter
+    @Column(name = "VERSION")
+    private Long version;
+
     @Getter
     @Setter
     @Column(name = "FIRST_NAME", nullable = false)
@@ -45,23 +81,30 @@ public class Person extends AbstractEntity {
 
     @Getter
     @Setter
-    @OneToOne
-    @JoinColumn(name = "ADDRESS_ID")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ADDRESS_ID", nullable = true)
     private Address address;
 
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "BUSINESS_ID", nullable = false)
     private Business business;
 
     @Getter
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
-    private Set<PersonDocument> documents;
+    @Setter
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
+    private Set<PersonDocument> personDocuments=new HashSet<>();
     
     @Getter
     @Setter
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
-    private Set<PersonSkill> skills;
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
+    private Set<PersonSkill> personSkills=new HashSet<>();
 
+	@Override
+	public String toString() {
+		return "Person [id=" + getId() + ", version=" + getVersion() + ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + ", email=" + email
+				+ ", title=" + title + ", personType=" + personType + ", address=" + (address==null) + ", business=" + (business==null)
+				+ ", personDocuments=" + (personDocuments==null?0:personDocuments.size()) + ", personSkills=" + (personSkills==null?0:personSkills.size()) + "]";
+	}
 }

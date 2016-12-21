@@ -1,6 +1,7 @@
 package com.insys.trapps.model;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -14,7 +15,20 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Role extends AbstractEntity {
+public class Role {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Getter
+    @Setter
+    private Long id;
+
+    @Version
+    @NonNull
+    @Getter
+    @Setter
+    @Column(name = "VERSION")
+    private Long version;
+
     @Getter
     @Setter
     @NonNull
@@ -23,7 +37,7 @@ public class Role extends AbstractEntity {
 
     @Getter
     @Setter
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval=true)
     @JoinTable(name = "ROLE_SKILL"
             , joinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")
             , inverseJoinColumns = @JoinColumn(name = "SKILL_ID", referencedColumnName = "ID")

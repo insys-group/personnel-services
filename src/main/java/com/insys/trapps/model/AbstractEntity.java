@@ -9,6 +9,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +30,8 @@ public abstract class AbstractEntity {
 
     @Version
     @NonNull
+    @Getter
+    @Setter
     @Column(name = "VERSION")
-    private Long version = 1L;
+    private Long version;
 }

@@ -6,10 +6,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +31,20 @@ import lombok.Singular;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Opportunity extends AbstractEntity {
+public class Opportunity {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Getter
+    @Setter
+    private Long id;
+
+    @Version
+    @NonNull
+    @Getter
+    @Setter
+    @Column(name = "VERSION")
+    private Long version;
+
     @Column(name = "COMMENTS")
     @Getter
     @Setter
