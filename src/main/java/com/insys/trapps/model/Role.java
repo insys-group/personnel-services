@@ -1,7 +1,6 @@
 package com.insys.trapps.model;
 
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.Set;
