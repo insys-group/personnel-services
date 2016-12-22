@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 @Entity
@@ -31,5 +33,6 @@ public class Question {
     @Getter
     @Setter
     @Column(name = "QUALITY")
-	private int quality = -1; // between 0-10, 10 being the best, -1 for not set by default
+    @Enumerated(EnumType.STRING)
+	private Quality quality;
 }
