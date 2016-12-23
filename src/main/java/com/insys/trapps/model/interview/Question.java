@@ -8,13 +8,15 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import com.insys.trapps.model.AbstractEntity;
+
 @Entity
 @Table(name = "QUESTION")
 @EqualsAndHashCode(of = {"question"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Question {
+public class Question extends AbstractEntity {
     @Getter
     @Setter
     @Column(name = "QUESTION", nullable = false)

@@ -5,10 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
-import java.sql.SQLData;
-
 @Entity
 @Table(name = "PERSON_DOCUMENT")
 @EqualsAndHashCode(exclude = {"person"}, callSuper = false)

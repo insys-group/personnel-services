@@ -27,3 +27,13 @@ insert into PERSON(id, first_name, last_name , phone, email, title, person_type,
 insert into ROLE(id , name, version) values(1 , 'Developer' , 1);
 insert into SKILL(id , name, version) values(1 , 'Java' , 1);
 insert into ROLE_SKILL values(1 , 1);
+
+insert into INTERVIEW(id, date, phone, person_id, role_id, version) values(0, 1482475703, '7035551234', 10, 1, 1);
+insert into QUESTION(id, question, answer, comment, quality, version) values(0, 'What do?', 'Stuff', 'Comment', 'Excellent', 1);
+insert into FEEDBACK(id, person_id, comment, version) values(0, 11, 'Comment', 1);
+
+insert into INTERVIEWERS(interview_id, person_id) values(0, 11);
+insert into QUESTIONS(interview_id, question_id) values(0, 0);
+insert into INT_FEEDBACK(interview_id, feedback_id) values(0, 0);
+
+

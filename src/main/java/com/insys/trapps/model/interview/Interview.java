@@ -28,12 +28,14 @@ public class Interview extends AbstractEntity {
 	private String phone;
 	
 	@Getter
-	@Setter
+    @Setter
+    @ManyToOne
 	@JoinColumn(name = "PERSON_ID", nullable = false)
 	private Person candidate;
 
 	@Getter
-	@Setter
+    @Setter
+    @ManyToOne
 	@JoinColumn(name = "ROLE_ID", nullable = false)
 	private Role role;
 
@@ -48,8 +50,6 @@ public class Interview extends AbstractEntity {
 
 	@Getter
 	@Setter
-	@Column(name = "QUESTIONS")
-
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "QUESTIONS", 
 		joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID"), 
