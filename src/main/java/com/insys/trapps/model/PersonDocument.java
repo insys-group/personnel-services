@@ -14,15 +14,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(name = "PERSON_DOCUMENT")
@@ -39,7 +39,6 @@ public class PersonDocument {
     private Long id;
 
     @Version
-    @NonNull
     @Getter
     @Setter
     @Column(name = "VERSION")
@@ -58,6 +57,11 @@ public class PersonDocument {
 
     @Getter
     @Setter
+    @Column(name = "FILE_SIZE", nullable = false)
+    private Long fileSize;
+    
+    @Getter
+    @Setter
     @Column(name = "UPLOAD_TIMESTAMP", nullable = false)
     private Date uploadTimestamp;
     
@@ -66,6 +70,7 @@ public class PersonDocument {
     @SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
     @Lob
     @Column(name = "DOCUMENT", nullable = false)
+    @JsonIgnore
     private byte[] document;
 
 	@Override

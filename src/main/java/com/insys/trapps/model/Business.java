@@ -43,7 +43,6 @@ public class Business {
     private Long id;
 
     @Version
-    @NonNull
     @Getter
     @Setter
     @Column(name = "VERSION")

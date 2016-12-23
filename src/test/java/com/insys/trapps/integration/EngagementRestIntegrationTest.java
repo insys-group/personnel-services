@@ -55,7 +55,7 @@ public class EngagementRestIntegrationTest {
 
     @Test
     public void testCreateEngagement() {
-        Engagement engagement = Engagement.builder().comments("Comcast Engagement").build();
+        Engagement engagement = Engagement.builder().comments("Comcast Engagement").version(1L).build();
         given()
                 .contentType("application/json")
                 .body(engagement)
@@ -68,7 +68,7 @@ public class EngagementRestIntegrationTest {
 
     @Test
     public void testCreateEngagementWithOpeninig() throws Exception {
-        Engagement engagement = Engagement.builder().comments("Aramark Engagement").build();
+        Engagement engagement = Engagement.builder().comments("Aramark Engagement").version(1L).build();
         String url =
                 given()
                         .contentType("application/json")
@@ -88,6 +88,7 @@ public class EngagementRestIntegrationTest {
                         .comments("engagement open 1")
                         .rate(BigDecimal.ONE)
                         .engagement(engagement)
+                        .version(1L)
                         .build())
                 .log().everything()
                 .when()
@@ -101,6 +102,7 @@ public class EngagementRestIntegrationTest {
                         .comments("engagement open 2")
                         .rate(BigDecimal.TEN)
                         .engagement(engagement)
+                        .version(1L)
                         .build())
                 .log().everything()
                 .when()

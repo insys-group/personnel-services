@@ -17,7 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import lombok.AllArgsConstructor;
@@ -25,7 +24,6 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
@@ -42,7 +40,6 @@ public class Person {
     private Long id;
 
     @Version
-    @NonNull
     @Getter
     @Setter
     @Column(name = "VERSION")
@@ -82,7 +79,7 @@ public class Person {
     @Getter
     @Setter
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ADDRESS_ID", nullable = true)
+    @JoinColumn(name = "ADDRESS_ID", nullable=true, insertable=true, updatable=true)
     private Address address;
 
     @Getter
@@ -104,7 +101,7 @@ public class Person {
 	@Override
 	public String toString() {
 		return "Person [id=" + getId() + ", version=" + getVersion() + ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + ", email=" + email
-				+ ", title=" + title + ", personType=" + personType + ", address=" + (address==null) + ", business=" + (business==null)
+				+ ", title=" + title + ", personType=" + personType + ", address=" + address.toString() + ", business=" + (business==null)
 				+ ", personDocuments=" + (personDocuments==null?0:personDocuments.size()) + ", personSkills=" + (personSkills==null?0:personSkills.size()) + "]";
 	}
 }

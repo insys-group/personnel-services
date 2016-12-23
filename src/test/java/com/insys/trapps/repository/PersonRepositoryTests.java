@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.junit.Before;
@@ -34,7 +33,6 @@ import com.insys.trapps.model.PersonType;
 import com.insys.trapps.respositories.BusinessRepository;
 import com.insys.trapps.respositories.PersonRepository;
 
-import ch.qos.logback.classic.Logger;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -51,9 +49,6 @@ public class PersonRepositoryTests {
 	
 	@Autowired
 	private BusinessRepository businessRepository;
-	
-	@Autowired
-	private EntityManager entitymanager;
 	
 	private Business business;
 	/**
@@ -115,7 +110,6 @@ public class PersonRepositoryTests {
 		person=repository.getOne(person.getId());
 		person.getPersonSkills().forEach(personSkill -> assertNotNull(personSkill.getId()));
 		
-		person=repository.getOne(person.getId());
 		PersonSkill skill=PersonSkill.builder().name("AWS").scale(8).version(1L).build();
 		person.getPersonSkills().add(skill);
 		person=repository.saveAndFlush(person);
@@ -142,7 +136,6 @@ public class PersonRepositoryTests {
 		person=repository.getOne(person.getId());
 		person.getPersonSkills().forEach(personSkill -> {assertNotNull(personSkill.getId());log.debug("Before Skill Delete " + personSkill.toString());});
 
-		person=repository.getOne(person.getId());
 		PersonSkill skillToDelete=person.getPersonSkills().stream().findFirst().get();
 		log.debug("Deleting Skill = " + skillToDelete.toString());
 		person.getPersonSkills().remove(skillToDelete);
@@ -188,7 +181,6 @@ public class PersonRepositoryTests {
 		person=repository.getOne(person.getId());
 		person.getPersonDocuments().forEach(personDocument -> assertNotNull(personDocument.getId()));
 		
-		person=repository.getOne(person.getId());
 		PersonDocument document=PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).version(1L).build();
 		person.getPersonDocuments().add(document);
 		person=repository.saveAndFlush(person);
@@ -216,7 +208,6 @@ public class PersonRepositoryTests {
 		person=repository.getOne(person.getId());
 		person.getPersonDocuments().forEach(personDocument -> {assertNotNull(personDocument.getId());log.debug("Before Document Delete " + personDocument.toString());});
 		
-		person=repository.getOne(person.getId());
 		PersonDocument documentToDelete=person.getPersonDocuments().stream().findFirst().get();
 		log.debug("Deleting document = " + documentToDelete.toString());
 		person.getPersonDocuments().remove(documentToDelete);
@@ -232,6 +223,62 @@ public class PersonRepositoryTests {
 		);
 	}
 	
+	@Test
+	public void testDeleteAllPersonDocuments() {
+		Set<PersonDocument> personDocuments=new HashSet<>();
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).version(1L).build());
+
+		Person person=Person.builder().firstName("Omar").lastName("Sabir")
+				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
+				.personDocuments(personDocuments).version(1L)
+				.build();
+		person=repository.saveAndFlush(person);
+		assertNotNull(person.getId());
+		
+		person=repository.getOne(person.getId());
+		person.getPersonDocuments().forEach(personDocument -> {assertNotNull(personDocument.getId());log.debug("Before Document Delete " + personDocument.toString());});
+		
+		log.debug("Deleting all documents = ");
+		person.getPersonDocuments().clear();
+		person=repository.saveAndFlush(person);
+		
+		person=repository.getOne(person.getId());
+		assertEquals(0, person.getPersonDocuments().size());
+	}
+	
+	@Test
+	public void testUpdatePersonDocuments() {
+		Set<PersonDocument> personDocuments=new HashSet<>();
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).version(1L).build());
+
+		Person person=Person.builder().firstName("Omar").lastName("Sabir")
+				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
+				.personDocuments(personDocuments).version(1L)
+				.build();
+		person=repository.saveAndFlush(person);
+		assertNotNull(person.getId());
+		
+		person=repository.getOne(person.getId());
+		person.getPersonDocuments().forEach(personDocument -> {assertNotNull(personDocument.getId());log.debug("Before Document Update " + personDocument.toString());});
+		
+		log.debug("Deleting all documents = ");
+		person.getPersonDocuments().clear();
+		person=repository.saveAndFlush(person);
+		
+		person=repository.getOne(person.getId());
+		assertEquals(0, person.getPersonDocuments().size());
+		
+		person.getPersonDocuments().add(PersonDocument.builder().fileName("resume-update.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).version(1L).build());
+		repository.saveAndFlush(person);
+		
+		person=repository.getOne(person.getId());
+		assertEquals(1, person.getPersonDocuments().size());
+	}
+
 	@Test
 	public void testCreatePersonWithAddress() {
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")

@@ -39,7 +39,6 @@ public class PersonSkill {
     private Long id;
 
     @Version
-    @NonNull
     @Getter
     @Setter
     @Column(name = "VERSION")

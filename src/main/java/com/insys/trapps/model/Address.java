@@ -8,7 +8,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Created by vnalitkin on 11/17/2016.
@@ -19,6 +26,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class Address {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -27,7 +35,6 @@ public class Address {
     private Long id;
 
     @Version
-    @NonNull
     @Getter
     @Setter
     @Column(name = "VERSION")
@@ -62,3 +69,4 @@ public class Address {
     @Column(name = "ZIP_CODE", nullable = false)
     private String zipCode;
 }
+

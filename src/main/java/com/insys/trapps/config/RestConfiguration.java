@@ -31,7 +31,6 @@ public class RestConfiguration extends RepositoryRestConfigurerAdapter {
         
         ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(true);
         provider.addIncludeFilter(new AnnotationTypeFilter(Entity.class));
-        //provider.addIncludeFilter(new AnnotationTypeFilter(MappedSuperclass.class));
         Set<BeanDefinition> components = provider.findCandidateComponents("com.insys.trapps.model");
 
         List<Class<?>> classes = new ArrayList<>();
@@ -45,10 +44,12 @@ public class RestConfiguration extends RepositoryRestConfigurerAdapter {
         });
         classes.add(AbstractEntity.class);
         config.exposeIdsFor(classes.toArray(new Class[classes.size()]));
+        /*
         classes.forEach(cls -> {
         	logger.debug("Class registering " + cls.getName());
         	config.exposeIdsFor(cls);
         });
+        */
     }
     
 }

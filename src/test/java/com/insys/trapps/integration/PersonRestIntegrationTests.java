@@ -78,7 +78,7 @@ public class PersonRestIntegrationTests {
     public void cleanup() {
     }
 
-    //@Test
+    @Test
     public void testCreatePerson() throws Exception {
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business)
@@ -94,7 +94,7 @@ public class PersonRestIntegrationTests {
                 .statusCode(HttpStatus.CREATED.value());
     }
 
-    //@Test
+    @Test
     public void testCreatePersonWithSkills() {
 		Set<PersonSkill> personSkills=new HashSet<>();
 		personSkills.add(PersonSkill.builder().name("Spring").scale(8).version(1L).build());
@@ -124,48 +124,32 @@ public class PersonRestIntegrationTests {
     @Test
     @Transactional
     public void testUpdatePersonWithSkills() {
-    	/*
-		Set<PersonSkill> personSkills=new HashSet<>();
-		personSkills.add(PersonSkill.builder().name("Spring").scale(8).build());
-		personSkills.add(PersonSkill.builder().name("JPA").scale(8).build());
-		Person person=Person.builder().firstName("Omar").lastName("Sabir")
-				.personType(PersonType.Candidate).business(businessRepository.findOne(business.getId())).email("omar@insys.com")
-				.personSkills(personSkills)
-				.build();
-		repository.saveAndFlush(person);
-		assertNotNull(person.getId());
-		
-		personSkills.forEach(personSkill -> {
-			assertNotNull(personSkill.getId());
-			log.debug("Skill created Before " + personSkill.toString());
-		});
-    	*/
 		Person person=createPersonWithSkills();
 		PersonSkill skill=PersonSkill.builder().name("AWS").scale(8).version(1L).build();
 		person.getPersonSkills().add(skill);
-    	
-		List<Map<String, Object>> savedSkills=
+		person.getPersonSkills().forEach(s -> {if(s.getName().equals("Spring")) {s.setScale(10);}});
+    	person.getBusiness().setDescription("TestingBusinessUpdate");
 		given()
                 .contentType("application/json")
                 .body(person)
                 .log().everything()
         .when()
-                .put(basePath + PERSON_PATH + "/put/1")
+                .put(basePath + PERSON_PATH + "/put/" + person.getId())
         .then()
-                .statusCode(HttpStatus.OK.value()).log().everything()
-                .extract().jsonPath().getList("personSkills");
+                .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
+
+
+		person=repository.getOne(person.getId());
 		
-		assertEquals(3, savedSkills.size());
-		
-		savedSkills.forEach(personSkill -> {
-			assertNotNull(personSkill.get("id"));
-			log.debug("Skill created After " + personSkill.get("id") + ", " + personSkill.get("name") + ", " + personSkill.get("scale"));
+		person.getPersonSkills().forEach(personSkill -> {
+			log.debug("Skill created After " + personSkill.toString());
+			if(personSkill.getName().equals("Spring")) {
+				assertEquals(new Integer(10), personSkill.getScale());
+			}
 		});
-		
-		repository.findAll().stream().filter(p -> p.getId().equals(person.getId())).forEach(p2 -> {
-			p2.getPersonSkills().forEach(s -> log.debug("Skill is " + s.toString()));
-		});
-		
+		log.debug("Person is " + person.toString());
+		assertEquals(3, person.getPersonSkills().size());
+		assertEquals("TestingBusinessUpdate", person.getBusiness().getDescription());
     }
     
     public Person createPersonWithSkills() {
@@ -203,7 +187,7 @@ public class PersonRestIntegrationTests {
 		person.setId(new Long((Integer)personProperties.get("id")));
 		return person;
     }
-
+    /*
     private String restBody(Person value) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		FilterProvider filters = new SimpleFilterProvider().addFilter("restBusinessFilter",
@@ -211,5 +195,5 @@ public class PersonRestIntegrationTests {
 		// and then serialize using that filter provider:
 		mapper.setFilterProvider(filters);
 		return mapper.writeValueAsString(value);
-    }
+    }*/
 }

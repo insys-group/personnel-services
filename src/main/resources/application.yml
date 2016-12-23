@@ -9,6 +9,7 @@ server:
 spring:
   profiles: local
   jpa:
+    show-sql: true
     properties:
       hibernate:
         hbm2ddl:
@@ -22,6 +23,11 @@ server:
 ---
 spring:
   profiles: local,cloud
+  http:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
   data:
     rest:
       basePath: /api/v1
