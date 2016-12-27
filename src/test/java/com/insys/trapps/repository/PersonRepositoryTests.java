@@ -154,8 +154,8 @@ public class PersonRepositoryTests {
 	@Test
 	public void testCreatePersonWithDocuments() {
 		Set<PersonDocument> personDocuments=new HashSet<>();
-		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
 				.personDocuments(personDocuments)
@@ -170,8 +170,8 @@ public class PersonRepositoryTests {
 	@Test
 	public void testUpdatePersonWithDocuments() {
 		Set<PersonDocument> personDocuments=new HashSet<>();
-		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
 				.personDocuments(personDocuments).version(1L)
@@ -181,7 +181,7 @@ public class PersonRepositoryTests {
 		person=repository.getOne(person.getId());
 		person.getPersonDocuments().forEach(personDocument -> assertNotNull(personDocument.getId()));
 		
-		PersonDocument document=PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).version(1L).build();
+		PersonDocument document=PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build();
 		person.getPersonDocuments().add(document);
 		person=repository.saveAndFlush(person);
 		
@@ -195,9 +195,9 @@ public class PersonRepositoryTests {
 	@Test
 	public void testDeletePersonDocuments() {
 		Set<PersonDocument> personDocuments=new HashSet<>();
-		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
 
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
@@ -226,9 +226,9 @@ public class PersonRepositoryTests {
 	@Test
 	public void testDeleteAllPersonDocuments() {
 		Set<PersonDocument> personDocuments=new HashSet<>();
-		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
 
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
@@ -251,9 +251,9 @@ public class PersonRepositoryTests {
 	@Test
 	public void testUpdatePersonDocuments() {
 		Set<PersonDocument> personDocuments=new HashSet<>();
-		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).version(1L).fileSize(100L).build());
+		personDocuments.add(PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).version(1L).fileSize(100L).build());
 
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
@@ -272,7 +272,7 @@ public class PersonRepositoryTests {
 		person=repository.getOne(person.getId());
 		assertEquals(0, person.getPersonDocuments().size());
 		
-		person.getPersonDocuments().add(PersonDocument.builder().fileName("resume-update.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).version(1L).build());
+		person.getPersonDocuments().add(PersonDocument.builder().fileName("resume-update.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
 		repository.saveAndFlush(person);
 		
 		person=repository.getOne(person.getId());

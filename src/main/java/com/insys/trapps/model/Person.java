@@ -100,8 +100,10 @@ public class Person {
 
 	@Override
 	public String toString() {
-		return "Person [id=" + getId() + ", version=" + getVersion() + ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + ", email=" + email
-				+ ", title=" + title + ", personType=" + personType + ", address=" + address.toString() + ", business=" + (business==null)
-				+ ", personDocuments=" + (personDocuments==null?0:personDocuments.size()) + ", personSkills=" + (personSkills==null?0:personSkills.size()) + "]";
+		return "Person";
 	}
 }
+/*[id=" + getId() + ", version=" + getVersion() + ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + ", email=" + email
++ ", title=" + title + ", personType=" + personType + ", address=" + (address==null) + 
+", business=" + (business==null?"business is null":business.toString())
++ ", personDocuments=" + (personDocuments==null?0:personDocuments.size()) + ", personSkills=" + (personSkills==null?0:personSkills.size()) + "]";*/

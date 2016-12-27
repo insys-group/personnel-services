@@ -127,7 +127,7 @@ public class PersonRestIntegrationTests {
 		Person person=createPersonWithSkills();
 		PersonSkill skill=PersonSkill.builder().name("AWS").scale(8).version(1L).build();
 		person.getPersonSkills().add(skill);
-		person.getPersonSkills().forEach(s -> {if(s.getName().equals("Spring")) {s.setScale(10);}});
+		person.getPersonSkills().forEach(s -> {if(s.getName().equals("Spring")) {s.setScale(10); s.setId(null);}});
     	person.getBusiness().setDescription("TestingBusinessUpdate");
 		given()
                 .contentType("application/json")

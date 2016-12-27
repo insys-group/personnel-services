@@ -65,14 +65,16 @@ public class PersonDocument {
     @Column(name = "UPLOAD_TIMESTAMP", nullable = false)
     private Date uploadTimestamp;
     
-    @Getter
     @Setter
     @SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
     @Lob
     @Column(name = "DOCUMENT", nullable = false)
-    @JsonIgnore
     private byte[] document;
 
+    @JsonIgnore
+    public byte[] getDocument() {
+    	return this.document;
+    }
 	@Override
 	public String toString() {
 		return "PersonDocument [person=" + person + ", fileName=" + fileName + ", uploadTimestamp=" + uploadTimestamp
