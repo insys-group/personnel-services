@@ -11,6 +11,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(exclude = {"email"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Person extends AbstractEntity {
     @Getter
     @Setter
