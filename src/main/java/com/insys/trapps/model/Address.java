@@ -2,9 +2,20 @@ package com.insys.trapps.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Created by vnalitkin on 11/17/2016.
@@ -15,7 +26,19 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Address extends AbstractEntity {
+@ToString
+public class Address {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Getter
+    @Setter
+    private Long id;
+
+    @Version
+    @Getter
+    @Setter
+    @Column(name = "VERSION")
+    private Long version;
 
     @Getter
     @Setter
@@ -53,3 +76,4 @@ public class Address extends AbstractEntity {
     private String country;
     
 }
+

@@ -5,8 +5,8 @@
     </encoder>
   </appender>
 
-  <logger name="com.insys.trapps" level="DEBUG"/>
-  <logger name="org" level="debug"/>
+  <logger name="com.insys" level="DEBUG"/>
+  <logger name="org" level="ERROR"/>
   
   <root level="ERROR">
     <appender-ref ref="STDOUT" />

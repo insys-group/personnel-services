@@ -9,11 +9,24 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "SKILL")
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(of = "name", callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Skill extends AbstractEntity {
+public class Skill {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Getter
+    @Setter
+    private Long id;
+
+    @Version
+    @NonNull
+    @Getter
+    @Setter
+    @Column(name = "VERSION")
+    private Long version;
+
     @Getter
     @Setter
     @NonNull

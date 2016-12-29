@@ -17,6 +17,7 @@ public class EngagementBuilder {
         builder.engagement = Engagement.builder()
                 .comments("Engagement 1")
                 .opportunity(opportunity)
+                .version(1L)
                 .build();
 
         builder.engagement
@@ -28,6 +29,7 @@ public class EngagementBuilder {
                                                 .rate(BigDecimal.TEN)
                                                 .role(role)
                                                 .address(address)
+                                                .version(1L)
                                                 .build()
                                         , EngagementOpening.builder()
                                                 .comments("EngagementOpening 1 " + builder.engagement.getComments())
@@ -35,6 +37,7 @@ public class EngagementBuilder {
                                                 .rate(BigDecimal.TEN)
                                                 .role(role)
                                                 .address(address)
+                                                .version(1L)
                                                 .build()
 
                                 )

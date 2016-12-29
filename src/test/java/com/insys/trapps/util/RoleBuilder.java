@@ -16,13 +16,14 @@ public class RoleBuilder {
         RoleBuilder builder = new RoleBuilder();
         builder.role = Role.builder()
                 .name(name)
+                .version(1L)
                 .build();
         builder.role.setSkills(
                 new HashSet<>(
                         Arrays.asList(
-                                Skill.builder().name("Skill 1 " + builder.role.getName()).build()
-                                , Skill.builder().name("Skill 2" + builder.role.getName()).build()
-                                , Skill.builder().name("Skill 3" + builder.role.getName()).build()
+                                Skill.builder().name("Skill 1 " + builder.role.getName()).version(1L).build()
+                                , Skill.builder().name("Skill 2" + builder.role.getName()).version(1L).build()
+                                , Skill.builder().name("Skill 3" + builder.role.getName()).version(1L).build()
                         )
                 )
         );
