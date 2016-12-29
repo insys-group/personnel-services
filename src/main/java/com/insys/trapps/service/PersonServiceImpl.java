@@ -36,9 +36,10 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public void updatePerson(Long id, Person person) {
 		Person dbPerson=repository.getOne(id);
-		dbPerson.getPersonDocuments().clear();
+		//dbPerson.getPersonDocuments().clear();
 		dbPerson.getPersonSkills().clear();
 		
+		/*
 		if(person.getPersonDocuments()!=null) {
 			person.getPersonDocuments().forEach(doc -> {
 				doc.setVersion(1L);
@@ -46,6 +47,7 @@ public class PersonServiceImpl implements PersonService {
 				doc.setPerson(dbPerson);
 			});
 		}
+		*/
 		
 		if(person.getPersonSkills()!=null) {
 			person.getPersonSkills().forEach(skill -> {
