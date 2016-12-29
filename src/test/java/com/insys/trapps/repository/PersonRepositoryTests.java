@@ -283,7 +283,7 @@ public class PersonRepositoryTests {
 	public void testCreatePersonWithAddress() {
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
-				.address(Address.builder().address1("3 Gerson Rd").city("Robbinsville").zipCode("08691").state("NJ").version(1L).build())
+				.address(Address.builder().address1("3 Gerson Rd").city("Robbinsville").zipCode("08691").state("NJ").country("USA").version(1L).build())
 				.version(1L).build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
@@ -294,7 +294,7 @@ public class PersonRepositoryTests {
 	public void testUpdatePersonWithAddress() {
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
-				.address(Address.builder().address1("3 Gerson Rd").city("Robbinsville").zipCode("08691").state("NJ").version(1L).build())
+				.address(Address.builder().address1("3 Gerson Rd").city("Robbinsville").zipCode("08691").state("NJ").country("USA").version(1L).build())
 				.version(1L).build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
@@ -312,7 +312,7 @@ public class PersonRepositoryTests {
 	public void testDeletePersonAddress() {
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
-				.address(Address.builder().address1("3 Gerson Rd").city("Robbinsville").zipCode("08691").state("NJ").version(1L).build())
+				.address(Address.builder().address1("3 Gerson Rd").city("Robbinsville").zipCode("08691").state("NJ").country("USA").version(1L).build())
 				.version(1L).build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
