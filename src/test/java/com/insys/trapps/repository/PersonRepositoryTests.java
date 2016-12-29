@@ -168,6 +168,51 @@ public class PersonRepositoryTests {
 	}
 
 	@Test
+	public void testCreatePersonWithSkillsAndDocuments() {
+		Set<PersonSkill> personSkills=new HashSet<>();
+		Set<PersonDocument> personDocuments=new HashSet<>();
+		personSkills.add(PersonSkill.builder().name("Spring").scale(8).version(1L).build());
+		personSkills.add(PersonSkill.builder().name("JPA").scale(8).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		Person person=Person.builder().firstName("Omar").lastName("Sabir")
+				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
+				.personSkills(personSkills)
+				.personDocuments(personDocuments)
+				.version(1L)
+				.build();
+		person=repository.saveAndFlush(person);
+		assertNotNull(person.getId());
+		person=repository.getOne(person.getId());
+		person.getPersonDocuments().forEach(personDocument -> assertNotNull(personDocument.getId()));
+		person.getPersonSkills().forEach(personSkill -> assertNotNull(personSkill.getId()));
+	}
+	
+	@Test
+	public void testDeletePersonWithSkillsAndDocuments() {
+		Set<PersonSkill> personSkills=new HashSet<>();
+		Set<PersonDocument> personDocuments=new HashSet<>();
+		personSkills.add(PersonSkill.builder().name("Spring").scale(8).version(1L).build());
+		personSkills.add(PersonSkill.builder().name("JPA").scale(8).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		Person person=Person.builder().firstName("Omar").lastName("Sabir")
+				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
+				.personSkills(personSkills)
+				.personDocuments(personDocuments)
+				.version(1L)
+				.build();
+		person=repository.saveAndFlush(person);
+		assertNotNull(person.getId());
+		person=repository.getOne(person.getId());
+		person.getPersonDocuments().forEach(personDocument -> assertNotNull(personDocument.getId()));
+		person.getPersonSkills().forEach(personSkill -> assertNotNull(personSkill.getId()));
+		repository.delete(person.getId());
+		Person deletedPerson=repository.findOne(person.getId());
+		assertNull(deletedPerson);
+	}
+
+	@Test
 	public void testUpdatePersonWithDocuments() {
 		Set<PersonDocument> personDocuments=new HashSet<>();
 		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());

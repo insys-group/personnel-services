@@ -4,8 +4,7 @@
 package com.insys.trapps.integration;
 
 import static com.jayway.restassured.RestAssured.given;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.util.HashSet;
 import java.util.List;
@@ -150,6 +149,21 @@ public class PersonRestIntegrationTests {
 		log.debug("Person is " + person.toString());
 		assertEquals(3, person.getPersonSkills().size());
 		assertEquals("TestingBusinessUpdate", person.getBusiness().getDescription());
+    }
+    
+    @Test
+    @Transactional
+    public void testDeletePersonWithSkills() {
+		Person person=createPersonWithSkills();
+		given()
+                .log().everything()
+        .when()
+                .delete(basePath + PERSON_PATH + "/" + person.getId())
+        .then()
+                .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
+
+		person=repository.findOne(person.getId());
+		assertNull(person);
     }
     
     public Person createPersonWithSkills() {
