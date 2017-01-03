@@ -51,7 +51,7 @@ public class OpportunityRestIntegrationTests {
 
     @Test
     public void testCreateOpportunity() {
-        Opportunity opportunity = Opportunity.builder().comments("Comcast Opportunity").build();
+        Opportunity opportunity = Opportunity.builder().comments("Comcast Opportunity").version(1L).build();
         given()
                 .contentType("application/json")
                 .body(opportunity)
@@ -64,7 +64,7 @@ public class OpportunityRestIntegrationTests {
 
     @Test
     public void testCreateOpportunityWithSteps() throws Exception {
-        Opportunity opportunity = Opportunity.builder().comments("Aramark Opportunity").build();
+        Opportunity opportunity = Opportunity.builder().comments("Aramark Opportunity").version(1L).build();
         String url =
                 given()
                         .contentType("application/json")
@@ -84,6 +84,7 @@ public class OpportunityRestIntegrationTests {
                         .comments("Step 1")
                         .stepTimestamp(Timestamp.valueOf(LocalDate.now().atStartOfDay()))
                         .opportunity(opportunity)
+                        .version(1L)
                         .build())
                 .log().everything()
                 .when()
@@ -108,7 +109,7 @@ public class OpportunityRestIntegrationTests {
     @Test
     public void testCreateOpportunityWithContacts() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        Opportunity opportunity = Opportunity.builder().comments("Aramark Opportunity").build();
+        Opportunity opportunity = Opportunity.builder().comments("Aramark Opportunity").version(1L).build();
 
         log.debug("Creating opportunity = " + mapper.writeValueAsString(opportunity));
         String url =
@@ -129,6 +130,7 @@ public class OpportunityRestIntegrationTests {
                         .comments("Step 1")
                         .stepTimestamp(Timestamp.valueOf(LocalDate.now().atStartOfDay()))
                         .opportunity(opportunity)
+                        .version(1L)
                         .build()
                 )
                 .log().everything()
