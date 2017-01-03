@@ -3,6 +3,8 @@
  */
 package com.insys.trapps.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -18,7 +21,6 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 
 /**
@@ -31,18 +33,20 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PersonSkill {
-    @Id
+public class PersonSkill implements Serializable {
+	private static final long serialVersionUID = -5990810947595710271L;
+
+	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Getter
     @Setter
     private Long id;
 
-    @Version
-    @Getter
-    @Setter
-    @Column(name = "VERSION")
-    private Long version;
+//    @Version
+//    @Getter
+//    @Setter
+//    @Column(name = "VERSION")
+//    private Long version;
 
     @Getter
     @Setter
@@ -62,7 +66,13 @@ public class PersonSkill {
 
 	@Override
 	public String toString() {
-		return "PersonSkill [person=" + person + ", name=" + name + ", scale=" + scale + ", getId()=" + getId()
-				+ ", getVersion()=" + getVersion() + "]";
+		return "PersonSkill [person=" + person + ", name=" + name + ", scale=" + scale + ", getId()=" + getId() + "]";
 	}
+	
+//	@PrePersist
+//	public void init() {
+//		if(this.version==null) {
+//			this.version=1L;
+//		}
+//	}
 }

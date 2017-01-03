@@ -1,5 +1,6 @@
 package com.insys.trapps.model;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -32,18 +34,20 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Person {
-    @Id
+public class Person implements Serializable {
+	private static final long serialVersionUID = 7055994680040943127L;
+
+	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Getter
     @Setter
     private Long id;
 
-    @Version
-    @Getter
-    @Setter
-    @Column(name = "VERSION")
-    private Long version;
+//    @Version
+//    @Getter
+//    @Setter
+//    @Column(name = "VERSION")
+//    private Long version;
 
     @Getter
     @Setter
@@ -84,7 +88,7 @@ public class Person {
 
     @Getter
     @Setter
-    @ManyToOne(cascade={CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "BUSINESS_ID", nullable = false)
     private Business business;
 
@@ -97,11 +101,18 @@ public class Person {
     @Setter
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
     private Set<PersonSkill> personSkills=new HashSet<>();
-
+    
 	@Override
 	public String toString() {
 		return "Person";
 	}
+	
+//	@PrePersist
+//	public void init() {
+//		if(this.version==null) {
+//			this.version=1L;
+//		}
+//	}
 }
 /*[id=" + getId() + ", version=" + getVersion() + ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + ", email=" + email
 + ", title=" + title + ", personType=" + personType + ", address=" + (address==null) + 

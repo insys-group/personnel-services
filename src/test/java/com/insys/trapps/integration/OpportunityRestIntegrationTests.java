@@ -51,28 +51,30 @@ public class OpportunityRestIntegrationTests {
 
     @Test
     public void testCreateOpportunity() {
-        Opportunity opportunity = Opportunity.builder().comments("Comcast Opportunity").version(1L).build();
+        Opportunity opportunity = Opportunity.builder().comments("Comcast Opportunity").build();
         given()
                 .contentType("application/json")
                 .body(opportunity)
                 .log().everything()
-                .when()
+        .when()
                 .post(basePath + OPP_PATH)
-                .then()
+        .then()
                 .statusCode(HttpStatus.CREATED.value());
     }
 
     @Test
     public void testCreateOpportunityWithSteps() throws Exception {
-        Opportunity opportunity = Opportunity.builder().comments("Aramark Opportunity").version(1L).build();
+        Opportunity opportunity = Opportunity.builder().comments("Aramark Opportunity")
+        		//.version(1L)
+        		.build();
         String url =
-                given()
+        given()
                         .contentType("application/json")
                         .body(opportunity)
                         .log().everything()
-                        .when()
+        .when()
                         .post(basePath + OPP_PATH)
-                        .then()
+        .then()
                         .statusCode(HttpStatus.CREATED.value())
                         .extract().jsonPath().get("_links.self.href").toString();
 
@@ -84,12 +86,12 @@ public class OpportunityRestIntegrationTests {
                         .comments("Step 1")
                         .stepTimestamp(Timestamp.valueOf(LocalDate.now().atStartOfDay()))
                         .opportunity(opportunity)
-                        .version(1L)
+                        
                         .build())
                 .log().everything()
-                .when()
+        .when()
                 .post(basePath + OPP_STEP_PATH)
-                .then()
+        .then()
                 .statusCode(HttpStatus.CREATED.value());
 
   /*      given()
@@ -109,19 +111,19 @@ public class OpportunityRestIntegrationTests {
     @Test
     public void testCreateOpportunityWithContacts() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        Opportunity opportunity = Opportunity.builder().comments("Aramark Opportunity").version(1L).build();
+        Opportunity opportunity = Opportunity.builder().comments("Aramark Opportunity").build();
 
         log.debug("Creating opportunity = " + mapper.writeValueAsString(opportunity));
         String url =
-                given()
-                        .contentType("application/json")
-                        .body(opportunity)
-                        .log().everything()
-                        .when()
-                        .post(basePath + OPP_PATH)
-                        .then()
-                        .statusCode(HttpStatus.CREATED.value())
-                        .extract().jsonPath().get("_links.self.href").toString();
+        given()
+                .contentType("application/json")
+                .body(opportunity)
+                .log().everything()
+        .when()
+                .post(basePath + OPP_PATH)
+        .then()
+                .statusCode(HttpStatus.CREATED.value())
+                .extract().jsonPath().get("_links.self.href").toString();
         //opportunity.setId(Utils.getId(url));
 
         given()
@@ -130,11 +132,10 @@ public class OpportunityRestIntegrationTests {
                         .comments("Step 1")
                         .stepTimestamp(Timestamp.valueOf(LocalDate.now().atStartOfDay()))
                         .opportunity(opportunity)
-                        .version(1L)
                         .build()
                 )
                 .log().everything()
-                .when()
+        .when()
                 .post(basePath + OPP_PATH)
                 .then()
                 .statusCode(HttpStatus.CREATED.value());

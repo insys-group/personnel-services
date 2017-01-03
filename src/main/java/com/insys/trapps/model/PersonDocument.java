@@ -1,5 +1,6 @@
 package com.insys.trapps.model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -31,18 +33,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
-public class PersonDocument {
-    @Id
+public class PersonDocument implements Serializable {
+	private static final long serialVersionUID = 4569824666811236042L;
+
+	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Getter
     @Setter
     private Long id;
 
-    @Version
-    @Getter
-    @Setter
-    @Column(name = "VERSION")
-    private Long version;
+//    @Version
+//    @Getter
+//    @Setter
+//    @Column(name = "VERSION")
+//    private Long version;
 
     @Getter
     @Setter
@@ -78,7 +82,15 @@ public class PersonDocument {
 	@Override
 	public String toString() {
 		return "PersonDocument [person=" + person + ", fileName=" + fileName + ", uploadTimestamp=" + uploadTimestamp
-				+ ", document=" + Arrays.toString(document) + ", getId()=" + getId() + ", getVersion()=" + getVersion()
+				+ ", document=" + Arrays.toString(document) + ", getId()=" + getId()
 				+ "]";
 	}
+	
+//	@PrePersist
+//	public void init() {
+//		if(this.version==null) {
+//			this.version=1L;
+//		}
+//	}
+
 }

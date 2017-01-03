@@ -65,7 +65,7 @@ public class PersonRepositoryTests {
 	public void setUp() throws Exception {
 		log.debug("Enter: setUp()**********");
 		if(business==null) {
-			business=Business.builder().name("Test Business").businessType(BusinessType.INSYS).description("Test Business").version(1L).build();
+			business=Business.builder().name("Test Business").businessType(BusinessType.INSYS).description("Test Business").build();
 			business=businessRepository.saveAndFlush(business);
 			log.debug("The Id is " + business.getId());
 			businessRepository.findAll().stream().forEach(bus -> log.debug("Business created is " + bus.getId()));
@@ -75,7 +75,7 @@ public class PersonRepositoryTests {
 	
 	@Test
 	public void testCreatePerson() {
-		Person person=Person.builder().firstName("Omar").lastName("Sabir").personType(PersonType.Candidate).business(business).email("omar@insys.com").version(1L).build();
+		Person person=Person.builder().firstName("Omar").lastName("Sabir").personType(PersonType.Candidate).business(business).email("omar@insys.com").build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
 	}
@@ -83,12 +83,12 @@ public class PersonRepositoryTests {
 	@Test
 	public void testCreatePersonWithSkills() {
 		Set<PersonSkill> personSkills=new HashSet<>();
-		personSkills.add(PersonSkill.builder().name("Spring").scale(8).version(1L).build());
-		personSkills.add(PersonSkill.builder().name("JPA").scale(8).version(1L).build());
+		personSkills.add(PersonSkill.builder().name("Spring").scale(8).build());
+		personSkills.add(PersonSkill.builder().name("JPA").scale(8).build());
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
 				.personSkills(personSkills)
-				.version(1L)
+				
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
@@ -99,18 +99,18 @@ public class PersonRepositoryTests {
 	@Test
 	public void testUpdatePersonWithSkills() {
 		Set<PersonSkill> personSkills=new HashSet<>();
-		personSkills.add(PersonSkill.builder().name("Spring").scale(8).version(1L).build());
-		personSkills.add(PersonSkill.builder().name("JPA").scale(8).version(1L).build());
+		personSkills.add(PersonSkill.builder().name("Spring").scale(8).build());
+		personSkills.add(PersonSkill.builder().name("JPA").scale(8).build());
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
-				.personSkills(personSkills).version(1L)
+				.personSkills(personSkills)
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
 		person=repository.getOne(person.getId());
 		person.getPersonSkills().forEach(personSkill -> assertNotNull(personSkill.getId()));
 		
-		PersonSkill skill=PersonSkill.builder().name("AWS").scale(8).version(1L).build();
+		PersonSkill skill=PersonSkill.builder().name("AWS").scale(8).build();
 		person.getPersonSkills().add(skill);
 		person=repository.saveAndFlush(person);
 		
@@ -124,12 +124,12 @@ public class PersonRepositoryTests {
 	@Test
 	public void testDeletePersonSkills() {
 		Set<PersonSkill> personSkills=new HashSet<>();
-		personSkills.add(PersonSkill.builder().name("Spring").scale(8).version(1L).build());
-		personSkills.add(PersonSkill.builder().name("JPA").scale(8).version(1L).build());
+		personSkills.add(PersonSkill.builder().name("Spring").scale(8).build());
+		personSkills.add(PersonSkill.builder().name("JPA").scale(8).build());
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
 				.personSkills(personSkills)
-				.version(1L)
+				
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
@@ -154,12 +154,12 @@ public class PersonRepositoryTests {
 	@Test
 	public void testCreatePersonWithDocuments() {
 		Set<PersonDocument> personDocuments=new HashSet<>();
-		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
 				.personDocuments(personDocuments)
-				.version(1L)
+				
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
@@ -171,15 +171,15 @@ public class PersonRepositoryTests {
 	public void testCreatePersonWithSkillsAndDocuments() {
 		Set<PersonSkill> personSkills=new HashSet<>();
 		Set<PersonDocument> personDocuments=new HashSet<>();
-		personSkills.add(PersonSkill.builder().name("Spring").scale(8).version(1L).build());
-		personSkills.add(PersonSkill.builder().name("JPA").scale(8).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		personSkills.add(PersonSkill.builder().name("Spring").scale(8).build());
+		personSkills.add(PersonSkill.builder().name("JPA").scale(8).build());
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
 				.personSkills(personSkills)
 				.personDocuments(personDocuments)
-				.version(1L)
+				
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
@@ -192,15 +192,15 @@ public class PersonRepositoryTests {
 	public void testDeletePersonWithSkillsAndDocuments() {
 		Set<PersonSkill> personSkills=new HashSet<>();
 		Set<PersonDocument> personDocuments=new HashSet<>();
-		personSkills.add(PersonSkill.builder().name("Spring").scale(8).version(1L).build());
-		personSkills.add(PersonSkill.builder().name("JPA").scale(8).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		personSkills.add(PersonSkill.builder().name("Spring").scale(8).build());
+		personSkills.add(PersonSkill.builder().name("JPA").scale(8).build());
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
 				.personSkills(personSkills)
 				.personDocuments(personDocuments)
-				.version(1L)
+				
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
@@ -215,18 +215,18 @@ public class PersonRepositoryTests {
 	@Test
 	public void testUpdatePersonWithDocuments() {
 		Set<PersonDocument> personDocuments=new HashSet<>();
-		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
-				.personDocuments(personDocuments).version(1L)
+				.personDocuments(personDocuments)
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
 		person=repository.getOne(person.getId());
 		person.getPersonDocuments().forEach(personDocument -> assertNotNull(personDocument.getId()));
 		
-		PersonDocument document=PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build();
+		PersonDocument document=PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build();
 		person.getPersonDocuments().add(document);
 		person=repository.saveAndFlush(person);
 		
@@ -240,13 +240,13 @@ public class PersonRepositoryTests {
 	@Test
 	public void testDeletePersonDocuments() {
 		Set<PersonDocument> personDocuments=new HashSet<>();
-		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
+		personDocuments.add(PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
 
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
-				.personDocuments(personDocuments).version(1L)
+				.personDocuments(personDocuments)
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
@@ -271,13 +271,13 @@ public class PersonRepositoryTests {
 	@Test
 	public void testDeleteAllPersonDocuments() {
 		Set<PersonDocument> personDocuments=new HashSet<>();
-		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
+		personDocuments.add(PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
 
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
-				.personDocuments(personDocuments).version(1L)
+				.personDocuments(personDocuments)
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
@@ -296,13 +296,13 @@ public class PersonRepositoryTests {
 	@Test
 	public void testUpdatePersonDocuments() {
 		Set<PersonDocument> personDocuments=new HashSet<>();
-		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
-		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).version(1L).fileSize(100L).build());
-		personDocuments.add(PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).version(1L).fileSize(100L).build());
+		personDocuments.add(PersonDocument.builder().fileName("resume.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
+		personDocuments.add(PersonDocument.builder().fileName("profile.doc").document("This is profile".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
+		personDocuments.add(PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
 
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
-				.personDocuments(personDocuments).version(1L)
+				.personDocuments(personDocuments)
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
@@ -317,7 +317,7 @@ public class PersonRepositoryTests {
 		person=repository.getOne(person.getId());
 		assertEquals(0, person.getPersonDocuments().size());
 		
-		person.getPersonDocuments().add(PersonDocument.builder().fileName("resume-update.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).version(1L).build());
+		person.getPersonDocuments().add(PersonDocument.builder().fileName("resume-update.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
 		repository.saveAndFlush(person);
 		
 		person=repository.getOne(person.getId());
@@ -328,8 +328,8 @@ public class PersonRepositoryTests {
 	public void testCreatePersonWithAddress() {
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
-				.address(Address.builder().address1("3 Gerson Rd").city("Robbinsville").zipCode("08691").state("NJ").country("USA").version(1L).build())
-				.version(1L).build();
+				.address(Address.builder().address1("3 Gerson Rd").city("Robbinsville").zipCode("08691").state("NJ").country("USA").build())
+				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
 		assertNotNull(person.getAddress().getId());
@@ -339,8 +339,8 @@ public class PersonRepositoryTests {
 	public void testUpdatePersonWithAddress() {
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
-				.address(Address.builder().address1("3 Gerson Rd").city("Robbinsville").zipCode("08691").state("NJ").country("USA").version(1L).build())
-				.version(1L).build();
+				.address(Address.builder().address1("3 Gerson Rd").city("Robbinsville").zipCode("08691").state("NJ").country("USA").build())
+				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
 		assertNotNull(person.getAddress().getId());
@@ -357,8 +357,8 @@ public class PersonRepositoryTests {
 	public void testDeletePersonAddress() {
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
-				.address(Address.builder().address1("3 Gerson Rd").city("Robbinsville").zipCode("08691").state("NJ").country("USA").version(1L).build())
-				.version(1L).build();
+				.address(Address.builder().address1("3 Gerson Rd").city("Robbinsville").zipCode("08691").state("NJ").country("USA").build())
+				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
 		assertNotNull(person.getAddress().getId());

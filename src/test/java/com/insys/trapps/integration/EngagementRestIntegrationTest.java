@@ -1,31 +1,25 @@
 package com.insys.trapps.integration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.insys.trapps.model.Engagement;
-import com.insys.trapps.model.EngagementOpening;
-import com.insys.trapps.util.Utils;
-import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.response.Response;
-import lombok.extern.slf4j.Slf4j;
+import static com.jayway.restassured.RestAssured.given;
+import static com.jayway.restassured.RestAssured.when;
+
+import java.math.BigDecimal;
+
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.LocalDate;
+import com.insys.trapps.model.Engagement;
+import com.insys.trapps.model.EngagementOpening;
+import com.insys.trapps.util.Utils;
+import com.jayway.restassured.RestAssured;
 
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.when;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.junit.Assert.assertEquals;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Created by vnalitkin on 11/22/2016.
@@ -55,28 +49,30 @@ public class EngagementRestIntegrationTest {
 
     @Test
     public void testCreateEngagement() {
-        Engagement engagement = Engagement.builder().comments("Comcast Engagement").version(1L).build();
+        Engagement engagement = Engagement.builder().comments("Comcast Engagement").build();
         given()
                 .contentType("application/json")
                 .body(engagement)
                 .log().everything()
-                .when()
+        .when()
                 .post(basePath + ENG_PATH)
-                .then()
+        .then()
                 .statusCode(HttpStatus.CREATED.value());
     }
 
     @Test
     public void testCreateEngagementWithOpeninig() throws Exception {
-        Engagement engagement = Engagement.builder().comments("Aramark Engagement").version(1L).build();
+        Engagement engagement = Engagement.builder().comments("Aramark Engagement")
+        		//.version(1L)
+        		.build();
         String url =
                 given()
                         .contentType("application/json")
                         .body(engagement)
                         .log().everything()
-                        .when()
+                .when()
                         .post(basePath + ENG_PATH)
-                        .then()
+                .then()
                         .statusCode(HttpStatus.CREATED.value())
                         .extract().jsonPath().get("_links.self.href").toString();
 
@@ -88,12 +84,11 @@ public class EngagementRestIntegrationTest {
                         .comments("engagement open 1")
                         .rate(BigDecimal.ONE)
                         .engagement(engagement)
-                        .version(1L)
                         .build())
                 .log().everything()
-                .when()
+        .when()
                 .post(basePath + ENG_OPEN_PATH)
-                .then()
+        .then()
                 .statusCode(HttpStatus.CREATED.value());
 
         given()
@@ -102,12 +97,11 @@ public class EngagementRestIntegrationTest {
                         .comments("engagement open 2")
                         .rate(BigDecimal.TEN)
                         .engagement(engagement)
-                        .version(1L)
                         .build())
                 .log().everything()
-                .when()
+        .when()
                 .post(basePath + ENG_OPEN_PATH)
-                .then()
+        .then()
                 .statusCode(HttpStatus.CREATED.value());
     }
 
@@ -115,7 +109,7 @@ public class EngagementRestIntegrationTest {
     public void testGetEngagements() {
         when()
                 .get(basePath + ENG_PATH)
-                .then()
+        .then()
                 .statusCode(HttpStatus.OK.value());
     }
 
@@ -123,7 +117,7 @@ public class EngagementRestIntegrationTest {
     public void testGetEngagementOpenings() {
         when()
                 .get(basePath + ENG_OPEN_PATH)
-                .then()
+        .then()
                 .statusCode(HttpStatus.OK.value());
     }
 
