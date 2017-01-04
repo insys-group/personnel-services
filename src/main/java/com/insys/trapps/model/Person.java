@@ -85,7 +85,7 @@ public class Person {
     @Getter
     @Setter
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "BUSINESS_ID", nullable = false)
+    @JoinColumn(name = "BUSINESS_ID")
     private Business business;
 
     @Getter

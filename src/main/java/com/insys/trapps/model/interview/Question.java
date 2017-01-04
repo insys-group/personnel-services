@@ -6,9 +6,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
-
-import com.insys.trapps.model.AbstractEntity;
+import javax.persistence.Version;
 
 @Entity
 @Table(name = "QUESTION")
@@ -16,7 +18,19 @@ import com.insys.trapps.model.AbstractEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Question extends AbstractEntity {
+public class Question {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Getter
+    @Setter
+    private Long id;
+
+    @Version
+    @Getter
+    @Setter
+    @Column(name = "VERSION")
+    private Long version;
+    
     @Getter
     @Setter
     @Column(name = "QUESTION", nullable = false)
