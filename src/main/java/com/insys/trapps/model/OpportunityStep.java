@@ -1,5 +1,6 @@
 package com.insys.trapps.model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -28,19 +30,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
-public class OpportunityStep {
-    @Id
+public class OpportunityStep implements Serializable {
+	private static final long serialVersionUID = 2759280838440810254L;
+
+	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Getter
     @Setter
     private Long id;
 
-    @Version
-    @NonNull
-    @Getter
-    @Setter
-    @Column(name = "VERSION")
-    private Long version;
+//    @Version
+//    @Getter
+//    @Setter
+//    @Column(name = "VERSION")
+//    private Long version;
 
     @Getter
     @Setter
@@ -59,4 +62,12 @@ public class OpportunityStep {
     @ManyToOne
     @JoinColumn(name = "OPPORTUNITY_ID", nullable = false)
     private Opportunity opportunity;
+	
+//	@PrePersist
+//	public void init() {
+//		if(this.version==null) {
+//			this.version=1L;
+//		}
+//	}
+
 }

@@ -51,7 +51,7 @@ public class PersonServiceImpl implements PersonService {
 		
 		if(person.getPersonSkills()!=null) {
 			person.getPersonSkills().forEach(skill -> {
-				skill.setVersion(1L);
+				//skill.setVersion(1L);
 				dbPerson.getPersonSkills().add(skill);
 				skill.setPerson(dbPerson);
 			});
@@ -68,17 +68,18 @@ public class PersonServiceImpl implements PersonService {
 				dbAddress.setZipCode(person.getAddress().getZipCode());
 			}
 		} else if(person.getAddress()!=null) {
-			person.getAddress().setVersion(1L);
+			//person.getAddress().setVersion(1L);
 			dbPerson.setAddress(person.getAddress());
 		}
 		
+		/*
 		if(person.getBusiness()!=null) {
 			if(dbPerson.getBusiness()!=null) {
 				person.getBusiness().setVersion(dbPerson.getBusiness().getVersion());
 			} else {
 				person.getBusiness().setVersion(1L);
 			}
-		}
+		}*/
 		logger.debug("Address is " + (dbPerson.getAddress()==null?"address is null":dbPerson.getAddress().toString()));
 		dbPerson.setBusiness(person.getBusiness());
 		dbPerson.setFirstName(person.getFirstName());

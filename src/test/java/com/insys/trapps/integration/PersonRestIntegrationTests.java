@@ -4,14 +4,14 @@
 package com.insys.trapps.integration;
 
 import static com.jayway.restassured.RestAssured.given;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.transaction.Transactional;
 
 import org.junit.After;
 import org.junit.Before;
@@ -31,6 +31,7 @@ import com.insys.trapps.model.PersonType;
 import com.insys.trapps.respositories.BusinessRepository;
 import com.insys.trapps.respositories.PersonRepository;
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.response.Response;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,7 +42,6 @@ import lombok.extern.slf4j.Slf4j;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
-//@Transactional
 public class PersonRestIntegrationTests {
 	@Autowired
 	private PersonRepository repository;
@@ -61,11 +61,9 @@ public class PersonRestIntegrationTests {
     @Before
     public void setup() {
         RestAssured.port = port;
-        if(business==null) {
-			business=Business.builder().name("Test Business").businessType(BusinessType.INSYS).description("Test Business").version(1L).build();
-			businessRepository.saveAndFlush(business);
-			log.debug("Business created successfully" + business.toString());
-		}
+		business=Business.builder().name("Test Business").businessType(BusinessType.INSYS).description("Test Business").build();
+		businessRepository.saveAndFlush(business);
+		log.debug("Business created successfully" + business.toString());
     }
 
     @After
@@ -76,7 +74,7 @@ public class PersonRestIntegrationTests {
     public void testCreatePerson() throws Exception {
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business)
-				.email("omar@insys.com").version(1L)
+				.email("omar@insys.com")
 				.build();
         given()
                 .contentType("application/json")
@@ -88,14 +86,15 @@ public class PersonRestIntegrationTests {
                 .statusCode(HttpStatus.CREATED.value());
     }
 
+    
     @Test
     public void testCreatePersonWithSkills() {
 		Set<PersonSkill> personSkills=new HashSet<>();
-		personSkills.add(PersonSkill.builder().name("Spring").scale(8).version(1L).build());
-		personSkills.add(PersonSkill.builder().name("JPA").scale(8).version(1L).build());
+		personSkills.add(PersonSkill.builder().name("Spring").scale(8).build());
+		personSkills.add(PersonSkill.builder().name("JPA").scale(8).build());
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
-				.personSkills(personSkills).version(1L)
+				.personSkills(personSkills)
 				.build();
 		List<Map<String, Object>> savedSkills=
 		given()
@@ -116,10 +115,9 @@ public class PersonRestIntegrationTests {
     }
     
     @Test
-    @Transactional
     public void testUpdatePersonWithSkills() {
 		Person person=createPersonWithSkills();
-		PersonSkill skill=PersonSkill.builder().name("AWS").scale(8).version(1L).build();
+		PersonSkill skill=PersonSkill.builder().name("AWS").scale(8).build();
 		person.getPersonSkills().add(skill);
 		person.getPersonSkills().forEach(s -> {if(s.getName().equals("Spring")) {s.setScale(10); s.setId(null);}});
     	person.getBusiness().setDescription("TestingBusinessUpdate");
@@ -133,21 +131,26 @@ public class PersonRestIntegrationTests {
                 .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
 
 
-		person=repository.getOne(person.getId());
+		Response response =
+		given()
+                .contentType("application/json")
+                .log().everything()
+        .when()
+                .get(basePath + PERSON_PATH + "/" + person.getId())
+        .then()
+                .statusCode(HttpStatus.OK.value())
+                .extract().response();
 		
-		person.getPersonSkills().forEach(personSkill -> {
-			log.debug("Skill created After " + personSkill.toString());
-			if(personSkill.getName().equals("Spring")) {
-				assertEquals(new Integer(10), personSkill.getScale());
-			}
-		});
-		log.debug("Person is " + person.toString());
-		assertEquals(3, person.getPersonSkills().size());
-		assertEquals("TestingBusinessUpdate", person.getBusiness().getDescription());
+		List<Map<String, Object>> savedSkills=response.jsonPath().getList("personSkills");
+		
+		assertEquals(3, savedSkills.size());
+		savedSkills.forEach(s-> {
+			assertNotNull(s.get("id"));
+			log.debug("Skills saved " + s.get("id") + ", " + s.get("name") + ", " + s.get("scale"));
+		});		
     }
     
     @Test
-    @Transactional
     public void testDeletePersonWithSkills() {
 		Person person=createPersonWithSkills();
 		given()
@@ -163,11 +166,11 @@ public class PersonRestIntegrationTests {
     
     public Person createPersonWithSkills() {
 		Set<PersonSkill> personSkills=new HashSet<>();
-		personSkills.add(PersonSkill.builder().name("Spring").scale(8).version(1L).build());
-		personSkills.add(PersonSkill.builder().name("JPA").scale(8).version(1L).build());
+		personSkills.add(PersonSkill.builder().name("Spring").scale(8).build());
+		personSkills.add(PersonSkill.builder().name("JPA").scale(8).build());
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
-				.personSkills(personSkills).version(1L)
+				.personSkills(personSkills)
 				.build();
 		Map<String, Object> personProperties=
 		given()

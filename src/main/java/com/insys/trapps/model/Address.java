@@ -1,10 +1,13 @@
 package com.insys.trapps.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -22,23 +25,25 @@ import lombok.ToString;
  */
 @Entity
 @Table(name = "ADDRESS")
-@EqualsAndHashCode(of = {"address1", "city", "state", "zipCode"}, callSuper = false)
+@EqualsAndHashCode(of = {"address1", "city", "state", "zipCode", "country"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString
-public class Address {
-    @Id
+public class Address implements Serializable {
+	private static final long serialVersionUID = 5861431468161799374L;
+
+	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Getter
     @Setter
     private Long id;
-
-    @Version
-    @Getter
-    @Setter
-    @Column(name = "VERSION")
-    private Long version;
+//
+//    @Version
+//    @Getter
+//    @Setter
+//    @Column(name = "VERSION")
+//    private Long version;
 
     @Getter
     @Setter
@@ -74,6 +79,14 @@ public class Address {
     @NonNull
     @Column(name = "COUNTRY", nullable = false)
     private String country;
+//    	
+//	@PrePersist
+//	public void init() {
+//		if(this.version==null) {
+//			this.version=1L;
+//		}
+//	}
+
     
 }
 

@@ -1,11 +1,11 @@
 package com.insys.trapps.respositories;
 
-import com.insys.trapps.model.Opportunity;
-import com.insys.trapps.model.OpportunityStep;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import java.util.List;
+import com.insys.trapps.model.OpportunityStep;
 
 /**
  * Created by vladn on 25.11.2016.
