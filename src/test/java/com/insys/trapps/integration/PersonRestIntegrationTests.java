@@ -23,10 +23,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.FilterProvider;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.insys.trapps.model.Business;
 import com.insys.trapps.model.BusinessType;
 import com.insys.trapps.model.Person;
@@ -61,7 +57,6 @@ public class PersonRestIntegrationTests {
     private String basePath;
 
     private final String PERSON_PATH = "/persons";
-
     
     @Before
     public void setup() {

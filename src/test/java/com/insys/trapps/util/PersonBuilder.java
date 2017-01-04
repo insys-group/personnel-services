@@ -16,6 +16,7 @@ public class PersonBuilder {
 				.email(email)
 				.title(title)
 				.personType(type)
+				.version(1L)
 				.build();
 		return builder;
 	}

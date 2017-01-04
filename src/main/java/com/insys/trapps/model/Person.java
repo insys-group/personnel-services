@@ -32,7 +32,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Person extends AbstractEntity {
+public class Person {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Getter

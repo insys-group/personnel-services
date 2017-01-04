@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,9 @@ import com.insys.trapps.model.Role;
 import com.insys.trapps.model.interview.Feedback;
 import com.insys.trapps.model.interview.Interview;
 import com.insys.trapps.model.interview.Question;
+import com.insys.trapps.respositories.interview.FeedbackRepository;
+import com.insys.trapps.respositories.interview.InterviewRepository;
+import com.insys.trapps.respositories.interview.QuestionRepository;
 import com.insys.trapps.util.PersonBuilder;
 import com.insys.trapps.util.RoleBuilder;
 import com.jayway.restassured.RestAssured;
@@ -32,6 +36,15 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
 public class InterviewRestIntegrationTest {
+	@Autowired
+	private FeedbackRepository feebackRepo;
+	
+	@Autowired
+	private QuestionRepository questionRepo;
+	
+	@Autowired
+	private InterviewRepository interviewRepo;
+	
 	@Value("${local.server.port}")
     private int port;
 
@@ -51,24 +64,21 @@ public class InterviewRestIntegrationTest {
 
     @Test
     public void testCreateInterview() {
-    	Interview interview = emptyInterview();
-    	
     	given()
     		.contentType("application/json")
-    		.body(interview)
+    		.body(partialInterview())
     		.log().everything()
-    		.when()
+    	.when()
     		.post(basePath + INT_PATH)
-    		.then()
+    	.then()
     		.statusCode(HttpStatus.CREATED.value());
     }
     
+    @Test
     public void testCreateInterviewWithBasicInfo() {
-    	Interview interview = partialInterview();
-    	
     	given()
 			.contentType("application/json")
-			.body(interview)
+			.body(partialInterview())
 			.log().everything()
 			.when()
 			.post(basePath + INT_PATH)
@@ -76,12 +86,11 @@ public class InterviewRestIntegrationTest {
 			.statusCode(HttpStatus.CREATED.value());    	
     }
     
+    @Test
     public void testCreateCompleteInterview() {
-    	Interview interview = completeInterview();
-    	
     	given()
 			.contentType("application/json")
-			.body(interview)
+			.body(completeInterview())
 			.log().everything()
 			.when()
 			.post(basePath + INT_PATH)

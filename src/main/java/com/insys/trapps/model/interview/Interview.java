@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 
-import com.insys.trapps.model.AbstractEntity;
 import com.insys.trapps.model.Person;
 import com.insys.trapps.model.Role;
 
@@ -16,7 +15,13 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Interview extends AbstractEntity {
+public class Interview {
+	@Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Getter
+    @Setter
+    private Long id;
+	
 	@Getter
 	@Setter
 	@Column(name = "DATE", nullable = false)
@@ -24,7 +29,7 @@ public class Interview extends AbstractEntity {
 
 	@Getter
 	@Setter
-	@Column(name = "PHONE", nullable = false)
+	@Column(name = "PHONE")
 	private String phone;
 	
 	@Getter
@@ -38,6 +43,12 @@ public class Interview extends AbstractEntity {
     @ManyToOne
 	@JoinColumn(name = "ROLE_ID", nullable = false)
 	private Role role;
+	
+    @Version
+    @Getter
+    @Setter
+    @Column(name = "VERSION")
+    private Long version;
 
 	@Getter
 	@Setter
