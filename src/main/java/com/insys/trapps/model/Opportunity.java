@@ -1,17 +1,18 @@
 package com.insys.trapps.model;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -31,19 +32,20 @@ import lombok.Singular;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Opportunity {
-    @Id
+public class Opportunity implements Serializable {
+	private static final long serialVersionUID = -5560389393119101131L;
+
+	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Getter
     @Setter
     private Long id;
 
-    @Version
-    @NonNull
-    @Getter
-    @Setter
-    @Column(name = "VERSION")
-    private Long version;
+//    @Version
+//    @Getter
+//    @Setter
+//    @Column(name = "VERSION")
+//    private Long version;
 
     @Column(name = "COMMENTS")
     @Getter
@@ -70,5 +72,12 @@ public class Opportunity {
     @ManyToOne
     @JoinColumn(name = "Person")
     private Person person;
+	
+//	@PrePersist
+//	public void init() {
+//		if(this.version==null) {
+//			this.version=1L;
+//		}
+//	}
 
 }

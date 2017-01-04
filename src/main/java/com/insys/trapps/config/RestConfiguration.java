@@ -28,7 +28,6 @@ public class RestConfiguration extends RepositoryRestConfigurerAdapter {
         config.setReturnBodyForPutAndPost(true);
         config.setReturnBodyOnCreate(true);
 
-        
         ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(true);
         provider.addIncludeFilter(new AnnotationTypeFilter(Entity.class));
         Set<BeanDefinition> components = provider.findCandidateComponents("com.insys.trapps.model");

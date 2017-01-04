@@ -1,5 +1,6 @@
 package com.insys.trapps.model;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -22,7 +24,6 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 
 /**
@@ -34,19 +35,20 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-//@JsonFilter("restBusinessFilter")
-public class Business {
-    @Id
+public class Business implements Serializable {
+	private static final long serialVersionUID = 542002485451980387L;
+
+	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Getter
     @Setter
     private Long id;
-
-    @Version
-    @Getter
-    @Setter
-    @Column(name = "VERSION")
-    private Long version;
+//
+//    @Version
+//    @Setter
+//    @Getter
+//    @Column(name = "VERSION")
+//    private Long version;
 
     @Getter
     @Setter
@@ -87,6 +89,13 @@ public class Business {
 	public String toString() {
 		return "Business [name=" + name + ", description=" + description + ", businessType=" + businessType
 				+ ", persons=" + persons + ", opportunities=" + opportunities + ", addresses=" + addresses
-				+ ", getId()=" + getId() + ", getVersion()=" + getVersion() + "]";
+				+ ", getId()=" + getId() + "]";
 	}
+	
+//	@PrePersist
+//	public void init() {
+//		if(this.version==null) {
+//			this.version=1L;
+//		}
+//	}
 }

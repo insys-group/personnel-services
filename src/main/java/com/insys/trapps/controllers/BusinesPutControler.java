@@ -30,11 +30,11 @@ public class BusinesPutControler {
 
     @RequestMapping
     public @ResponseBody Resource<Business> businessesPut(@RequestBody Business business) {
-        Business businessOld = repository.findOne(business.getId());
+        //Business businessOld = repository.findOne(business.getId());
         Set<Address> addressSet = new HashSet<>();
         business.getAddresses().forEach(addressSet::add);
         business.getAddresses().clear();
-        business.setVersion(businessOld.getVersion());
+        //business.setVersion(businessOld.getVersion());
         repository.save(business);
         business = repository.findOne(business.getId());
         addressSet.forEach(business.getAddresses()::add);

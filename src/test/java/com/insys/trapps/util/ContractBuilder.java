@@ -20,7 +20,7 @@ public class ContractBuilder {
                 .comments(comment)
                 .engagementOpening(engagementOpening)
                 .person(person)
-                .version(1L)
+                //.version(1L)
                 .build();
         builder.contract
                 .setContractDetails(new HashSet<>(
@@ -30,7 +30,7 @@ public class ContractBuilder {
                                                 .startDate(LocalDate.now())
                                                 .endDate(LocalDate.now().plusDays(20))
                                                 .contract(builder.contract)
-                                                .version(1L)
+                                                //.version(1L)
                                                 .build()
                                         , ContractDetail.builder()
                                                 .comments("contractDetail CD2 " + builder.contract.getComments())
@@ -38,7 +38,7 @@ public class ContractBuilder {
                                                 .startDate(LocalDate.now())
                                                 .endDate(LocalDate.now().plusDays(20))
                                                 .contract(builder.contract)
-                                                .version(1L)
+                                                //.version(1L)
                                                 .build()
                                 )
                         )
