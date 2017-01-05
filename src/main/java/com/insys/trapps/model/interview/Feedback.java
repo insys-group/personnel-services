@@ -2,6 +2,9 @@ package com.insys.trapps.model.interview;
 
 import lombok.*;
 
+import java.io.Serializable;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import com.insys.trapps.model.Person;
 
@@ -20,22 +22,24 @@ import com.insys.trapps.model.Person;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Feedback {
-    @Id
+public class Feedback implements Serializable {
+	private static final long serialVersionUID = -160410578502096831L;
+
+	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Getter
     @Setter
     private Long id;
 
-    @Version
-    @Getter
-    @Setter
-    @Column(name = "VERSION")
-    private Long version;
+//    @Version
+//    @Getter
+//    @Setter
+//    @Column(name = "VERSION")
+//    private Long version;
 	
 	@Getter
     @Setter
-	@ManyToOne
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "PERSON_ID")
 	private Person interviewer;
 	

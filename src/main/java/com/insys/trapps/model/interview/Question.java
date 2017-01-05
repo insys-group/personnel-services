@@ -2,6 +2,8 @@ package com.insys.trapps.model.interview;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,18 +20,20 @@ import javax.persistence.Version;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Question {
-    @Id
+public class Question implements Serializable {
+	private static final long serialVersionUID = -3773883069993102682L;
+
+	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Getter
     @Setter
     private Long id;
 
-    @Version
-    @Getter
-    @Setter
-    @Column(name = "VERSION")
-    private Long version;
+//    @Version
+//    @Getter
+//    @Setter
+//    @Column(name = "VERSION")
+//    private Long version;
     
     @Getter
     @Setter

@@ -85,7 +85,6 @@ public class BusinessRestIntegrationTests {
     				.state("PA")
     				.zipCode("19103")
     				.country("USA")
-    				.version(1L)
     				.build());
     		addresses.add(Address.builder()
     				.address1("Cable Street")
@@ -93,13 +92,12 @@ public class BusinessRestIntegrationTests {
     				.state("VA")
     				.zipCode("22030")
     				.country("USA")
-    				.version(1L)
     				.build());
     		Business business=Business.builder()
     				.name("Comcast")
     				.description("Comcast Center")
     				.businessType(BusinessType.Client)
-    				.addresses(addresses).version(1L)
+    				.addresses(addresses)
     				.build();
     		
     		List<Map<String, Object>> savedAddresses =
@@ -128,7 +126,6 @@ public class BusinessRestIntegrationTests {
 				.state("NY")
 				.zipCode("10011")
 				.country("USA")
-				.version(1L)
 				.build();
 		business.getAddresses().add(address);
 		business.getAddresses().forEach(s -> {if(s.getAddress1().equals("Cable Street")) 
@@ -180,7 +177,6 @@ public class BusinessRestIntegrationTests {
 				.state("PA")
 				.zipCode("19103")
 				.country("USA")
-				.version(1L)
 				.build());
 		businessAddresses.add(Address.builder()
 				.address1("Cable Street")
@@ -188,13 +184,12 @@ public class BusinessRestIntegrationTests {
 				.state("VA")
 				.zipCode("22030")
 				.country("USA")
-				.version(1L)
 				.build());
 		Business business=Business.builder()
 				.name("Comcast")
 				.description("Comcast Center")
 				.businessType(BusinessType.Client)
-				.addresses(businessAddresses).version(1L)
+				.addresses(businessAddresses)
 				.build();
 		
 		Map<String, Object> businessProperties=

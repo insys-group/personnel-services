@@ -1,13 +1,19 @@
 package com.insys.trapps.model.interview;
 
-import lombok.*;
-
 import javax.persistence.*;
 
 import com.insys.trapps.model.Person;
 import com.insys.trapps.model.Role;
 
+import java.io.Serializable;
 import java.util.Set;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "INTERVIEW")
@@ -15,7 +21,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Interview {
+public class Interview implements Serializable {
+	private static final long serialVersionUID = 898931233669153755L;
+
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Getter
@@ -34,7 +42,7 @@ public class Interview {
 	
 	@Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
 	@JoinColumn(name = "PERSON_ID", nullable = false)
 	private Person candidate;
 
@@ -44,11 +52,11 @@ public class Interview {
 	@JoinColumn(name = "ROLE_ID", nullable = false)
 	private Role role;
 	
-    @Version
-    @Getter
-    @Setter
-    @Column(name = "VERSION")
-    private Long version;
+//    @Version
+//    @Getter
+//    @Setter
+//    @Column(name = "VERSION")
+//    private Long version;
 
 	@Getter
 	@Setter

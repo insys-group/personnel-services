@@ -87,7 +87,7 @@ public class Person implements Serializable {
     @Getter
     @Setter
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
-    @JoinColumn(name = "BUSINESS_ID", nullable = false)
+    @JoinColumn(name = "BUSINESS_ID")
     private Business business;
 
     @Getter
