@@ -4,7 +4,6 @@ import lombok.*;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,7 +38,7 @@ public class Feedback implements Serializable {
 	
 	@Getter
     @Setter
-    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "PERSON_ID")
 	private Person interviewer;
 	

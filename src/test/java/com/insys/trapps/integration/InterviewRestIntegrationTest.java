@@ -6,6 +6,7 @@ import static com.jayway.restassured.RestAssured.when;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -23,10 +24,9 @@ import com.insys.trapps.model.Role;
 import com.insys.trapps.model.interview.Feedback;
 import com.insys.trapps.model.interview.Interview;
 import com.insys.trapps.model.interview.Question;
+import com.insys.trapps.respositories.PersonRepository;
+import com.insys.trapps.respositories.RoleRepository;
 import com.insys.trapps.respositories.interview.FeedbackRepository;
-import com.insys.trapps.respositories.interview.InterviewRepository;
-import com.insys.trapps.respositories.interview.QuestionRepository;
-import com.insys.trapps.util.PersonBuilder;
 import com.insys.trapps.util.RoleBuilder;
 import com.jayway.restassured.RestAssured;
 
@@ -37,117 +37,75 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class InterviewRestIntegrationTest {
 	@Autowired
-	private FeedbackRepository feebackRepo;
-	
+	private FeedbackRepository feedbackRepo;
 	@Autowired
-	private QuestionRepository questionRepo;
-	
+	private RoleRepository roleRepo;
 	@Autowired
-	private InterviewRepository interviewRepo;
-	
+	private PersonRepository personRepo;
+
 	@Value("${local.server.port}")
-    private int port;
+	private int port;
 
-    @Value("${spring.data.rest.basePath}")
-    private String basePath;
+	@Value("${spring.data.rest.basePath}")
+	private String basePath;
 
-    private final String INT_PATH = "/interviews";
-    
-    @Before
-    public void setup() {
-        RestAssured.port = port;
-    }
+	private final String INT_PATH = "/interviews";
 
-    @After
-    public void cleanup() {
-    }
+	private Person employee0, employee1, candidate;
+	private Role role;
+	private Set<Question> questions;
+	private Feedback feedback;
+	private Set<Person> interviewers;
 
-    @Test
-    public void testCreateInterview() {
-    	given()
-    		.contentType("application/json")
-    		.body(partialInterview())
-    		.log().everything()
-    	.when()
-    		.post(basePath + INT_PATH)
-    	.then()
-    		.statusCode(HttpStatus.CREATED.value());
-    }
-    
-    @Test
-    public void testCreateInterviewWithBasicInfo() {
-    	given()
-			.contentType("application/json")
-			.body(partialInterview())
-			.log().everything()
-			.when()
-			.post(basePath + INT_PATH)
-			.then()
-			.statusCode(HttpStatus.CREATED.value());    	
-    }
-    
-    @Test
-    public void testCreateCompleteInterview() {
-    	given()
-			.contentType("application/json")
-			.body(completeInterview())
-			.log().everything()
-			.when()
-			.post(basePath + INT_PATH)
-			.then()
-			.statusCode(HttpStatus.CREATED.value());    	
-    }
-    
-    @Test
-    public void testGetInterviews() {
-        when()
-        	.get(basePath + INT_PATH)
-        	.then()
-        	.statusCode(HttpStatus.OK.value());
-    }
+	@Before
+	public void setup() {
+		RestAssured.port = port;
 
-    private Interview emptyInterview() {
-		return Interview.builder().build();
+		role = RoleBuilder.buildRole("Swift Developer II").build();
+		roleRepo.saveAndFlush(role);
+
+		employee0 = buildPerson("Hung", "Do", "hdo@insys.com", "Architect", PersonType.Employee);
+		employee1 = buildPerson("Rohit", "Narwhal", "rfnu@insys.com", "Architect", PersonType.Employee);
+		candidate = buildPerson("Person A", "Last name", "Email", "Architect", PersonType.Candidate);
+
+		personRepo.saveAndFlush(candidate);
+
+		Question q0 = Question.builder().question("Question 1").build();
+		Question q1 = Question.builder().question("Question 2").build();
+		Question q2 = Question.builder().question("Question 3").build();
+
+		questions = new HashSet<>(Arrays.asList(q0, q1, q2));
+		interviewers = new HashSet<Person>(Arrays.asList(employee0, employee1));
+
+		Person interviewer = buildPerson("Hung", "Do", "hdo@insys.com", "Architect", PersonType.Employee);
+		personRepo.saveAndFlush(interviewer);
+		feedback = Feedback.builder().comment("Excellent").interviewer(interviewer).build();
+		feedbackRepo.saveAndFlush(feedback);
 	}
-	
-	private Interview partialInterview() {
-		return Interview.builder()
-				.candidate(new Person())
-				.role(RoleBuilder.buildRole("Swift Developer").build())
-				.date(new Date().getTime())
-				.build();
+
+	@After
+	public void cleanup() {
 	}
-	
-	private Interview completeInterview() {
-		Role role = RoleBuilder.buildRole("Swift Developer II").build();
-		Person employee0 = PersonBuilder
-				.buildPerson("Hung", "Do", "hdo@insys.com", "Architect", PersonType.Employee)
-				.build();
-		Person employee1 = PersonBuilder
-				.buildPerson("Rohit", "Narwhal", "rfnu@insys.com", "Architect", PersonType.Employee)
-				.build();
-		Person candidate = PersonBuilder
-				.buildPerson("Person A", "Last name", "Email", "Architect", PersonType.Candidate)
-				.build();
-		
-		Feedback feedback = Feedback.builder()
-				.comment("Excellent")
-				.interviewer(employee0).build();
-		
-		HashSet <Question> questions = new HashSet<>(
-				Arrays.asList(
-						Question.builder().question("Question 1").build(),
-						Question.builder().question("Question 2").build(),
-						Question.builder().question("Question 3").build())
-				);
-		
-		return Interview.builder()
-				.candidate(candidate)
-				.role(role)
-				.date(new Date().getTime())
-				.interviewers(new HashSet<Person>(Arrays.asList(employee0, employee1)))
-				.feedback(feedback)
-				.questions(questions)
+
+	@Test
+	public void testCreateInterview() {
+		Interview interview = buildInterview();
+		given().contentType("application/json").body(interview).log().everything().when().post(basePath + INT_PATH)
+				.then().statusCode(HttpStatus.CREATED.value());
+	}
+
+	@Test
+	public void testGetInterviews() {
+		when().get(basePath + INT_PATH).then().statusCode(HttpStatus.OK.value());
+	}
+
+	private Interview buildInterview() {
+		return Interview.builder().candidate(candidate).role(role).date(new Date().getTime()).interviewers(interviewers)
+				.questions(questions).feedback(feedback).build();
+	}
+
+	private Person buildPerson(String firstName, String lastName, String email, String title, PersonType type) {
+		return Person.builder().firstName(firstName).lastName(lastName).email(email).title(title).personType(type)
 				.build();
 	}
 }
