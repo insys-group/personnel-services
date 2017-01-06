@@ -18,15 +18,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.insys.trapps.model.Business;
+import com.insys.trapps.model.BusinessType;
 import com.insys.trapps.model.Person;
 import com.insys.trapps.model.PersonType;
 import com.insys.trapps.model.Role;
 import com.insys.trapps.model.interview.Feedback;
 import com.insys.trapps.model.interview.Interview;
 import com.insys.trapps.model.interview.Question;
+import com.insys.trapps.respositories.BusinessRepository;
 import com.insys.trapps.respositories.PersonRepository;
 import com.insys.trapps.respositories.RoleRepository;
 import com.insys.trapps.respositories.interview.FeedbackRepository;
+import com.insys.trapps.util.BusinessBuilder;
 import com.insys.trapps.util.RoleBuilder;
 import com.jayway.restassured.RestAssured;
 
@@ -42,6 +46,8 @@ public class InterviewRestIntegrationTest {
 	private RoleRepository roleRepo;
 	@Autowired
 	private PersonRepository personRepo;
+	@Autowired
+	private BusinessRepository businessRepo;
 
 	@Value("${local.server.port}")
 	private int port;
@@ -57,10 +63,14 @@ public class InterviewRestIntegrationTest {
 	private Set<Question> questions;
 	private Feedback feedback;
 	private Set<Person> interviewers;
+	private Business business;
 
 	@Before
 	public void setup() {
 		RestAssured.port = port;
+		
+		business = BusinessBuilder.buildBusiness("Insys", "Interview", BusinessType.INSYS).build();
+		businessRepo.saveAndFlush(business);
 		
 		date = new Date().getTime();
 		role = RoleBuilder.buildRole("Swift Developer II").build();
@@ -128,7 +138,7 @@ public class InterviewRestIntegrationTest {
 	}
 
 	private Person buildPerson(String firstName, String lastName, String email, String title, PersonType type) {
-		return Person.builder().firstName(firstName).lastName(lastName).email(email).title(title).personType(type)
-				.build();
+		return Person.builder().firstName(firstName).lastName(lastName).email(email).title(title)
+				.personType(type).business(business).build();
 	}
 }
