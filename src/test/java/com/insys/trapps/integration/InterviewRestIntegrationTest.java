@@ -52,6 +52,7 @@ public class InterviewRestIntegrationTest {
 	private final String INT_PATH = "/interviews";
 
 	private Person employee0, employee1, candidate;
+	private long date;
 	private Role role;
 	private Set<Question> questions;
 	private Feedback feedback;
@@ -60,7 +61,8 @@ public class InterviewRestIntegrationTest {
 	@Before
 	public void setup() {
 		RestAssured.port = port;
-
+		
+		date = new Date().getTime();
 		role = RoleBuilder.buildRole("Swift Developer II").build();
 		roleRepo.saveAndFlush(role);
 
@@ -88,20 +90,42 @@ public class InterviewRestIntegrationTest {
 	}
 
 	@Test
-	public void testCreateInterview() {
-		Interview interview = buildInterview();
-		given().contentType("application/json").body(interview).log().everything().when().post(basePath + INT_PATH)
-				.then().statusCode(HttpStatus.CREATED.value());
+	public void testCreateInterviewWithEmptyInterview() {
+		Interview interview = Interview.builder().build();
+		given().contentType("application/json").body(interview).log().everything()
+			.when().post(basePath + INT_PATH)
+			.then().statusCode(HttpStatus.CONFLICT.value());
+	}
+	
+	@Test
+	public void testCreateInterviewWithBasicInfo() {
+		Interview interview = Interview.builder()
+				.candidate(candidate)
+				.role(role)
+				.date(date).build();
+		given().contentType("application/json").body(interview).log().everything()
+			.when().post(basePath + INT_PATH)
+			.then().statusCode(HttpStatus.CREATED.value());
+	}
+	
+	@Test
+	public void testCreateInterviewWithCompleteInterview() {
+		Interview interview = Interview.builder()
+				.candidate(candidate)
+				.role(role)
+				.date(date)
+				.interviewers(interviewers)
+				.questions(questions)
+				.feedback(feedback)
+				.build();
+		given().contentType("application/json").body(interview).log().everything()
+			.when().post(basePath + INT_PATH)
+			.then().statusCode(HttpStatus.CREATED.value());
 	}
 
 	@Test
 	public void testGetInterviews() {
 		when().get(basePath + INT_PATH).then().statusCode(HttpStatus.OK.value());
-	}
-
-	private Interview buildInterview() {
-		return Interview.builder().candidate(candidate).role(role).date(new Date().getTime()).interviewers(interviewers)
-				.questions(questions).feedback(feedback).build();
 	}
 
 	private Person buildPerson(String firstName, String lastName, String email, String title, PersonType type) {
