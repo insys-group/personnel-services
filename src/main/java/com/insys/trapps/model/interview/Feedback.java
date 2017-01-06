@@ -17,7 +17,7 @@ import com.insys.trapps.model.Person;
 
 @Entity
 @Table(name = "FEEDBACK")
-@EqualsAndHashCode(of = {"interviewer", "comment"}, callSuper = false)
+@EqualsAndHashCode(of = { "interviewer", "comment" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -25,25 +25,25 @@ public class Feedback implements Serializable {
 	private static final long serialVersionUID = -160410578502096831L;
 
 	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    @Getter
-    @Setter
-    private Long id;
-
-//    @Version
-//    @Getter
-//    @Setter
-//    @Column(name = "VERSION")
-//    private Long version;
-	
-	@Getter
-    @Setter
-    @ManyToOne
-    @JoinColumn(name = "PERSON_ID")
-	private Person interviewer;
-	
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Getter
 	@Setter
-    @Column(name = "COMMENT", nullable = false)
+	private Long id;
+
+	// @Version
+	// @Getter
+	// @Setter
+	// @Column(name = "VERSION")
+	// private Long version;
+
+	@Getter
+	@Setter
+	@ManyToOne
+	@JoinColumn(name = "PERSON_ID")
+	private Person interviewer;
+
+	@Getter
+	@Setter
+	@Column(name = "COMMENT", nullable = false)
 	private String comment;
 }

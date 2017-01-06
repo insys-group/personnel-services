@@ -69,7 +69,6 @@ public class InterviewRestIntegrationTest {
 		employee0 = buildPerson("Hung", "Do", "hdo@insys.com", "Architect", PersonType.Employee);
 		employee1 = buildPerson("Rohit", "Narwhal", "rfnu@insys.com", "Architect", PersonType.Employee);
 		candidate = buildPerson("Person A", "Last name", "Email", "Architect", PersonType.Candidate);
-
 		personRepo.saveAndFlush(candidate);
 
 		Question q0 = Question.builder().question("Question 1").build();
