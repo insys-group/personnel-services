@@ -22,7 +22,6 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.Setter;
 
 /**
@@ -50,7 +49,7 @@ public class Business {
 
     @Getter
     @Setter
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "NAME", nullable = false, unique=true)
     private String name;
 
     @Getter
