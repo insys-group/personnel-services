@@ -32,6 +32,7 @@
 --insert into ROLE(id , name, version) values(1 , 'Developer', 1);
 --insert into SKILL(id , name, version) values(1 , 'Java', 1);
 --insert into ROLE_SKILL values(1 , 1);
+
 insert into ADDRESS(id, address_1 , city , state, zip_code, country) values(1, '10 Park Ave' , 'Manhatten' , 'NY' , '10010', 'USA');
 insert into ADDRESS(id, address_1 , city , state, zip_code, country) values(2, '100 Business Ave', 'Manhatten' , 'NY' , '10012', 'USA');
 insert into ADDRESS(id, address_1 , city , state, zip_code, country) values(3, '100 Comcast Ave', 'Philadelphia', 'PA', '88790', 'USA');
@@ -49,7 +50,7 @@ insert into BUSINESS(id, name, description, business_type) values(17, 'Pivotal C
 insert into BUSINESS(id, name, description, business_type) values(18, 'Pivotal Labs', 'Pivotal Labs', 'PivotalLabs');
 insert into BUSINESS(id, name, description, business_type) values(19, 'Apptium Inc', 'Apptium Solutions', 'Vendor');
 
-insert into LOCATION(business_id , address_id) values(15, 1 );
+insert into LOCATION(business_id , address_id) values(15, 1);
 insert into LOCATION(business_id , address_id) values(15, 3);
 insert into LOCATION(business_id , address_id) values(15, 2);
 insert into LOCATION(business_id , address_id) values(16, 4);
@@ -61,8 +62,15 @@ insert into PERSON(id, first_name, last_name , phone, email, title, person_type,
 insert into PERSON(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) values(14, 'Kevin', 'Meloney', '872-28-1297', 'kmulder@comcast.com', 'Manager', 'Client', 9, 15);
 insert into PERSON(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) values(15, 'Chris', 'Umbel', '297-28-1276', 'cumbel@pivotal.com', 'Architect', 'Pivotal', 10, 17);
 
-insert into PERSON_SKILL(id, person_id, name, scale) values(1, 10, 'Spring', 8);
+insert into INTERVIEW(id, date, phone, person_id, role_id) values(0, 1482475703, '7035551234', 10, 1);
+insert into QUESTION(id, question, answer, comment, quality) values(0, 'What do?', 'Stuff', 'Comment', 'Excellent');
+insert into FEEDBACK(id, person_id, comment) values(0, 11, 'Comment');
 
+insert into INTERVIEWERS(interview_id, person_id) values(0, 11);
+insert into QUESTIONS(interview_id, question_id) values(0, 0);
+insert into INT_FEEDBACK(interview_id, feedback_id) values(0, 0);
+
+insert into PERSON_SKILL(id, person_id, name, scale) values(1, 10, 'Spring', 8);
 
 insert into ROLE(id , name) values(1 , 'Developer');
 insert into SKILL(id , name) values(1 , 'Java');

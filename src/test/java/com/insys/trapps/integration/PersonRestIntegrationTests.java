@@ -57,7 +57,6 @@ public class PersonRestIntegrationTests {
     private String basePath;
 
     private final String PERSON_PATH = "/persons";
-
     
     @Before
     public void setup() {
