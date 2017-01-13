@@ -6,6 +6,7 @@ import com.insys.trapps.model.Person;
 import com.insys.trapps.model.Role;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
@@ -62,13 +63,13 @@ public class Interview implements Serializable {
 	@Setter
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "INTERVIEWERS", joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID"))
-	private Set<Person> interviewers;
+	private Set<Person> interviewers = new HashSet<>();
 
 	@Getter
 	@Setter
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "QUESTIONS", joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "QUESTION_ID", referencedColumnName = "ID"))
-	private Set<Question> questions;
+	private Set<Question> questions = new HashSet<>();
 
 	@Getter
 	@Setter

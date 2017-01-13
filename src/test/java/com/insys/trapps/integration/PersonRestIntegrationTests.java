@@ -147,7 +147,7 @@ public class PersonRestIntegrationTests {
 		savedSkills.forEach(s-> {
 			assertNotNull(s.get("id"));
 			log.debug("Skills saved " + s.get("id") + ", " + s.get("name") + ", " + s.get("scale"));
-		});		
+		});
     }
     
     @Test
