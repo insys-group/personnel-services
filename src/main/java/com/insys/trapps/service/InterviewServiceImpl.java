@@ -18,7 +18,16 @@ public class InterviewServiceImpl implements InterviewService {
 	
 	@Override
 	public void updateInterview(Long id, Interview interview) {
-		// TODO Auto-generated method stub
+		Interview dbInterview = repository.getOne(id);
+		
+		dbInterview.getQuestions().clear();
+		
+		interview.getQuestions().forEach(question -> {
+			dbInterview.getQuestions().add(question);
+		});
+		
+		repository.saveAndFlush(dbInterview);
+		
 		logger.debug("updateInterview called");
 	}
 }
