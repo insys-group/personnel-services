@@ -152,7 +152,7 @@ public class InterviewRestIntegrationTest {
 	
 	@Test
 	public void testUpdateInterviewWithQuestions() {
-		Interview interview = createBasicInterview();
+		Interview interview = mockInterview;
 		
 		Question q0 = Question.builder().question("Question 1").build();
 		Question q1 = Question.builder().question("Question 2").build();
@@ -162,15 +162,19 @@ public class InterviewRestIntegrationTest {
 		interview.getQuestions().add(q1);
 		interview.getQuestions().add(q2);
 		
+		
+		
 		// update using put
-		log.debug("PUT REQUEST");
+		log.debug("PATCH REQUEST");
 		given()
 			.contentType("application/json")
 			.body(interview)
 		.when()
-			.put(basePath + INT_PATH + "/" + interview.getId())
+			.patch(basePath + INT_PATH + "/" + interview.getId())
 		.then()
-			.statusCode(HttpStatus.NO_CONTENT.value());
+			.log().everything()
+			.statusCode(HttpStatus.ACCEPTED.value())
+			.extract().response();
 
 		// check if update took with get
 		log.debug("GET REQUEST");
@@ -180,10 +184,11 @@ public class InterviewRestIntegrationTest {
 		.when()
 			.get(basePath + INT_PATH + "/" + interview.getId())
 		.then()
-			.statusCode(HttpStatus.OK.value())
+			.log().everything()
+			.statusCode(HttpStatus.ACCEPTED.value())
 			.extract().response();
 		
-		log.debug(response.jsonPath().prettify());
+		// log.debug(response.jsonPath().prettify());
 		
 		List<Map<String, Object>> questions = response.jsonPath().getList("questions");
 		assertEquals(3, questions.size());
@@ -202,45 +207,6 @@ public class InterviewRestIntegrationTest {
 	private Person buildPerson(String firstName, String lastName, String email, String title, PersonType type) {
 		return Person.builder().firstName(firstName).lastName(lastName).email(email).title(title)
 				.personType(type).business(mockBusiness).build();
-	}
-	
-	private Interview createBasicInterview() {
-		if (mockCandidate == null) {
-			mockCandidate = buildPerson("Person A", "Last name", "Email", "Architect", PersonType.Candidate);
-			personRepo.saveAndFlush(mockCandidate);
-		}
-		
-		if (mockRole == null) {
-			mockRole = RoleBuilder.buildRole("Swift Developer II").build();
-			roleRepo.saveAndFlush(mockRole);
-		}
-		
-		if (mockDate == 0) {
-			mockDate = new Date().getTime();
-		}
-		
-		Interview interview = Interview.builder()
-				.candidate(mockCandidate)
-				.role(mockRole)
-				.date(mockDate)
-				.interviewers(new HashSet<>())
-				.questions(new HashSet<>())
-				.build();
-
-		Map<String, Object> interviewProps = 
-				given()
-					.contentType("application/json")
-					.body(interview)
-				.when()
-					.post(basePath + INT_PATH)
-				.then()
-					.statusCode(HttpStatus.CREATED.value()).extract().jsonPath()
-				.get();
-		
-		assertNotNull(interviewProps.get("id"));
-		interview.setId(new Long((Integer) interviewProps.get("id")));
-		
-		return interview;
 	}
 	
 	private Interview createMockInterview() {

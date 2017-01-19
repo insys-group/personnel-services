@@ -1,5 +1,7 @@
 package com.insys.trapps.service;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,16 +19,17 @@ public class InterviewServiceImpl implements InterviewService {
 	private Logger logger = Logger.getLogger(InterviewService.class);
 	
 	@Override
-	public void updateInterview(Long id, Interview interview) {
+	public void patchInterview(Long id, Map<String, Object> mappedVals) {
 		Interview dbInterview = repository.getOne(id);
 		
-		dbInterview.getQuestions().clear();
+		logger.debug(mappedVals);
 		
-		interview.getQuestions().forEach(question -> {
-			dbInterview.getQuestions().add(question);
-		});
+//		dbInterview.getQuestions().clear();
+//		dbInterview.getQuestions().forEach(question -> {
+//			dbInterview.getQuestions().add(question);
+//		});
 		
-		repository.saveAndFlush(dbInterview);
+		// repository.saveAndFlush(dbInterview);
 		
 		logger.debug("updateInterview called");
 	}

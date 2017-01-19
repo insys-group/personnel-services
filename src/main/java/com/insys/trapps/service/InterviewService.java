@@ -1,7 +1,7 @@
 package com.insys.trapps.service;
 
-import com.insys.trapps.model.interview.Interview;
+import java.util.Map;
 
 public interface InterviewService {
-	void updateInterview(Long id, Interview interview);
+	void patchInterview(Long id, Map<String, Object> mappedVals);
 }

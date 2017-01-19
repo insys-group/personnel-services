@@ -41,8 +41,8 @@ public class Interview implements Serializable {
 
 	@Getter
 	@Setter
-	@ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.MERGE })
-	@JoinColumn(name = "PERSON_ID", nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "PERSON_ID")
 	private Person candidate;
 
 	@Getter
@@ -59,7 +59,7 @@ public class Interview implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToMany(cascade = { CascadeType.ALL },  orphanRemoval = true)
+	@OneToMany(cascade = { CascadeType.REFRESH, CascadeType.MERGE },  orphanRemoval = true)
 	@JoinTable(joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID"), 
 		inverseJoinColumns = @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID"))
 	private Set<Person> interviewers;
