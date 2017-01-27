@@ -124,7 +124,7 @@ public class InterviewRestIntegrationTest {
 			feedbackRepo.save(mockFeedback);
 			
 			mockInterview = createMockInterview();
-			interviewRepo.saveAndFlush(mockInterview);
+			mockInterview.setId(interviewRepo.saveAndFlush(mockInterview).getId());
 			log.debug(mockInterview.getId() + " mock");
 		}
 	}
@@ -177,12 +177,15 @@ public class InterviewRestIntegrationTest {
 		log.debug("PATCH REQUEST");
 		given()
 			.contentType("application/json")
-			.body("{\"questions\":" + json + "}")
+//			.body("{\"questions\":" + json + "}")
+			.body(interview)
 		.when()
-			.patch(basePath + INT_PATH + "/" + interview.getId())
+//			.patch(basePath + INT_PATH + "/" + interview.getId())
+			.post(basePath + INT_PATH)
 		.then()
 			.log().everything()
-			.statusCode(HttpStatus.ACCEPTED.value())
+//			.statusCode(HttpStatus.ACCEPTED.value())
+			.statusCode(HttpStatus.CREATED.value())
 			.extract().response();
 
 		// check if update took with get
