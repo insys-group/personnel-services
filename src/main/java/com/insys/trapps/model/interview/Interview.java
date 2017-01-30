@@ -15,11 +15,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @EqualsAndHashCode(of = { "candidate", "role", "date" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Builder
 public class Interview implements Serializable {
 	private static final long serialVersionUID = 898931233669153755L;
@@ -59,9 +61,9 @@ public class Interview implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToMany(cascade = { CascadeType.REFRESH, CascadeType.MERGE },  orphanRemoval = true)
-	@JoinTable(joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID"), 
-		inverseJoinColumns = @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID"))
+	@OneToMany(cascade = { CascadeType.MERGE},  orphanRemoval = true)
+	@JoinTable(joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID", nullable = false), 
+		inverseJoinColumns = @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID", nullable = false))
 	private Set<Person> interviewers;
 
 	@Getter

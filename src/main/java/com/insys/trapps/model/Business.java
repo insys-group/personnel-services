@@ -68,8 +68,10 @@ public class Business implements Serializable {
 
     @Setter
     @Getter
-    @OneToMany(mappedBy = "business", fetch = FetchType.LAZY)
-    private Set<Person> persons;
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+     @JoinTable(joinColumns = @JoinColumn(name = "BUSINESS_ID", referencedColumnName = "ID"),
+         inverseJoinColumns = @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID"))
+     private Set<Person> persons;
 
     @Getter
     @Setter
