@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.insys.trapps.model.interview.Interview;
@@ -32,7 +33,8 @@ public class InterviewController {
 	
 	@GetMapping(value = "/interviews/{id}") 
 	@ResponseStatus(HttpStatus.OK)
-	public Interview getInterview(@PathVariable("id") Long id) {
+	@ResponseBody
+	public  Interview getInterview(@PathVariable("id") Long id) {
 		return service.getInterview(id);
 	}
 }
