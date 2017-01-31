@@ -44,6 +44,6 @@ public class Feedback implements Serializable {
 
 	@Getter
 	@Setter
-	@Column(name = "COMMENT", nullable = false)
+	@Column(nullable = false)
 	private String comment;
 }

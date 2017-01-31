@@ -19,6 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.insys.trapps.model.interview.Interview;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -86,18 +88,18 @@ public class Person implements Serializable {
 
 	@Getter
 	@Setter
-	@ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.MERGE })
-	@JoinColumn(name = "BUSINESS_ID", nullable = false)
-	private Business business;
+	@ManyToOne
+	@JoinColumn(name = "BUSINESS_ID")
+    private Business business;
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<PersonDocument> personDocuments = new HashSet<>();
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<PersonSkill> personSkills = new HashSet<>();
 
 	@Override

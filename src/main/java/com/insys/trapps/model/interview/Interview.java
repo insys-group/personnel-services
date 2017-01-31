@@ -6,6 +6,7 @@ import com.insys.trapps.model.Person;
 import com.insys.trapps.model.Role;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
@@ -14,12 +15,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Table(name = "INTERVIEW")
 @EqualsAndHashCode(of = { "candidate", "role", "date" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Builder
 public class Interview implements Serializable {
 	private static final long serialVersionUID = 898931233669153755L;
@@ -32,18 +34,17 @@ public class Interview implements Serializable {
 
 	@Getter
 	@Setter
-	@Column(name = "DATE", nullable = false)
+	@Column(nullable = false)
 	private long date;
 
 	@Getter
 	@Setter
-	@Column(name = "PHONE")
 	private String phone;
 
 	@Getter
 	@Setter
-	@ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.MERGE })
-	@JoinColumn(name = "PERSON_ID", nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "PERSON_ID")
 	private Person candidate;
 
 	@Getter
@@ -60,19 +61,23 @@ public class Interview implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinTable(name = "INTERVIEWERS", joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID"))
+	@OneToMany(cascade = { CascadeType.MERGE},  orphanRemoval = true)
+	@JoinTable(joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID", nullable = false), 
+		inverseJoinColumns = @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID", nullable = false))
 	private Set<Person> interviewers;
 
 	@Getter
 	@Setter
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinTable(name = "QUESTIONS", joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "QUESTION_ID", referencedColumnName = "ID"))
+	@OneToMany(cascade = { CascadeType.ALL },  orphanRemoval = true)
+	@JoinTable(joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID"),
+		inverseJoinColumns = @JoinColumn(name = "QUESTION_ID", referencedColumnName = "ID"))
 	private Set<Question> questions;
 
 	@Getter
 	@Setter
 	@OneToOne
-	@JoinTable(name = "INT_FEEDBACK", joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "FEEDBACK_ID", referencedColumnName = "ID"))
+	@JoinTable(name = "INT_FEEDBACK", 
+		joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID"), 
+		inverseJoinColumns = @JoinColumn(name = "FEEDBACK_ID", referencedColumnName = "ID"))
 	private Feedback feedback;
 }
