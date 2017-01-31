@@ -1,9 +1,10 @@
 package com.insys.trapps.controllers;
 
-import com.insys.trapps.model.Address;
-import com.insys.trapps.model.Business;
-import com.insys.trapps.respositories.BusinessRepository;
-import com.insys.trapps.respositories.RoleRepository;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.Resource;
@@ -11,11 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+import com.insys.trapps.model.Address;
+import com.insys.trapps.model.Business;
+import com.insys.trapps.respositories.BusinessRepository;
 
 /**
  * Created by vnalitkin on 12/16/16.

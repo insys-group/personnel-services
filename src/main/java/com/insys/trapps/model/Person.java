@@ -19,8 +19,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.insys.trapps.model.interview.Interview;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -42,12 +40,6 @@ public class Person implements Serializable {
 	@Getter
 	@Setter
 	private Long id;
-
-	// @Version
-	// @Getter
-	// @Setter
-	// @Column(name = "VERSION")
-	// private Long version;
 
 	@Getter
 	@Setter
@@ -106,20 +98,4 @@ public class Person implements Serializable {
 	public String toString() {
 		return "Person";
 	}
-
-	// @PrePersist
-	// public void init() {
-	// if(this.version==null) {
-	// this.version=1L;
-	// }
-	// }
 }
-/*
- * [id=" + getId() + ", version=" + getVersion() + ",
- * firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + ",
- * email=" + email + ", title=" + title + ", personType=" + personType +
- * ", address=" + (address==null) + ", business=" +
- * (business==null?"business is null":business.toString()) +
- * ", personDocuments=" + (personDocuments==null?0:personDocuments.size()) +
- * ", personSkills=" + (personSkills==null?0:personSkills.size()) + "]";
- */

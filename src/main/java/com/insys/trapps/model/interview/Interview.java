@@ -1,13 +1,22 @@
 package com.insys.trapps.model.interview;
 
-import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.insys.trapps.model.Person;
 import com.insys.trapps.model.Role;
-
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,32 +53,29 @@ public class Interview implements Serializable {
 	@Getter
 	@Setter
 	@ManyToOne
-	@JoinColumn(name = "PERSON_ID")
+	@JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
 	private Person candidate;
 
 	@Getter
 	@Setter
 	@ManyToOne
-	@JoinColumn(name = "ROLE_ID", nullable = false)
+	@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID", nullable = false)
 	private Role role;
 
-	// @Version
-	// @Getter
-	// @Setter
-	// @Column(name = "VERSION")
-	// private Long version;
 
 	@Getter
 	@Setter
 	@OneToMany(cascade = { CascadeType.MERGE},  orphanRemoval = true)
-	@JoinTable(joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID", nullable = false), 
+	@JoinTable(name = "INTERVIEWERS",
+			joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID", nullable = false), 
 		inverseJoinColumns = @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID", nullable = false))
 	private Set<Person> interviewers;
 
 	@Getter
 	@Setter
 	@OneToMany(cascade = { CascadeType.ALL },  orphanRemoval = true)
-	@JoinTable(joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID"),
+	@JoinTable(name = "QUESTIONS",
+			joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID"),
 		inverseJoinColumns = @JoinColumn(name = "QUESTION_ID", referencedColumnName = "ID"))
 	private Set<Question> questions;
 

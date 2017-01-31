@@ -2,8 +2,6 @@ package com.insys.trapps.controllers;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.HttpStatus;
@@ -21,7 +19,7 @@ import com.insys.trapps.service.InterviewService;
 @RepositoryRestController
 @RequestMapping("/api/v1")
 public class InterviewController {
-	private Logger logger = LoggerFactory.getLogger(PersonController.class);
+	
 	@Autowired
 	private InterviewService service;
 	
