@@ -1,7 +1,5 @@
 package com.insys.trapps.model.interview;
 
-import lombok.*;
-
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -14,9 +12,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
-import com.insys.trapps.model.Person;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "QUESTION")

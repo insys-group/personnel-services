@@ -62,6 +62,10 @@ insert into PERSON(id, first_name, last_name , phone, email, title, person_type,
 insert into PERSON(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) values(14, 'Kevin', 'Meloney', '872-28-1297', 'kmulder@comcast.com', 'Manager', 'Client', 9, 15);
 insert into PERSON(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) values(15, 'Chris', 'Umbel', '297-28-1276', 'cumbel@pivotal.com', 'Architect', 'Pivotal', 10, 17);
 
+insert into ROLE(id , name) values(1 , 'Developer');
+insert into SKILL(id , name) values(1 , 'Java');
+insert into ROLE_SKILL values(1 , 1);
+
 insert into INTERVIEW(id, date, phone, person_id, role_id) values(0, 1482475703, '7035551234', 10, 1);
 insert into QUESTION(id, question, answer, comment, quality) values(0, 'What do?', 'Stuff', 'Comment', 'Excellent');
 insert into FEEDBACK(id, person_id, comment) values(0, 11, 'Comment');
@@ -71,10 +75,6 @@ insert into QUESTIONS(interview_id, question_id) values(0, 0);
 insert into INT_FEEDBACK(interview_id, feedback_id) values(0, 0);
 
 insert into PERSON_SKILL(id, person_id, name, scale) values(1, 10, 'Spring', 8);
-
-insert into ROLE(id , name) values(1 , 'Developer');
-insert into SKILL(id , name) values(1 , 'Java');
-insert into ROLE_SKILL values(1 , 1);
 
 insert into STATE(id , state_code) values(1 , 'AL');
 insert into STATE(id , state_code) values(2 , 'AK');

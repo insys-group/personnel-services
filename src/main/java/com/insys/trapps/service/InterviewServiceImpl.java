@@ -1,18 +1,13 @@
 package com.insys.trapps.service;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.cloudfoundry.com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.cloud.cloudfoundry.com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,8 +25,9 @@ public class InterviewServiceImpl implements InterviewService {
 	private Logger logger = Logger.getLogger(InterviewService.class);
 	
 	private ObjectMapper mapper = new ObjectMapper();
-	
+
 	@Override
+	@SuppressWarnings("unchecked")
 	public void patchInterview(Long id, Map<String, Object> mappedVals) {
 		Interview dbInterview = repository.findOne(id);
 		

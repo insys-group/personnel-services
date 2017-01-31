@@ -15,9 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,12 +41,6 @@ public class Business implements Serializable {
     @Getter
     @Setter
     private Long id;
-//
-//    @Version
-//    @Setter
-//    @Getter
-//    @Column(name = "VERSION")
-//    private Long version;
 
     @Getter
     @Setter
@@ -93,11 +85,4 @@ public class Business implements Serializable {
 				+ ", persons=" + persons + ", opportunities=" + opportunities + ", addresses=" + addresses
 				+ ", getId()=" + getId() + "]";
 	}
-	
-//	@PrePersist
-//	public void init() {
-//		if(this.version==null) {
-//			this.version=1L;
-//		}
-//	}
 }
