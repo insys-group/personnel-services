@@ -48,6 +48,10 @@ public class Interview implements Serializable {
 
 	@Getter
 	@Setter
+	private String name;
+
+	@Getter
+	@Setter
 	private String phone;
 
 	@Getter
