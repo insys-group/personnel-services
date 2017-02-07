@@ -66,8 +66,8 @@ public class TrainingRestIntegrationTest {
     public void testCreateTraining() throws Exception {
     	Training training = initTraining();
     	
-    	Integer id = (Integer) postTrainingRequest(training).get("id");
-    	String name = (String) getTrainingRequest(id).get("name");
+    	Integer id = postTrainingRequest(training).getInt("id");
+    	String name = getTrainingRequest(id).getString("name");
     	
     	assertThat(name, equalTo("Test Training"));
     }
@@ -76,7 +76,7 @@ public class TrainingRestIntegrationTest {
     public void testDeleteTraining() throws Exception {
     	Training training = initTraining();
     	
-    	Integer id = (Integer) postTrainingRequest(training).get("id");
+    	Integer id = postTrainingRequest(training).getInt("id");
     	deleteTrainingRequest(id);
     	getTrainingRequestReturnsNotFound(id);
     }
@@ -88,24 +88,17 @@ public class TrainingRestIntegrationTest {
     	String newName = "New Name";
     	
     	
-    	Integer id = (Integer) postTrainingRequest(training).get("id");
+    	Integer id = postTrainingRequest(training).getInt("id");
     	setNewFieldsToTraining(training, (long) id, newName, newTaskNames);
-    	Integer secondPostId = postTrainingRequest(training).get("id");
+    	Integer secondPostId = postTrainingRequest(training).getInt("id");
     	JsonPath updatedTraining = getTrainingRequest(secondPostId);
     	
     	assertThat(secondPostId, equalTo(id));
     	checkTrainingName(updatedTraining, newName);
-    	checkTrainingTasks(updatedTraining, newTaskNames);
     }
 
 	private void checkTrainingName(JsonPath updatedTraining, String newName) {
 		assertThat((String) updatedTraining.get("name"), equalTo(newName));
-	}
-
-	private void checkTrainingTasks(JsonPath updatedTraining, String... newNames) {
-		List<String> taskNames = getTrainingTaskNames(updatedTraining);
-    	assertThat(taskNames, hasSize(3));
-		assertThat(taskNames, containsInAnyOrder(newNames));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -151,8 +144,8 @@ public class TrainingRestIntegrationTest {
 		given()
                 .contentType("application/json")
                 .body(training)
-                .log().everything()
         .when()
+        		.log().everything()
                 .post(basePath + TRAINING_PATH)
         .then()
                 .statusCode(HttpStatus.CREATED.value())
@@ -164,7 +157,7 @@ public class TrainingRestIntegrationTest {
 		return Training.builder()
 				.name("Test Training")
 				.trainees(initTrainees())
-				.progress(ProgressType.NotStarted)
+				.progress(ProgressType.NOT_STARTED)
 				.location(initAddress())
 				.isOnline(true)
 				.startDate(new Date(LocalDate.of(2017, Month.JANUARY, 25).toEpochDay()))
@@ -179,7 +172,7 @@ public class TrainingRestIntegrationTest {
 
 	private Set<TrainingTask> initTasks(String... taskNames) {
 		return new HashSet<>(Arrays.stream(taskNames)
-				.map(TrainingTask::new).collect(Collectors.toList()));
+				.map(name -> TrainingTask.builder().name(name).build()).collect(Collectors.toList()));
 	}
 
 	private Address initAddress() {

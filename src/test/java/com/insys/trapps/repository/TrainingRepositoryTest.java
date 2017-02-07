@@ -102,7 +102,7 @@ public class TrainingRepositoryTest {
 		return Training.builder()
 				.name("Test Training")
 				.trainees(initTrainees())
-				.progress(ProgressType.NotStarted)
+				.progress(ProgressType.NOT_STARTED)
 				.location(initAddress())
 				.isOnline(true)
 				.startDate(new Date(LocalDate.of(2017, Month.JANUARY, 25).toEpochDay()))

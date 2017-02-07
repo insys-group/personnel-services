@@ -92,12 +92,6 @@ public class Person implements Serializable {
 
 	@Getter
 	@Setter
-    @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.MERGE })
-    @JoinColumn(name = "TRAINING_ID")
-    private Training training;
-
-	@Getter
-	@Setter
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<PersonDocument> personDocuments = new HashSet<>();
 

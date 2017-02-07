@@ -1,18 +1,18 @@
 package com.insys.trapps.model;
 
 import java.io.Serializable;
-import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,10 +21,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "OPPORTUNITY_CONTACT")
+@Table(name = "TRAINING_TASK")
 @RequiredArgsConstructor
 @EqualsAndHashCode(of = {"name"})
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class TrainingTask implements Serializable {
 	
 	private static final long serialVersionUID = 9124554833641859811L;
@@ -48,8 +50,7 @@ public class TrainingTask implements Serializable {
     
     @Getter
 	@Setter
-    @ManyToOne
-    @JoinColumn(name = "TRAINING_ID")
+    @ManyToOne(cascade = CascadeType.ALL)
     private Training training;
 	
 }
