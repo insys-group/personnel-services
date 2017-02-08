@@ -5,11 +5,23 @@ spring:
     show-sql: true
 server: 
   port: 0
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://trapps-api.local.pcfdev.io/user
+trapps:
+  access-token:
+    url: http://trapps-api.local.pcfdev.io/oauth/token
+  client:
+    apps: http://trapps-web.local.pcfdev.io
 ---
 spring:
   profiles: local
+  devtools:
+    restart:
+      enabled: true
   jpa:
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         hbm2ddl:
@@ -20,6 +32,20 @@ spring:
       path: /console
 server: 
   port: 8081
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://NJ395MAC11.fios-router.home:8081/user
+trapps:
+  access-token:
+    url: http://NJ395MAC11.fios-router.home:8081/oauth/token
+  client:
+    apps: http://NJ395MAC11.fios-router.home:4201/restlogin, http://localhost:4201/restlogin
+logging:
+  level:
+    org.springframework.web: ERROR
+    com.insys.trapps: DEBUG
+    org.hibernate: ERROR
 ---
 spring:
   profiles: local,cloud
@@ -32,3 +58,15 @@ spring:
     rest:
       basePath: /api/v1
       defaultMediaType: application/json
+---
+security:
+  basic:
+    enabled: false
+  oauth2:
+    client:
+      client-id: trapps-application
+      client-secret: trapps-application-secret
+      authorized-grant-types: authorization_code,refresh_token,password,client_credentials
+      scope: read,write
+      
+  

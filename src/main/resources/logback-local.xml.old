@@ -6,7 +6,6 @@
   </appender>
 
   <logger name="com.insys.trapps" level="DEBUG"/>
-  <logger name="org" level="debug"/>
   
   <root level="ERROR">
     <appender-ref ref="STDOUT" />
