@@ -6,20 +6,17 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-@EnableWebSecurity
 @Configuration
-public class OAuth2ServerSecurityConfiguration extends WebSecurityConfigurerAdapter {
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public class LoginConfig extends WebSecurityConfigurerAdapter {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Value("${trapps.client.apps}")
 	private String[] clientApps;
@@ -31,9 +28,10 @@ public class OAuth2ServerSecurityConfiguration extends WebSecurityConfigurerAdap
 	
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf()
-        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-        .and()
+        http
+        .csrf().disable()
+        //.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        //.and()
         .cors().and()
         .authorizeRequests()
             .antMatchers("/api/**").authenticated();
@@ -45,7 +43,9 @@ public class OAuth2ServerSecurityConfiguration extends WebSecurityConfigurerAdap
         //.and().ignoring().antMatchers(HttpMethod.OPTIONS, "/restlogin");
     }
     
-    @Bean
+    
+    //@Bean
+    /*
 	CorsConfigurationSource corsConfigurationSource() {
 		logger.debug("Enter: OAuth2ServerSecurityConfiguration.corsConfigurationSource()");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -53,6 +53,8 @@ public class OAuth2ServerSecurityConfiguration extends WebSecurityConfigurerAdap
         config.setAllowCredentials(true);
         config.setAllowedOrigins(Arrays.asList(clientApps));
 		config.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "HEAD", "OPTIONS", "DELETE"));
+		exposedHeaders.forEach(header -> config.addAllowedHeader(header));
+		
         source.registerCorsConfiguration("/**", config);
         
         //exposedHeaders.forEach(header -> config.addAllowedHeader(header));
@@ -60,15 +62,15 @@ public class OAuth2ServerSecurityConfiguration extends WebSecurityConfigurerAdap
         
         
         return source;
-        /*
+        
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("https://example.com"));
 		configuration.setAllowedMethods(Arrays.asList("GET","POST"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
-		*/
-	}
+		
+	}*/
     
     
 }

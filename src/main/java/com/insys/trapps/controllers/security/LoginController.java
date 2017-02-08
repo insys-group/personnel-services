@@ -58,9 +58,17 @@ public class LoginController {
 		resourceDetails.setUsername(credentials.getUsername());
 		resourceDetails.setPassword(credentials.getPassword());
 
-		OAuth2RestTemplate template=new OAuth2RestTemplate(resourceDetails);
-		OAuth2AccessToken accessToken=template.getAccessToken();
-		
+		logger.debug("Getting ready to send to oauth/token");
+
+		OAuth2RestTemplate template=null;
+		OAuth2AccessToken accessToken=null;
+
+		try {
+			template=new OAuth2RestTemplate(resourceDetails);
+			accessToken=template.getAccessToken();
+		}catch(Exception e) {
+			logger.error("Error while Authenticating ", e);
+		}
 		AuthToken token=new AuthToken();
 		token.setAccessToken(accessToken.getValue());
 		token.setTokenType(accessToken.getTokenType());
@@ -75,7 +83,7 @@ public class LoginController {
 				.status(HttpStatus.CREATED)
 				.body(token);
 	}
-	/*
+	
 	@RequestMapping(path="/restlogin", method=RequestMethod.OPTIONS)
     public ResponseEntity<?> loginOptions(
     		HttpServletRequest request,
@@ -84,7 +92,7 @@ public class LoginController {
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(null);
-	}*/
+	}
 	/*
 	private ResponseEntity<AuthToken> executeRestLogin(HttpServletRequest request, String username, String password) {
 	    logger.debug("Request URL is " + request.getRequestURI() + " " + request.getRequestURL());

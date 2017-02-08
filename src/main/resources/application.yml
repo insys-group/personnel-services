@@ -33,6 +33,8 @@ spring:
 server: 
   port: 8081
 security:
+  basic:
+    enabled: false
   oauth2:
     resource:
       user-info-uri: http://NJ395MAC11.fios-router.home:8081/user
@@ -40,10 +42,11 @@ trapps:
   access-token:
     url: http://NJ395MAC11.fios-router.home:8081/oauth/token
   client:
-    apps: http://NJ395MAC11.fios-router.home:4201/restlogin, http://localhost:4201/restlogin
+    apps: http://localhost:4201
 logging:
   level:
-    org.springframework.web: ERROR
+    org.spring.security: DEBUG
+    org.springframework.web: DEBUG
     com.insys.trapps: DEBUG
     org.hibernate: ERROR
 ---
