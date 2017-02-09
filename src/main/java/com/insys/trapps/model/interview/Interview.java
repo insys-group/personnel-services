@@ -66,7 +66,6 @@ public class Interview implements Serializable {
 	@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID", nullable = false)
 	private Role role;
 
-
 	@Getter
 	@Setter
 	@OneToMany(cascade = { CascadeType.MERGE},  orphanRemoval = true)
