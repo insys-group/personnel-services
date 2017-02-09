@@ -47,7 +47,7 @@ public class LoginController {
     public ResponseEntity<AuthToken> login(
     		HttpServletRequest request,
     		@RequestBody PasswordCredentials credentials) {
-		logger.debug("Enter: LoginController.login()" + credentials.getUsername() + ", " + credentials.getPassword());
+		logger.debug("Enter: LoginController.login()" + credentials.getUsername() + ", " + credentials.getPassword() + clientId + " " + clientSecret + " " + accessTokenUrl );
 		
 		ResourceOwnerPasswordResourceDetails resourceDetails=new ResourceOwnerPasswordResourceDetails();
 		resourceDetails.setClientAuthenticationScheme(AuthenticationScheme.header);
@@ -57,6 +57,7 @@ public class LoginController {
 		resourceDetails.setClientSecret(clientSecret);
 		resourceDetails.setUsername(credentials.getUsername());
 		resourceDetails.setPassword(credentials.getPassword());
+		resourceDetails.setGrantType("password");
 
 		logger.debug("Getting ready to send to oauth/token");
 

@@ -18,7 +18,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 @EnableAuthorizationServer
 public class AuthServerConfig extends GlobalAuthenticationConfigurerAdapter {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Override
 	public void init(AuthenticationManagerBuilder auth) throws Exception {
 		logger.debug("Enter: AuthServerConfig.init()");

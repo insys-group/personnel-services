@@ -3,23 +3,19 @@
  */
 package com.insys.trapps.config.filter;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsUtils;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author msabir
@@ -45,11 +41,16 @@ public class CORSResponseFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse resp,
             FilterChain chain) throws IOException, ServletException {
     	logger.debug("Enter: CORSResponseFilter.doFilter()");
+
+        HttpServletRequest request=(HttpServletRequest) req;
         HttpServletResponse response=(HttpServletResponse) resp;
-        response.setHeader("Access-Control-Allow-Origin", Arrays.stream(clientApps).collect(Collectors.joining(", ")));
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
-        //response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", exposedHeaders.stream().collect(Collectors.joining(", ")));
+        if(CorsUtils.isCorsRequest(request) && CorsUtils.isPreFlightRequest(request)){
+            logger.debug("Enter: Processing CORS request");
+            response.setHeader("Access-Control-Allow-Origin", Arrays.stream(clientApps).collect(Collectors.joining(", ")));
+            response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
+            //response.setHeader("Access-Control-Max-Age", "3600");
+            response.setHeader("Access-Control-Allow-Headers", exposedHeaders.stream().collect(Collectors.joining(", ")));
+        }
         chain.doFilter(req, resp);
     }
 

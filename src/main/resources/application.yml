@@ -37,16 +37,16 @@ security:
     enabled: false
   oauth2:
     resource:
-      user-info-uri: http://NJ395MAC11.fios-router.home:8081/user
+      user-info-uri: http://nj395mac11.fios-router.home:8081/user
 trapps:
   access-token:
-    url: http://NJ395MAC11.fios-router.home:8081/oauth/token
+    url: http://nj395mac11.fios-router.home:8081/oauth/token
   client:
-    apps: http://localhost:4201
+    apps: http://nj395mac11.fios-router.home:4201
 logging:
   level:
     org.spring.security: DEBUG
-    org.springframework.web: DEBUG
+    org.springframework.web: ERROR
     com.insys.trapps: DEBUG
     org.hibernate: ERROR
 ---
