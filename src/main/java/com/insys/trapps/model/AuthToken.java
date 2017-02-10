@@ -3,15 +3,11 @@
  */
 package com.insys.trapps.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
+
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author msabir
@@ -25,24 +21,30 @@ public class AuthToken implements Serializable {
 	
 	@Getter
 	@Setter
+    @JsonProperty("access_token")
 	private String accessToken;
 	
 	@Getter
 	@Setter
+    @JsonProperty("token_type")
 	private String tokenType;
 	
 	@Getter
 	@Setter
+    @JsonProperty("expires_in")
 	private Long expiresIn;
 	
 	private Date expiration;
 	
 	@Getter
 	@Setter
-	private Set<String> scopes;
+    @JsonProperty("scope")
+	//private Set<String> scopes;
+    private String scope;
 	
 	@Getter
 	@Setter
+    @JsonProperty("refresh_token")
 	private String refreshToken;
 	
 	public void setExpiration(Date expiration) {

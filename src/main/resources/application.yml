@@ -11,7 +11,7 @@ security:
       user-info-uri: http://trapps-api.local.pcfdev.io/user
 trapps:
   access-token:
-    url: http://trapps-api.local.pcfdev.io/oauth/token
+    url: /oauth/token
   client:
     apps: http://trapps-web.local.pcfdev.io
 ---
@@ -40,7 +40,7 @@ security:
       user-info-uri: http://nj395mac11.fios-router.home:8081/user
 trapps:
   access-token:
-    url: http://nj395mac11.fios-router.home:8081/oauth/token
+    url: /oauth/token
   client:
     apps: http://nj395mac11.fios-router.home:4201
 logging:

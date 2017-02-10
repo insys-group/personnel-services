@@ -29,8 +29,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter { //We
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-                    .antMatchers("/api/**").fullyAuthenticated().and()
-                .antMatcher("/restlogin").anonymous();
+                .antMatchers("/api/**").fullyAuthenticated();
+                //.and()
+                //.authorizeRequests().antMatchers("/restlogin").permitAll();
+                //.and()
+                //.antMatcher("/restlogin").anonymous()
+
+        //http.requestMatchers().antMatchers("").and().authorizeRequests().requestMatchers()
     }
     /*
     @Override
