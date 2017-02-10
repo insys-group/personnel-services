@@ -21,17 +21,14 @@ public class AuthToken implements Serializable {
 	
 	@Getter
 	@Setter
-    @JsonProperty("access_token")
 	private String accessToken;
 	
 	@Getter
 	@Setter
-    @JsonProperty("token_type")
 	private String tokenType;
 	
 	@Getter
 	@Setter
-    @JsonProperty("expires_in")
 	private Long expiresIn;
 	
 	private Date expiration;
@@ -44,7 +41,6 @@ public class AuthToken implements Serializable {
 	
 	@Getter
 	@Setter
-    @JsonProperty("refresh_token")
 	private String refreshToken;
 	
 	public void setExpiration(Date expiration) {

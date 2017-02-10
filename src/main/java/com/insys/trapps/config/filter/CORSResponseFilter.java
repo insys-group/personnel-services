@@ -44,9 +44,12 @@ public class CORSResponseFilter implements Filter {
 
         HttpServletRequest request=(HttpServletRequest) req;
         HttpServletResponse response=(HttpServletResponse) resp;
-        if(CorsUtils.isCorsRequest(request) && CorsUtils.isPreFlightRequest(request)){
+        if(CorsUtils.isCorsRequest(request)){
             logger.debug("Enter: Processing CORS request");
             response.setHeader("Access-Control-Allow-Origin", Arrays.stream(clientApps).collect(Collectors.joining(", ")));
+        }
+        if(CorsUtils.isPreFlightRequest(request)) {
+            logger.debug("Enter: Processing PreFlight request");
             response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
             //response.setHeader("Access-Control-Max-Age", "3600");
             response.setHeader("Access-Control-Allow-Headers", exposedHeaders.stream().collect(Collectors.joining(", ")));

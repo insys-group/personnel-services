@@ -1,32 +1,11 @@
 package com.insys.trapps.model;
 
+import lombok.*;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
-import javax.persistence.Version;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "PERSON")
@@ -114,7 +93,3 @@ public class Person implements Serializable {
 //		}
 //	}
 }
-/*[id=" + getId() + ", version=" + getVersion() + ", firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + ", email=" + email
-+ ", title=" + title + ", personType=" + personType + ", address=" + (address==null) + 
-", business=" + (business==null?"business is null":business.toString())
-+ ", personDocuments=" + (personDocuments==null?0:personDocuments.size()) + ", personSkills=" + (personSkills==null?0:personSkills.size()) + "]";*/
