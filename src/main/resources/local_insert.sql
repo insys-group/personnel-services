@@ -82,7 +82,6 @@ insert into ROLE_SKILL values(2 , 6);
 
 insert into INTERVIEW(id, date, name, phone, person_id, role_id) values(1, 1482475703, 'Interview 1', '7035551234', 10, 1);
 insert into QUESTION(id, question, answer, comment, quality) values(0, 'What do?', 'Stuff', 'Comment', 'Excellent');
-insert into FEEDBACK(id, person_id, comment) values(0, 11, 'Comment');
 
 insert into PERSON_SKILL(id, person_id, name, scale) values(1, 10, 'Spring', 8);
 
