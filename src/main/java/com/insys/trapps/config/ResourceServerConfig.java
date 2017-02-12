@@ -18,7 +18,7 @@ import java.security.Principal;
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RestController
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter { //WebSecurityConfigurerAdapter {
+public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @RequestMapping("/user")
     public Principal user(Principal user) {
         return user;
@@ -34,19 +34,5 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter { //We
                 .cors().and()
                 .authorizeRequests()
                 .antMatchers("/api/**").fullyAuthenticated();
-                //.and()
-                //.authorizeRequests().antMatchers("/restlogin").permitAll();
-                //.and()
-                //.antMatcher("/restlogin").anonymous()
-
-        //http.requestMatchers().antMatchers("").and().authorizeRequests().requestMatchers()
     }
-    /*
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web
-                .ignoring()
-                .antMatchers("/resources/**"); // #3
-    }*/
-
 }

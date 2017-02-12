@@ -75,7 +75,7 @@ public class LoginController { //extends HttpServlet {
 				token.setAccessToken(tokenMap.get("access_token"));
 				token.setRefreshToken(tokenMap.get("refresh_token"));
 				token.setTokenType(tokenMap.get("token_type"));
-                token.setExpiresIn(Long.getLong(tokenMap.get("expires_in")));
+                token.setExpiresIn(Long.parseLong(tokenMap.get("expires_in")));
                 token.setScope(tokenMap.get("scope"));
                 logger.debug("Token is " + mapper.writeValueAsString(token));
                 responseEntity=ResponseEntity
