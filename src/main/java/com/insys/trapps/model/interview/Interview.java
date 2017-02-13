@@ -66,7 +66,6 @@ public class Interview implements Serializable {
 	@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID", nullable = false)
 	private Role role;
 
-
 	@Getter
 	@Setter
 	@OneToMany(cascade = { CascadeType.MERGE},  orphanRemoval = true)
@@ -85,9 +84,9 @@ public class Interview implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToOne
-	@JoinTable(name = "INT_FEEDBACK", 
+	@OneToMany(cascade = { CascadeType.ALL },  orphanRemoval = true)
+	@JoinTable(name = "FEEDBACKS",
 		joinColumns = @JoinColumn(name = "INTERVIEW_ID", referencedColumnName = "ID"), 
 		inverseJoinColumns = @JoinColumn(name = "FEEDBACK_ID", referencedColumnName = "ID"))
-	private Feedback feedback;
+	private Set<Feedback> feedbacks;
 }

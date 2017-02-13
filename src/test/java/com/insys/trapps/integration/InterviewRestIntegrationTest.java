@@ -212,7 +212,8 @@ public class InterviewRestIntegrationTest {
 
 	private Interview createInterview() {
 		return getInterviewBuilder().interviewers(new HashSet<Person>(Arrays.asList(firstInterviewer, secondInterviewer)))
-				.questions(createQuestions("Question 1", "Question 2", "Question 3")).feedback(feedback).build();
+				.questions(createQuestions("Question 1", "Question 2", "Question 3"))
+				.feedbacks(createFeedbacks("Comment 1", "Comment 2", "Comment 3")).build();
 	}
 
 	private Interview initBasicInterview() {
@@ -230,6 +231,14 @@ public class InterviewRestIntegrationTest {
 	private Question createQuestion(String question) {
 		return Question.builder().question(question).answer("Answer")
 				.quality(Quality.Excellent).comment("Comment").build();
+	}
+
+	private Set<Feedback> createFeedbacks(String... questions) {
+		return Arrays.stream(questions).map(this::createFeedback).collect(Collectors.toSet());
+	}
+
+	private Feedback createFeedback(String comment) {
+		return Feedback.builder().comment(comment).interviewer(firstInterviewer).build();
 	}
 
 	private long createDate() {
