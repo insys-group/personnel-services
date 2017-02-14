@@ -7,5 +7,6 @@ applications:
   stack: cflinuxfs2
   services:
   - mysqldb
-  host: trapps-api
+  routes:
+  - route:
 

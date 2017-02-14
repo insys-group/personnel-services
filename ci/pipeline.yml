@@ -1,0 +1,40 @@
+---
+resources:
+- name: trapps-api-source
+  type: git
+  source:
+    uri: https://github.com/insys-group/trapps-api.git
+    branch: develop
+- name: deploy-trapps-api
+  type: cf
+  source:
+    api: api.local.pcfdev.io
+    username: user
+    password: pass
+    organization: pcfdev-org
+    space: pcfdev-space
+    skip_cert_check: true
+
+jobs:
+- name: deploy
+  public: true
+  plan:
+  - get: trapps-api-source
+    trigger: true
+  - task: package
+    file: trapps-api-source/ci/tasks/package.yml
+  - put: deploy-trapps-api
+    params:
+      manifest: trapps-api-source/manifest.yml
+      path: package-output/trapps-api.jar
+
+- name: smoke_test
+  public: true
+  plan:
+  - get: trapps-api-source
+    trigger: true
+    passed: [deploy]
+  - task: smoke_test
+    file: trapps-api-source/ci/tasks/smoke-test.yml
+    params:
+      HEALTH_URL: http://trapps-api.local.pcfdev.io/health

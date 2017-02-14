@@ -2,7 +2,7 @@
 group = 'com.insys'
 version = '0.0.1-SNAPSHOT'
 
-description = """trapps-api"""
+description = "trapps-api"
 
 buildscript {
     ext {
