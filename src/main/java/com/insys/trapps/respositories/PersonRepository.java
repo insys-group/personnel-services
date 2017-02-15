@@ -7,4 +7,5 @@ import com.insys.trapps.model.Person;
 
 @RepositoryRestResource
 public interface PersonRepository extends JpaRepository<Person, Long> {
+
 }

@@ -34,7 +34,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString
+@ToString(of = {"firstName", "lastName", "phone", "email", "title"})
 public class Person implements Serializable {
 	private static final long serialVersionUID = 7055994680040943127L;
 
