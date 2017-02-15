@@ -93,12 +93,12 @@ insert into STATE(id , state_code) values(49 , 'WV');
 insert into STATE(id , state_code) values(50 , 'WV');
 insert into STATE(id , state_code) values(51 , 'WY');
 
-insert into TRAINING(id, name, progress_type, address_id, online, start_date, end_date) values(1, 'Pivotal training', 'NOT_STARTED', 1, FALSE, '2017-02-03', '2017-02-10');
+insert into TRAINING(id, name, address_id, online) values(1, 'Pivotal training', 1, FALSE);
 
-insert into TRAINING_TASK(id, name, weblink, completed, training_id) values (1, 'Training Task 1', 'http://training.org/1', false, 1);
-insert into TRAINING_TASK(id, name, weblink, completed, training_id) values (2, 'Training Task 2', 'http://training.org/2', false, 1);
-insert into TRAINING_TASK(id, name, weblink, completed, training_id) values (3, 'Training Task 3', 'http://training.org/3', true, 1);
+insert into TRAINING_TASK(id, name, weblink) values (1, 'Training Task 1', 'http://training.org/1');
+insert into TRAINING_TASK(id, name, weblink) values (2, 'Training Task 2', 'http://training.org/2');
+insert into TRAINING_TASK(id, name, weblink) values (3, 'Training Task 3', 'http://training.org/3');
 
-insert into PERSON_TRAINING(training_id, person_id) values (1, 10)
-insert into PERSON_TRAINING(training_id, person_id) values (1, 11)
-insert into PERSON_TRAINING(training_id, person_id) values (1, 12)
+insert into TRAINING_TASKS(training_id, tasks_id) values (1, 1);
+insert into TRAINING_TASKS(training_id, tasks_id) values (1, 2);
+insert into TRAINING_TASKS(training_id, tasks_id) values (1, 3);

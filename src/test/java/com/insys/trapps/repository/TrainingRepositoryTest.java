@@ -1,19 +1,17 @@
 package com.insys.trapps.repository;
 
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.insys.trapps.TrappsApiApplication;
 import com.insys.trapps.model.Address;
-import com.insys.trapps.model.Business;
-import com.insys.trapps.model.BusinessType;
-import com.insys.trapps.model.Person;
-import com.insys.trapps.model.PersonType;
-import com.insys.trapps.model.ProgressType;
 import com.insys.trapps.model.Training;
 import com.insys.trapps.model.TrainingTask;
-import com.insys.trapps.respositories.BusinessRepository;
 import com.insys.trapps.respositories.TrainingRepository;
 
 @RunWith(SpringRunner.class)
@@ -41,20 +33,6 @@ public class TrainingRepositoryTest {
 	@Autowired
 	private TrainingRepository repository;
 
-	@Autowired
-	private BusinessRepository businessRepository;
-
-	private Person person;
-
-	private Business business;
-
-	@Before
-	public void init() {
-		business = initBusiness();
-		person = initPerson();
-		businessRepository.saveAndFlush(business);
-	}
-
 	@Test
 	public void testCreateTraining() {
 		Training training = initTraining();
@@ -63,7 +41,9 @@ public class TrainingRepositoryTest {
 		Training savedTraining = repository.findOne(id);
 
 		assertThat(savedTraining, equalTo(training));
-		checkFieldsNotIncludedInEquals(training, savedTraining);
+		assertThat(savedTraining.getLocation(), equalTo(training.getLocation()));
+		assertThat(savedTraining.isOnline(), equalTo(training.isOnline()));
+		assertThat(savedTraining.getTasks(), hasSize(2));
 	}
 
 	@Test
@@ -78,44 +58,51 @@ public class TrainingRepositoryTest {
 
 	@Test
 	public void testUpdateTraining() {
-		Training training = initTraining();
+		List<TrainingTask> tasks = initTasks(1,2);
+		Training training = initTraining(tasks);
 		Long id = repository.saveAndFlush(training).getId();
-
-		Training updatedTraining = initTraining();
-		updatedTraining.setId(id);
+		
+		Training newTraining = initTraining(tasks);
+		newTraining.setId(id);
 		String differentName = "Different Name";
-		updatedTraining.setName(differentName);
-		repository.saveAndFlush(updatedTraining);
-
-		assertThat(repository.findOne(id).getName(), equalTo(differentName));
+		newTraining.setName(differentName);
+		newTraining.getTasks().remove(tasks.get(0));
+		newTraining.getTasks().add(createTask(3));
+		repository.saveAndFlush(newTraining);
+		
+		Training updatedTraining = repository.findOne(id);
+		assertThat(updatedTraining.getName(), equalTo(differentName));
+		assertThat(updatedTraining.getTasks(), hasSize(2));
+		assertThat(getTaskNames(updatedTraining), hasItems("Test Task 2", "Test Task 3"));
 	}
 
-	private void checkFieldsNotIncludedInEquals(Training training, Training savedTraining) {
-		assertThat(savedTraining.getTrainees(), hasSize(1));
-		assertThat(savedTraining.getTrainees(), hasItems(person));
-		assertThat(savedTraining.getProgress(), equalTo(training.getProgress()));
-		assertThat(savedTraining.getEndDate(), equalTo(training.getEndDate()));
-		assertThat(savedTraining.getTasks(), hasSize(2));
+	private List<String> getTaskNames(Training updatedTraining) {
+		return updatedTraining.getTasks().stream().map(TrainingTask::getName).collect(Collectors.toList());
+	}
+	
+	private Training initTraining(){
+		return initTraining(initTasks(1,2));
 	}
 
-	private Training initTraining() {
+	private Training initTraining(List<TrainingTask> tasks) {
 		return Training.builder()
 				.name("Test Training")
-				.trainees(initTrainees())
-				.progress(ProgressType.NOT_STARTED)
 				.location(initAddress())
 				.online(true)
-				.startDate(new Date(LocalDate.of(2017, Month.JANUARY, 25).toEpochDay()))
-				.endDate(new Date(LocalDate.of(2017, Month.JANUARY, 31).toEpochDay()))
-				.tasks(initTasks())
+				.tasks(new HashSet<>(tasks))
 				.build();
 	}
 
-	private Set<TrainingTask> initTasks() {
-		return new HashSet<>(Arrays.asList(
-				TrainingTask.builder().name("Test Task 1").weblink("http://training.org/1").build(),
-				TrainingTask.builder().name("Test Task 2").weblink("http://training.org/2").build()
-				));
+	private List<TrainingTask> initTasks(int... numbers) {
+		return Arrays.stream(numbers).mapToObj(this::createTask).collect(toList());
+	}
+	
+	private TrainingTask createTask(int number){
+		return TrainingTask.builder()
+				.name("Test Task " + number)
+				.weblink("http://training.org/" + number)
+				.description("Description " + number)
+				.build();
 	}
 
 	private Address initAddress() {
@@ -127,29 +114,4 @@ public class TrainingRepositoryTest {
 				.country("USA")
 				.build();
 	}
-
-	private Person initPerson() {
-		return Person.builder()
-				.firstName("Mike")
-				.lastName("Tian")
-				.personType(PersonType.Candidate)
-				.business(business)
-				.email("mtian@insys.com")
-				.build();
-	}
-
-	private Business initBusiness() {
-		return Business.builder()
-				.name("Test Business")
-				.businessType(BusinessType.INSYS)
-				.description("Test Business")
-				.build();
-	}
-
-	private Set<Person> initTrainees() {
-		Set<Person> trainees = new HashSet<>();
-		trainees.add(person);
-		return trainees;
-	}
-
 }

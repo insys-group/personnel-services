@@ -1,135 +1,138 @@
 package com.insys.trapps.integration;
 
 import static com.jayway.restassured.RestAssured.given;
+import static com.jayway.restassured.RestAssured.with;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.insys.trapps.model.Address;
-import com.insys.trapps.model.Business;
-import com.insys.trapps.model.BusinessType;
-import com.insys.trapps.model.Person;
-import com.insys.trapps.model.PersonType;
-import com.insys.trapps.model.ProgressType;
 import com.insys.trapps.model.Training;
 import com.insys.trapps.model.TrainingTask;
-import com.insys.trapps.respositories.BusinessRepository;
 import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.path.json.JsonPath;
+import com.jayway.restassured.response.ValidatableResponse;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TrainingRestIntegrationTest {
-	
-	@Autowired
-	private BusinessRepository businessRepository;
-	
-	private Business business;
-
-	
+			
     @Value("${local.server.port}")
     private int port;
-
+    
     @Value("${spring.data.rest.basePath}")
     private String basePath;
 
-    private final String TRAINING_PATH = "/trainings";
+    private static final String TRAINING_PATH = "/trainings";
+    /**
+     * The container appears in REST-assured tests. There is no this element in real communication to a microservice. 
+     */
+    private static String JSON_NESTED_CONTAINER = "_embedded";
     
     @Before
     public void setup() {
         RestAssured.port = port;
-		business=initBusiness();
-		businessRepository.saveAndFlush(business);
     }
     
     @Test
     public void testCreateTraining() throws Exception {
     	Training training = initTraining();
     	
-    	Integer id = postTrainingRequest(training).getInt("id");
-    	String name = getTrainingRequest(id).getString("name");
+    	long id = postTrainingRequest(training).getId();
     	
-    	assertThat(name, equalTo("Test Training"));
+		getTrainingRequest(id)
+			.body("name", equalTo("Test Training"))
+			.body("tasks.name", hasItems("Test Task 1", "Test Task 2"));
     }
     
     @Test
     public void testDeleteTraining() throws Exception {
     	Training training = initTraining();
     	
-    	Integer id = postTrainingRequest(training).getInt("id");
+    	long id = postTrainingRequest(training).getId();
     	deleteTrainingRequest(id);
-    	getTrainingRequestReturnsNotFound(id);
+
+		checkGetRequestReturnNOT_FOUND(id);
     }
 
     @Test
-    public void testUpdateTraining() throws Exception {
+    public void testUpdateTrainingWithPost() throws Exception {
     	Training training = initTraining();
     	String[] newTaskNames = new String[]{"New Task 1", "New Task 2", "New Task 3"};
     	String newName = "New Name";
     	
+    	Training postedTraining = postTrainingRequest(training);
+    	setNewFieldsTo(postedTraining, newTaskNames, newName);
+    	postTrainingRequest(postedTraining);
     	
-    	Integer id = postTrainingRequest(training).getInt("id");
-    	setNewFieldsToTraining(training, (long) id, newName, newTaskNames);
-    	Integer secondPostId = postTrainingRequest(training).getInt("id");
-    	JsonPath updatedTraining = getTrainingRequest(secondPostId);
+    	getTrainingRequest(postedTraining.getId())
+    		.body("name", equalTo(newName)).and()
+    		.body("tasks.name", hasItems(newTaskNames));
+    }
+    
+    
+    @Test
+    public void testGetAllTrainings() throws Exception {
+    	deletAllTrainings();
     	
-    	assertThat(secondPostId, equalTo(id));
-    	checkTrainingName(updatedTraining, newName);
+    	Training training = initTraining();
+    	postTrainingRequest(training);
+    	
+		getAllTrainingsRequest()
+    		.body(JSON_NESTED_CONTAINER + ".trainings", hasSize(1));
     }
 
-	private void checkTrainingName(JsonPath updatedTraining, String newName) {
-		assertThat((String) updatedTraining.get("name"), equalTo(newName));
-	}
-
-	private void setNewFieldsToTraining(Training training, Long id, String name, String... taskNames) {
-		training.setId(id);
-    	training.setName(name);
-    	training.setTasks(initTasks(taskNames));
-	}
-
-	private void deleteTrainingRequest(Integer id) {
-		given()
-		.when()
+	private void deleteTrainingRequest(long id) {
+		with()
+				.log().everything()
 		        .delete(basePath + TRAINING_PATH + "/" + id)
 		.then()
-		        .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
+		        .statusCode(HttpStatus.NO_CONTENT.value());
 	}
 
-	private JsonPath getTrainingRequest(Integer id) {
+	private ValidatableResponse getTrainingRequest(long id) {
+		return with()
+			.get(basePath + TRAINING_PATH + "/" + id)
+		.then()
+			.log().everything()
+			.statusCode(HttpStatus.OK.value());
+	}
+
+
+	private ValidatableResponse getAllTrainingsRequest() {
 		return 
-		given()
-    	.when()
-    			.get(basePath + TRAINING_PATH + "/" + id)
+		with()
+    			.get(basePath + TRAINING_PATH)
     	.then()
-    			.statusCode(HttpStatus.OK.value()).log().everything()
-    			.extract().jsonPath();
+				.log().everything()
+    			.statusCode(HttpStatus.OK.value());
 	}
 
-	private void getTrainingRequestReturnsNotFound(Integer id) {
-		given()
-    	.when()
-    			.get(basePath + TRAINING_PATH + "/" + id)
-    	.then()
-    			.statusCode(HttpStatus.NOT_FOUND.value()).log().everything();
+
+	private void setNewFieldsTo(Training training, String[] newTaskNames, String newName) {
+    	training.setName(newName);
+    	training.getLocation().setAddress1("New Address 1");
+    	training.setTasks(initTasks(training,newTaskNames));
 	}
 
-	private JsonPath postTrainingRequest(Training training) {
+	private void deletAllTrainings() {
+		getAllTrainingsRequest().extract().jsonPath()
+			.getList(JSON_NESTED_CONTAINER + ".trainings.id").stream()
+			.mapToLong(id -> new Long((Integer) id)).forEach(this::deleteTrainingRequest);
+	}
+
+	private Training postTrainingRequest(Training training) {
 		return 
 		given()
                 .contentType("application/json")
@@ -139,30 +142,31 @@ public class TrainingRestIntegrationTest {
                 .post(basePath + TRAINING_PATH)
         .then()
                 .statusCode(HttpStatus.CREATED.value())
-                .extract().jsonPath();
+                .extract().as(Training.class);
 	}
 
+	private ValidatableResponse checkGetRequestReturnNOT_FOUND(long id) {
+		return with()
+    			.get(basePath + TRAINING_PATH + "/" + id)
+    	.then()
+				.log().everything()
+    			.statusCode(HttpStatus.NOT_FOUND.value());
+	}
 
 	private Training initTraining() {
-		return Training.builder()
+		Training training = Training.builder()
 				.name("Test Training")
-				.trainees(initTrainees())
-				.progress(ProgressType.NOT_STARTED)
 				.location(initAddress())
 				.online(true)
-				.startDate(new Date(LocalDate.of(2017, Month.JANUARY, 25).toEpochDay()))
-				.endDate(new Date(LocalDate.of(2017, Month.JANUARY, 31).toEpochDay()))
-				.tasks(initTasks())
 				.build();
+		training.setTasks(initTasks(training,"Test Task 1", "Test Task 2"));
+		return training;
 	}
 
-	private Set<TrainingTask> initTasks() {
-		return initTasks("Test Task 1", "Test Task 2");
-	}
-
-	private Set<TrainingTask> initTasks(String... taskNames) {
-		return new HashSet<>(Arrays.stream(taskNames)
-				.map(name -> TrainingTask.builder().name(name).build()).collect(Collectors.toList()));
+	private Set<TrainingTask> initTasks(Training training, String... taskNames) {
+		return Arrays.stream(taskNames)
+				.map(name -> TrainingTask.builder().name(name).build())
+				.collect(Collectors.toSet());
 	}
 
 	private Address initAddress() {
@@ -173,30 +177,6 @@ public class TrainingRestIntegrationTest {
 				.state("NJ")
 				.country("USA")
 				.build();
-	}
-
-	private Person initPerson() {
-		return Person.builder()
-				.firstName("Mike")
-				.lastName("Tian")
-				.personType(PersonType.Candidate)
-				.business(business)
-				.email("mtian@insys.com")
-				.build();
-	}
-
-	private Business initBusiness() {
-		return Business.builder()
-				.name("Test Business")
-				.businessType(BusinessType.INSYS)
-				.description("Test Business")
-				.build();
-	}
-
-	private Set<Person> initTrainees() {
-		Set<Person> trainees = new HashSet<>();
-		trainees.add(initPerson());
-		return trainees;
 	}
 
 
