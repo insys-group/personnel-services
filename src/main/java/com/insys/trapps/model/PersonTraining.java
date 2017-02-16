@@ -1,7 +1,10 @@
 package com.insys.trapps.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.*;
 
@@ -39,20 +42,22 @@ public class PersonTraining implements Serializable {
 
     @Getter
     @Setter
-    private ProgressType progress;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 12, columnDefinition = "varchar(12) default 'NOT_STARTED'")
+    private ProgressType progress = ProgressType.NOT_STARTED;
 
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "PERSON_ID")
-    @JsonBackReference (value="person-trainings")
+    @JsonBackReference ("person-trainings")
     private Person person;
 
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "TRAINING_ID")
-    @JsonBackReference
+	@JsonBackReference("assign-training")
     private Training training;
 
 }

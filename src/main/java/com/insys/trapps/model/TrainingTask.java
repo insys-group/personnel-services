@@ -52,5 +52,10 @@ public class TrainingTask implements Serializable {
     @Getter
     @Setter
     private String weblink;
+    
+    @Getter
+    @Setter
+    @Column(nullable = true)
+    private boolean completed;
 	
 }

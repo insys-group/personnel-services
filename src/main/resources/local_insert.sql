@@ -111,3 +111,5 @@ insert into TRAINING_TASK(id, name, weblink) values (3, 'Training Task 3', 'http
 insert into TRAINING_TASKS(training_id, tasks_id) values (1, 1);
 insert into TRAINING_TASKS(training_id, tasks_id) values (1, 2);
 insert into TRAINING_TASKS(training_id, tasks_id) values (1, 3);
+
+insert into PERSON_TRAINING(id, start_date, end_date, person_id, training_id) values (1, 1487203200, 1487548800, 12, 1)

@@ -36,22 +36,10 @@ public class PersonServiceImpl implements PersonService {
 	@Override
 	public void updatePerson(Long id, Person person) {
 		Person dbPerson=repository.getOne(id);
-		//dbPerson.getPersonDocuments().clear();
+		
 		dbPerson.getPersonSkills().clear();
-		
-		/*
-		if(person.getPersonDocuments()!=null) {
-			person.getPersonDocuments().forEach(doc -> {
-				doc.setVersion(1L);
-				dbPerson.getPersonDocuments().add(doc);
-				doc.setPerson(dbPerson);
-			});
-		}
-		*/
-		
 		if(person.getPersonSkills()!=null) {
 			person.getPersonSkills().forEach(skill -> {
-				//skill.setVersion(1L);
 				dbPerson.getPersonSkills().add(skill);
 				skill.setPerson(dbPerson);
 			});
@@ -68,18 +56,17 @@ public class PersonServiceImpl implements PersonService {
 				dbAddress.setZipCode(person.getAddress().getZipCode());
 			}
 		} else if(person.getAddress()!=null) {
-			//person.getAddress().setVersion(1L);
 			dbPerson.setAddress(person.getAddress());
 		}
+
+		dbPerson.getPersonTrainings().clear();
+		if(person.getPersonTrainings()!=null) {
+			person.getPersonTrainings().forEach(training -> {
+				dbPerson.getPersonTrainings().add(training);
+				training.setPerson(dbPerson);
+			});
+		}
 		
-		/*
-		if(person.getBusiness()!=null) {
-			if(dbPerson.getBusiness()!=null) {
-				person.getBusiness().setVersion(dbPerson.getBusiness().getVersion());
-			} else {
-				person.getBusiness().setVersion(1L);
-			}
-		}*/
 		logger.debug("Address is " + (dbPerson.getAddress()==null?"address is null":dbPerson.getAddress().toString()));
 		dbPerson.setBusiness(person.getBusiness());
 		dbPerson.setFirstName(person.getFirstName());
@@ -89,8 +76,7 @@ public class PersonServiceImpl implements PersonService {
 		dbPerson.setTitle(person.getTitle());
 		dbPerson.setPersonType(person.getPersonType());
 		
-		repository.saveAndFlush(dbPerson);
-		Person savedPerson=repository.getOne(id);
+		Person savedPerson = repository.saveAndFlush(dbPerson);
 		logger.debug("Person in DB is " + savedPerson.toString());
 	}
 	

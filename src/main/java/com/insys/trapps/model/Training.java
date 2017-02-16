@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -22,7 +23,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "TRAINING")
 @EqualsAndHashCode(of = { "name"})
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @Builder
 @SuppressFBWarnings(value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
@@ -61,7 +62,7 @@ public class Training implements Serializable {
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "training", cascade = CascadeType.ALL)
-	@JsonManagedReference
-	private Set<PersonTraining>  personTrainings = new HashSet<>();
+	@JsonManagedReference("assign-training")
+	private Set<PersonTraining> personTrainings = new HashSet<>();
 
 }
