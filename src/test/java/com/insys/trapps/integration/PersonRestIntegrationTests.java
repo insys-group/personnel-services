@@ -8,11 +8,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.insys.trapps.model.*;
+import com.insys.trapps.model.Training.TrainingBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,11 +28,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.insys.trapps.model.Business;
-import com.insys.trapps.model.BusinessType;
-import com.insys.trapps.model.Person;
-import com.insys.trapps.model.PersonSkill;
-import com.insys.trapps.model.PersonType;
 import com.insys.trapps.respositories.BusinessRepository;
 import com.insys.trapps.respositories.PersonRepository;
 import com.jayway.restassured.RestAssured;
@@ -149,6 +149,44 @@ public class PersonRestIntegrationTests {
 			log.debug("Skills saved " + s.get("id") + ", " + s.get("name") + ", " + s.get("scale"));
 		});
     }
+
+	@Test
+	public void testUpdatePersonWithTraining() {
+		Person person=createPersonWithTraining();
+		PersonTraining training=PersonTraining.builder().progress(ProgressType.IN_PROGRESS).startDate(createStartDate()).endDate(createEndDate()).training(getTrainingBuilder().build()).build();
+		person.getPersonTrainings().add(training);
+		person.getPersonTrainings().forEach(s -> {if(s.getTraining().getName().equals("PAL")) {Training updateTraining = s.getTraining();updateTraining.setName("PAL-2"); s.setTraining(updateTraining); s.setId(null);}});
+		person.getBusiness().setDescription("TestingTrainingUpdate");
+		given()
+				.contentType("application/json")
+				.body(person)
+				.log().everything()
+				.when()
+				.put(basePath + PERSON_PATH + "/put/" + person.getId())
+				.then()
+				.statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
+
+
+		Response response =
+				given()
+						.contentType("application/json")
+						.log().everything()
+						.when()
+						.get(basePath + PERSON_PATH + "/" + person.getId())
+						.then()
+						.statusCode(HttpStatus.OK.value())
+						.extract().response();
+
+		log.debug(response.jsonPath().prettyPrint());
+
+		List<Map<String, Object>> savedTaining=response.jsonPath().getList("personTrainings");
+
+		assertEquals(3, savedTaining.size());
+		savedTaining.forEach(s-> {
+			assertNotNull(s.get("id"));
+			log.debug("Skills saved " + s.get("id") + ", " + s.get("name") + ", " + s.get("scale"));
+		});
+	}
     
     @Test
     public void testDeletePersonWithSkills() {
@@ -208,4 +246,52 @@ public class PersonRestIntegrationTests {
 		mapper.setFilterProvider(filters);
 		return mapper.writeValueAsString(value);
     }*/
+
+	public Person createPersonWithTraining() {
+		Set<PersonTraining> personTraining=new HashSet<>();
+		personTraining.add(PersonTraining.builder().progress(ProgressType.IN_PROGRESS).startDate(createStartDate()).endDate(createEndDate()).training(getTrainingBuilder().build()).build());
+		Person person=Person.builder().firstName("Omar").lastName("Sabir")
+				.personType(PersonType.Employee).business(business).email("omar@insys.com")
+				.personTrainings(personTraining)
+				.build();
+
+		Map<String, Object> personProperties=
+				given()
+						.contentType("application/json")
+						.body(person)
+						.log().everything()
+						.when()
+						.post(basePath + PERSON_PATH)
+						.then()
+						.statusCode(HttpStatus.CREATED.value())
+						.extract().jsonPath().get();
+
+		assertNotNull(personProperties.get("id"));
+
+		List<Map<String, Object>> personTrainings =(List<Map<String, Object>>)personProperties.get("personTrainings");
+		personTrainings.forEach(trainingMap -> {
+			log.debug("Person Properties - Training Map " + trainingMap.get("id") + " " + trainingMap.get("startDate"));
+
+			person.getPersonTrainings().forEach(personObjectTraining -> {
+				if(personObjectTraining.getTraining().getName().equals(trainingMap.get("name"))){
+					personObjectTraining.setId(new Long((Integer)trainingMap.get("id")));
+				}
+			});
+
+		});
+		person.setId(new Long((Integer)personProperties.get("id")));
+		return person;
+	}
+
+	private long createStartDate() {
+		return LocalDate.of(2017, Month.JANUARY, 25).toEpochDay();
+	}
+
+	private long createEndDate() {
+		return LocalDate.of(2017, Month.JANUARY, 31).toEpochDay();
+	}
+
+	private TrainingBuilder getTrainingBuilder() {
+		return Training.builder().name("PAL").online(true);
+	}
 }
