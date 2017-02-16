@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @ToString(of = {"firstName", "lastName", "phone", "email", "title"})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Person implements Serializable {
 	private static final long serialVersionUID = 7055994680040943127L;
 
@@ -90,11 +92,11 @@ public class Person implements Serializable {
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
-	//@OneToMany(cascade = { CascadeType.ALL}, fetch = FetchType.EAGER)
-	/*@JoinTable(name = "PERSON_TRAINING"
-			, joinColumns = @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
-			, inverseJoinColumns = @JoinColumn(name = "TRAINING_ID", referencedColumnName = "ID"))*/
-	@JsonManagedReference (value="person-training")
+//	@OneToMany(cascade = { CascadeType.ALL})
+//	@JoinTable(name = "PERSON_TRAINING"
+//			, joinColumns = @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
+//			, inverseJoinColumns = @JoinColumn(name = "TRAINING_ID", referencedColumnName = "ID"))
+	@JsonManagedReference ("person-training")
 	private Set<PersonTraining> personTrainings = new HashSet<>();
 
 }
