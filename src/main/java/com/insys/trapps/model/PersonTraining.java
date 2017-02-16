@@ -19,6 +19,8 @@ import java.util.Date;
 @ToString
 public class PersonTraining implements Serializable {
 
+    private static final long serialVersionUID = -5990810947595710271L;
+
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Getter
