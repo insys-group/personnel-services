@@ -7,12 +7,7 @@ import static org.junit.Assert.assertThat;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.junit.Before;
@@ -67,6 +62,8 @@ public class InterviewRestIntegrationTest {
 	private String basePath;
 
 	private final String INTERVIEW_PATH = "/interviews";
+
+	private final String INTERVIEW_DETAILS_PATH = "/interview";
 
 	private Business business;
 
@@ -135,37 +132,6 @@ public class InterviewRestIntegrationTest {
 		checkQuestions(updatedInterview, questionNames);
 	}
 
-	@Test
-	public void testPatchInterviewWithQuestions() {
-		Interview interview = createInterview();
-		Map<String, Question> questionsPatch = createQuestions("Patched Question 1", "Patched Question 2").stream()
-				.collect(Collectors.toMap(Question::getQuestion, question -> question));
-		String questionsInJson = convertQuestionsToJson(questionsPatch);
-
-		long id = postRequestForInterview(interview).getInt("id");
-		patchRequestForInterview(id, questionsInJson);
-		JsonPath updatedInterview = getRequestForInterview(id);
-
-		checkQuestions(updatedInterview, "Patched Question 1", "Patched Question 2");
-	}
-
-	private void patchRequestForInterview(long id, String json) {
-		log.debug("PATCH REQUEST");
-		given().contentType("application/json").body("{\"questions\":" + json + "}").when().log().everything()
-				.patch(basePath + INTERVIEW_PATH + "/" + id).then().statusCode(HttpStatus.ACCEPTED.value()).extract()
-				.response();
-	}
-
-	private String convertQuestionsToJson(Map<String, Question> questionsPatch) {
-		String json = "";
-		try {
-			json = new ObjectMapper().writeValueAsString(questionsPatch);
-		} catch (JsonProcessingException e) {
-			log.error(e.getMessage());
-		}
-		return json;
-	}
-
 	private void checkQuestions(JsonPath updatedInterview, String... questionNames) {
 		List<String> updatedQuestions = getQuestions(updatedInterview);
 		assertThat(updatedQuestions.size(), equalTo(questionNames.length));
@@ -201,7 +167,7 @@ public class InterviewRestIntegrationTest {
 	}
 
 	private JsonPath getRequestForInterview(long id) {
-		return given().when().get(basePath + INTERVIEW_PATH + "/" + id).then().statusCode(HttpStatus.OK.value()).log()
+		return given().when().get(basePath + INTERVIEW_DETAILS_PATH + "/" + id).then().statusCode(HttpStatus.OK.value()).log()
 				.everything().extract().jsonPath();
 	}
 
@@ -241,7 +207,7 @@ public class InterviewRestIntegrationTest {
 		return Feedback.builder().comment(comment).interviewer(firstInterviewer).build();
 	}
 
-	private long createDate() {
-		return LocalDate.of(2017, Month.JANUARY, 25).toEpochDay();
+	private Date createDate() {
+		return new Date();
 	}
 }
