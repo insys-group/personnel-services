@@ -44,5 +44,9 @@ public interface PersonService {
 	 * @throws Exception
 	 */
 	PersonDocument deleteDocument(Long id, Long documentId) throws Exception;
-	
+
+	/**
+	 * @param person
+	 */
+    Person savePerson(Person person);
 }

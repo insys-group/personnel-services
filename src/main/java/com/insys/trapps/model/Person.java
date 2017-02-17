@@ -1,7 +1,9 @@
 package com.insys.trapps.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -93,6 +95,6 @@ public class Person implements Serializable {
 	@Setter
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
 	@JsonManagedReference ("person-training")
-	private Set<PersonTraining> personTrainings = new HashSet<>();
+	private List<PersonTraining> personTrainings = new ArrayList<>();
 
 }

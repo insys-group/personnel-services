@@ -55,7 +55,6 @@ public class PersonTraining implements Serializable {
     @Setter
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "TRAINING_ID")
-	@JsonBackReference("assign-training")
     private Training training;
 
     @JsonProperty

@@ -36,7 +36,7 @@ public class TrainingTask implements Serializable {
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Getter
     @Setter
-    private long id;
+    private Long id;
 	
     @Getter
     @Setter

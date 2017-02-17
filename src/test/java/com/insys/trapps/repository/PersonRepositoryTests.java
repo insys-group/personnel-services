@@ -3,17 +3,23 @@
  */
 package com.insys.trapps.repository;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -29,7 +35,11 @@ import com.insys.trapps.model.BusinessType;
 import com.insys.trapps.model.Person;
 import com.insys.trapps.model.PersonDocument;
 import com.insys.trapps.model.PersonSkill;
+import com.insys.trapps.model.PersonTraining;
 import com.insys.trapps.model.PersonType;
+import com.insys.trapps.model.ProgressType;
+import com.insys.trapps.model.Training;
+import com.insys.trapps.model.TrainingTask;
 import com.insys.trapps.respositories.BusinessRepository;
 import com.insys.trapps.respositories.PersonRepository;
 
@@ -119,6 +129,24 @@ public class PersonRepositoryTests {
 			assertNotNull(personSkill.getId());
 			log.debug("Skill is " + personSkill.toString());
 		});
+	}
+	
+	@Test
+	public void testUpdatePersonWithTraining() {
+		Person person=Person.builder().firstName("Omar").lastName("Sabir")
+				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
+				.build();
+		PersonTraining personTraining = initPersonTraining(person,initTraining("Test Training"));
+		person.setPersonTrainings(singletonList(personTraining));
+		person=repository.saveAndFlush(person);
+		assertNotNull(person.getId());
+		
+		PersonTraining anotherPersonTraining = initPersonTraining(person, initTraining("Another Training"));
+		person.getPersonTrainings().add(anotherPersonTraining);
+		person=repository.saveAndFlush(person);
+		
+		person=repository.getOne(person.getId());
+		assertThat(assoicatedTrainingNames(person), hasItems("Test Training", "Another Training"));
 	}
 
 	@Test
@@ -369,6 +397,33 @@ public class PersonRepositoryTests {
 		
 		person=repository.getOne(person.getId());
 		assertNull(person.getAddress());
+	}
+
+	private List<String> assoicatedTrainingNames(Person person) {
+		return person.getPersonTrainings().stream().map(PersonTraining::getTraining).map(Training::getName).collect(Collectors.toList());
+	}
+
+	private PersonTraining initPersonTraining(Person person, Training training) {
+		return PersonTraining.builder()
+				.progress(ProgressType.IN_PROGRESS)
+				.startDate(LocalDate.of(2017, Month.JANUARY, 25).toEpochDay())
+				.endDate(LocalDate.of(2017, Month.JANUARY, 30).toEpochDay())
+				.training(training).person(person).build();
+	}
+
+	private Training initTraining(String name) {
+		Training training = Training.builder()
+				.name(name)
+				.online(true)
+				.build();
+		training.setTasks(initTasks(training,"Test Task 1", "Test Task 2"));
+		return training;
+	}
+
+	private Set<TrainingTask> initTasks(Training training, String... taskNames) {
+		return Arrays.stream(taskNames)
+				.map(name -> TrainingTask.builder().name(name).build())
+				.collect(Collectors.toSet());
 	}
 }
 

@@ -38,7 +38,7 @@ public class Training implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Getter
 	@Setter
-	private long id;
+	private Long id;
 
 	@Getter
 	@Setter
@@ -67,8 +67,8 @@ public class Training implements Serializable {
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "training", cascade = CascadeType.MERGE)
-	@JsonManagedReference("assign-training")
 	@JsonIgnore
 	private Set<PersonTraining> personTrainings = new HashSet<>();
+
 
 }

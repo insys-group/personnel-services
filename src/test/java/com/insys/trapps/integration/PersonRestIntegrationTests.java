@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.with;
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.*;
 
 /**
@@ -149,46 +151,52 @@ public class PersonRestIntegrationTests {
     }
 
     @Test
-    public void testUpdatePersonWithTraining() {
-        Training firstTraining = postTrainingRequest(initTraining("First Test Training"));
-        Training secondTraining = postTrainingRequest(initTraining("Second Test Training"));
-        Person person = postPersonRequest(createPersonWithTraining(firstTraining));
-        PersonTraining personTraining = PersonTraining.builder().progress(ProgressType.IN_PROGRESS).startDate(createStartDate()).endDate(createEndDate()).training(secondTraining).person(person).build();
-        person.getPersonTrainings().add(personTraining);
-
-        given()
-                .contentType("application/json")
-                .body(person)
-                .log().everything()
-                .when()
-                .put(basePath + PERSON_PATH + "/put/" + person.getId())
-                .then()
-                .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
-
-        /*with()
+    public void testCreatePersonWithTraining() {
+        Training savedTraining = postTrainingRequest(initTraining("Test Training"));
+        Person personWithTraining = createPersonWithTraining(savedTraining);
+        Person person = postPersonRequest(personWithTraining);
+//
+//TODO The test works only with PUT method implemented
+//
+//       given()
+//                .contentType("application/json")
+//                .body(person)
+//                .log().everything()
+//                .when()
+//                .put(basePath + PERSON_PATH + "/put/" + person.getId())
+//                .then()
+//                .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
+        with()
                 .get(basePath + PERSON_PATH + "/" + person.getId())
                 .then()
                 .log().everything()
-                .statusCode(HttpStatus.OK.value())
-                .body("personTrainings", hasItems(1));*/
+        .assertThat()
+                .body("personTrainings._links.training.href", hasItems(endsWith(savedTraining.getId().toString())));
 
-        Response response =
-                given()
-                        .contentType("application/json")
-                        .when()
-                        .get(basePath + PERSON_PATH + "/" + person.getId())
-                        .then()
-                        .log().everything()
-                        .statusCode(HttpStatus.OK.value())
-                        .extract().response();
+    }
 
-        List<Map<String, Object>> savedTrainings = response.jsonPath().getList("personTrainings");
+    @Test
+    public void testUpdatePersonWithTraining() {
+        Training firstTraining = postTrainingRequest(initTraining("First Test Training"));
+        Person personWithTraining = createPersonWithTraining(firstTraining);
+        Person savedPerson = postPersonRequest(personWithTraining);
+        getPersonRequest(savedPerson);
+        Training newTraining = postTrainingRequest(initTraining("Second Test Training"));
+        PersonTraining newPersonTraining = createPersonTraining(savedPerson, newTraining);
+        savedPerson.getPersonTrainings().add(newPersonTraining);
 
-        assertEquals(1, savedTrainings.size());
-        savedTrainings.forEach(s -> {
-            assertNotNull(s.get("id"));
-            log.debug("Training saved " + s.get("id") + ", " + s.get("startDate") + ", " + s.get("progress"));
-        });
+        given()
+            .contentType("application/json")
+            .body(savedPerson)
+            .log().everything()
+        .when()
+            .put(basePath + PERSON_PATH + "/put/" + savedPerson.getId())
+            .then()
+            .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
+
+        Person response = getPersonRequest(savedPerson);
+
+       assertThat(response.getPersonTrainings(),hasSize(2));
     }
 
     @Test
@@ -203,6 +211,23 @@ public class PersonRestIntegrationTests {
 
         person = repository.findOne(person.getId());
         assertNull(person);
+    }
+
+    private Person getPersonRequest(Person person) {
+        return with()
+                .get(basePath + PERSON_PATH + "/" + person.getId())
+                .then()
+                .log().everything()
+                .extract().as(Person.class);
+    }
+
+    private PersonTraining createPersonTraining(Person savedPerson, Training newTraining) {
+        return PersonTraining.builder()
+                .progress(ProgressType.IN_PROGRESS)
+                .startDate(createStartDate())
+                .endDate(createEndDate())
+                .training(newTraining)
+                .person(savedPerson).build();
     }
 
     private Training postTrainingRequest(Training training) {
@@ -220,7 +245,7 @@ public class PersonRestIntegrationTests {
 
     private Training initTraining(String name) {
         Training training = Training.builder()
-                .id(0)
+                .id(0L)
                 .name(name)
                 .online(true)
                 .tasks(initTasks("Test Task 1", "Test Task 2"))
@@ -282,7 +307,7 @@ public class PersonRestIntegrationTests {
     }*/
 
     private Person createPersonWithTraining(Training training) {
-        Set<PersonTraining> personTraining = new HashSet<>();
+        List<PersonTraining> personTraining = new ArrayList<>();
         personTraining.add(PersonTraining.builder().progress(ProgressType.IN_PROGRESS).startDate(createStartDate()).endDate(createEndDate()).training(training).build());
         return Person.builder().firstName("Omar").lastName("Sabir")
                 .personType(PersonType.Employee).business(business).email("omar@insys.com")
