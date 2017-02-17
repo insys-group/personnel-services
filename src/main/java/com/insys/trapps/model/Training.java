@@ -67,7 +67,6 @@ public class Training implements Serializable {
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "training", cascade = CascadeType.MERGE)
-	@JsonIgnore
 	private Set<PersonTraining> personTrainings = new HashSet<>();
 
 

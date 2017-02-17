@@ -62,9 +62,9 @@ public class PersonServiceImpl implements PersonService {
 
         dbPerson.getPersonTrainings().clear();
         if (person.getPersonTrainings() != null) {
-            person.getPersonTrainings().forEach(training -> {
-                dbPerson.getPersonTrainings().add(training);
-                training.setPerson(dbPerson);
+            person.getPersonTrainings().forEach(personTraining -> {
+                personTraining.setPerson(dbPerson);
+                dbPerson.getPersonTrainings().add(personTraining);
             });
         }
 
@@ -127,13 +127,9 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person savePerson(Person person) {
-//        person.getPersonTrainings().forEach(personTraining -> {
-//            personTraining.getTraining().setId(null);
-//            personTraining.getTraining().getTasks().forEach(task -> task.setId(null));
-//        });
-//        Person person1 = ;
-//        List<Training> trainings = trainingRepository.findAll();
-//        Person one = repository.findOne(person1.getId());
+        if (person.getPersonTrainings()!=null) {
+            person.getPersonTrainings().forEach(personTraining -> personTraining.setPerson(person));
+        }
         return repository.saveAndFlush(person);
     }
 }

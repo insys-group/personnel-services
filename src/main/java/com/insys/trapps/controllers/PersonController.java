@@ -99,13 +99,4 @@ public class PersonController {
 		response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+document.getFileName()+"\"");
 		response.getOutputStream().write(document.getDocument());
     }
-	/*
-	return ResponseEntity
-			.status(HttpStatus.OK)
-			.header(, )
-			.header(, "")
-			.header(HttpHeaders.PRAGMA, "no-cache")
-			.header(HttpHeaders.CACHE_CONTROL, "no-cache")
-			.body(document.getDocument());
-	*/
 }

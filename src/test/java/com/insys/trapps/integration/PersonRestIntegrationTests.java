@@ -26,9 +26,10 @@ import java.util.stream.Collectors;
 
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.with;
+import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.Matchers.endsWith;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 /**
@@ -75,9 +76,9 @@ public class PersonRestIntegrationTests {
                 .contentType("application/json")
                 .body(person)
                 .log().everything()
-                .when()
+        .when()
                 .post(basePath + PERSON_PATH)
-                .then()
+        .then()
                 .statusCode(HttpStatus.CREATED.value());
     }
 
@@ -91,27 +92,23 @@ public class PersonRestIntegrationTests {
                 .personType(PersonType.Candidate).business(business).email("omar@insys.com")
                 .personSkills(personSkills)
                 .build();
-        List<Map<String, Object>> savedSkills =
-                given()
-                        .contentType("application/json")
-                        .body(person)
-                        .log().everything()
-                        .when()
-                        .post(basePath + PERSON_PATH)
-                        .then()
-                        .statusCode(HttpStatus.CREATED.value())
-                        .extract().jsonPath().getList("personSkills");
-        assertEquals(2, savedSkills.size());
-
-        savedSkills.forEach(skill -> {
-            assertNotNull(skill.get("id"));
-            log.debug("Skills saved " + skill.get("id") + ", " + skill.get("name") + ", " + skill.get("scale"));
-        });
+        given()
+                .contentType("application/json")
+                .body(person)
+                .log().everything()
+        .when()
+                .post(basePath + PERSON_PATH)
+        .then()
+                .log().everything()
+                .statusCode(HttpStatus.CREATED.value())
+        .assertThat()
+                .body("personSkills", hasSize(2))
+                .body("personSkills.id", containsInAnyOrder(asList(greaterThan(0), greaterThan(0))));
     }
 
     @Test
     public void testUpdatePersonWithSkills() {
-        Person person = createPersonWithSkills();
+        Person person = postPersonRequest(createPersonWithSkills());
         PersonSkill skill = PersonSkill.builder().name("AWS").scale(8).build();
         person.getPersonSkills().add(skill);
         person.getPersonSkills().forEach(s -> {
@@ -125,88 +122,72 @@ public class PersonRestIntegrationTests {
                 .contentType("application/json")
                 .body(person)
                 .log().everything()
-                .when()
+        .when()
                 .put(basePath + PERSON_PATH + "/put/" + person.getId())
-                .then()
+        .then()
                 .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
 
-
-        Response response =
-                given()
-                        .contentType("application/json")
-                        .when()
-                        .get(basePath + PERSON_PATH + "/" + person.getId())
-                        .then()
-                        .log().everything()
-                        .statusCode(HttpStatus.OK.value())
-                        .extract().response();
-
-        List<Map<String, Object>> savedSkills = response.jsonPath().getList("personSkills");
-
-        assertEquals(3, savedSkills.size());
-        savedSkills.forEach(s -> {
-            assertNotNull(s.get("id"));
-            log.debug("Skills saved " + s.get("id") + ", " + s.get("name") + ", " + s.get("scale"));
-        });
+        with()
+                .contentType("application/json")
+        .when()
+                .get(basePath + PERSON_PATH + "/" + person.getId())
+        .then()
+                .log().everything()
+                .statusCode(HttpStatus.OK.value())
+        .assertThat()
+                .body("personSkills", hasSize(3))
+                .body("personSkills.id", containsInAnyOrder(asList(greaterThan(0), greaterThan(0), greaterThan(0))))
+                .body("personSkills.scale", hasItems(10));
     }
 
     @Test
     public void testCreatePersonWithTraining() {
-        Training savedTraining = postTrainingRequest(initTraining("Test Training"));
+        Training savedTraining = postTrainingRequest(createTraining("Test Training"));
         Person personWithTraining = createPersonWithTraining(savedTraining);
         Person person = postPersonRequest(personWithTraining);
-//
-//TODO The test works only with PUT method implemented
-//
-//       given()
-//                .contentType("application/json")
-//                .body(person)
-//                .log().everything()
-//                .when()
-//                .put(basePath + PERSON_PATH + "/put/" + person.getId())
-//                .then()
-//                .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
+
         with()
                 .get(basePath + PERSON_PATH + "/" + person.getId())
-                .then()
+        .then()
                 .log().everything()
         .assertThat()
+                .body("personTrainings._links.training", hasSize(1))
                 .body("personTrainings._links.training.href", hasItems(endsWith(savedTraining.getId().toString())));
 
     }
 
     @Test
     public void testUpdatePersonWithTraining() {
-        Training firstTraining = postTrainingRequest(initTraining("First Test Training"));
+        Training firstTraining = postTrainingRequest(createTraining("First Test Training"));
         Person personWithTraining = createPersonWithTraining(firstTraining);
         Person savedPerson = postPersonRequest(personWithTraining);
         getPersonRequest(savedPerson);
-        Training newTraining = postTrainingRequest(initTraining("Second Test Training"));
+        Training newTraining = postTrainingRequest(createTraining("Second Test Training"));
         PersonTraining newPersonTraining = createPersonTraining(savedPerson, newTraining);
         savedPerson.getPersonTrainings().add(newPersonTraining);
 
         given()
-            .contentType("application/json")
-            .body(savedPerson)
-            .log().everything()
+                .contentType("application/json")
+                .body(savedPerson)
+                .log().everything()
         .when()
-            .put(basePath + PERSON_PATH + "/put/" + savedPerson.getId())
-            .then()
-            .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
+                .put(basePath + PERSON_PATH + "/put/" + savedPerson.getId())
+        .then()
+                .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
 
         Person response = getPersonRequest(savedPerson);
 
-       assertThat(response.getPersonTrainings(),hasSize(2));
+        assertThat(response.getPersonTrainings(), hasSize(2));
     }
 
     @Test
     public void testDeletePersonWithSkills() {
-        Person person = createPersonWithSkills();
+        Person person = postPersonRequest(createPersonWithSkills());
         given()
                 .log().everything()
-                .when()
+        .when()
                 .delete(basePath + PERSON_PATH + "/" + person.getId())
-                .then()
+        .then()
                 .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
 
         person = repository.findOne(person.getId());
@@ -221,101 +202,6 @@ public class PersonRestIntegrationTests {
                 .extract().as(Person.class);
     }
 
-    private PersonTraining createPersonTraining(Person savedPerson, Training newTraining) {
-        return PersonTraining.builder()
-                .progress(ProgressType.IN_PROGRESS)
-                .startDate(createStartDate())
-                .endDate(createEndDate())
-                .training(newTraining)
-                .person(savedPerson).build();
-    }
-
-    private Training postTrainingRequest(Training training) {
-        return
-                given()
-                        .contentType("application/json")
-                        .body(training)
-                        .when()
-                        .log().everything()
-                        .post(basePath + "/trainings")
-                        .then()
-                        .statusCode(HttpStatus.CREATED.value())
-                        .extract().as(Training.class);
-    }
-
-    private Training initTraining(String name) {
-        Training training = Training.builder()
-                .id(0L)
-                .name(name)
-                .online(true)
-                .tasks(initTasks("Test Task 1", "Test Task 2"))
-                .build();
-        training.getTasks().forEach(task -> task.setId(training.getId()));
-        return training;
-    }
-
-    private Set<TrainingTask> initTasks(String... taskNames) {
-        return Arrays.stream(taskNames)
-                .map(name -> TrainingTask.builder().name(name).description("Spring training tasks").completed(true)
-                        .weblink("loclahost").build())
-                .collect(Collectors.toSet());
-    }
-
-    public Person createPersonWithSkills() {
-        Set<PersonSkill> personSkills = new HashSet<>();
-        personSkills.add(PersonSkill.builder().name("Spring").scale(8).build());
-        personSkills.add(PersonSkill.builder().name("JPA").scale(8).build());
-        Person person = Person.builder().firstName("Omar").lastName("Sabir")
-                .personType(PersonType.Candidate).business(business).email("omar@insys.com")
-                .personSkills(personSkills)
-                .build();
-        Map<String, Object> personProperties =
-                given()
-                        .contentType("application/json")
-                        .body(person)
-                        .log().everything()
-                        .when()
-                        .post(basePath + PERSON_PATH)
-                        .then()
-                        .statusCode(HttpStatus.CREATED.value())
-                        .extract().jsonPath().get();
-
-        assertNotNull(personProperties.get("id"));
-
-        List<Map<String, Object>> skills = (List<Map<String, Object>>) personProperties.get("personSkills");
-        skills.forEach(skillMap -> {
-            log.debug("Person Properties - Skills Map " + skillMap.get("id") + " " + skillMap.get("name"));
-
-            person.getPersonSkills().forEach(personObjectSkill -> {
-                if (personObjectSkill.getName().equals(skillMap.get("name"))) {
-                    personObjectSkill.setId(new Long((Integer) skillMap.get("id")));
-                }
-            });
-
-        });
-        person.setId(new Long((Integer) personProperties.get("id")));
-        return person;
-    }
-    /*
-    private String restBody(Person value) throws Exception {
-		ObjectMapper mapper = new ObjectMapper();
-		FilterProvider filters = new SimpleFilterProvider().addFilter("restBusinessFilter",
-		SimpleBeanPropertyFilter.filterOutAllExcept("id", "name", "description", "businessType"));
-		// and then serialize using that filter provider:
-		mapper.setFilterProvider(filters);
-		return mapper.writeValueAsString(value);
-    }*/
-
-    private Person createPersonWithTraining(Training training) {
-        List<PersonTraining> personTraining = new ArrayList<>();
-        personTraining.add(PersonTraining.builder().progress(ProgressType.IN_PROGRESS).startDate(createStartDate()).endDate(createEndDate()).training(training).build());
-        return Person.builder().firstName("Omar").lastName("Sabir")
-                .personType(PersonType.Employee).business(business).email("omar@insys.com")
-                .personTrainings(personTraining)
-                .build();
-    }
-
-
     private Person postPersonRequest(Person person) {
         return
                 given()
@@ -327,6 +213,66 @@ public class PersonRestIntegrationTests {
                         .then()
                         .statusCode(HttpStatus.CREATED.value())
                         .extract().as(Person.class);
+    }
+
+    private Training postTrainingRequest(Training training) {
+        return
+                given()
+                        .contentType("application/json")
+                        .body(training)
+                .when()
+                        .log().everything()
+                        .post(basePath + "/trainings")
+                .then()
+                        .statusCode(HttpStatus.CREATED.value())
+                        .extract().as(Training.class);
+    }
+
+    public Person createPersonWithSkills() {
+        Set<PersonSkill> personSkills = new HashSet<>();
+        personSkills.add(PersonSkill.builder().name("Spring").scale(8).build());
+        personSkills.add(PersonSkill.builder().name("JPA").scale(8).build());
+        return Person.builder().firstName("Omar").lastName("Sabir")
+                .personType(PersonType.Candidate).business(business).email("omar@insys.com")
+                .personSkills(personSkills)
+                .build();
+
+    }
+
+    private Person createPersonWithTraining(Training training) {
+        Person person = Person.builder().firstName("Omar").lastName("Sabir")
+                .personType(PersonType.Employee).business(business).email("omar@insys.com")
+                .build();
+        PersonTraining personTraining = createPersonTraining(person, training);
+        person.setPersonTrainings(Collections.singletonList(personTraining));
+        return person;
+    }
+
+    private PersonTraining createPersonTraining(Person person, Training training) {
+        return PersonTraining.builder()
+                .progress(ProgressType.IN_PROGRESS)
+                .startDate(createStartDate())
+                .endDate(createEndDate())
+                .training(training)
+                .person(person).build();
+    }
+
+    private Training createTraining(String name) {
+        Training training = Training.builder()
+                .id(0L)
+                .name(name)
+                .online(true)
+                .tasks(createTasks("Test Task 1", "Test Task 2"))
+                .build();
+        training.getTasks().forEach(task -> task.setId(training.getId()));
+        return training;
+    }
+
+    private Set<TrainingTask> createTasks(String... taskNames) {
+        return Arrays.stream(taskNames)
+                .map(name -> TrainingTask.builder().name(name).description("Spring training tasks").completed(false)
+                        .weblink("localhost").build())
+                .collect(Collectors.toSet());
     }
 
     private long createStartDate() {

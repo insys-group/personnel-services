@@ -57,9 +57,4 @@ public class PersonTraining implements Serializable {
     @JoinColumn(name = "TRAINING_ID")
     private Training training;
 
-    @JsonProperty
-    public Long getTrainingId(){
-        return training == null ? null : training.getId();
-    }
-
 }
