@@ -92,10 +92,6 @@ public class Person implements Serializable {
 	@Getter
 	@Setter
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
-//	@OneToMany(cascade = { CascadeType.ALL})
-//	@JoinTable(name = "PERSON_TRAINING"
-//			, joinColumns = @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID")
-//			, inverseJoinColumns = @JoinColumn(name = "TRAINING_ID", referencedColumnName = "ID"))
 	@JsonManagedReference ("person-training")
 	private Set<PersonTraining> personTrainings = new HashSet<>();
 

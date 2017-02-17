@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -56,13 +57,18 @@ public class Training implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true, targetEntity = TrainingTask.class)
+	@OneToMany(cascade = { CascadeType.ALL}, fetch = FetchType.EAGER)
+	@JoinTable(name = "TRAINING_TASKS"
+			, joinColumns = @JoinColumn(name = "training_id", referencedColumnName = "ID")
+			, inverseJoinColumns = @JoinColumn(name = "tasks_id", referencedColumnName = "ID")
+	)
 	private Set<TrainingTask> tasks = new HashSet<>();
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "training", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "training", cascade = CascadeType.MERGE)
 	@JsonManagedReference("assign-training")
+	@JsonIgnore
 	private Set<PersonTraining> personTrainings = new HashSet<>();
 
 }

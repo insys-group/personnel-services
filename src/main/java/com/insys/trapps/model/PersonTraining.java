@@ -1,9 +1,6 @@
 package com.insys.trapps.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.*;
@@ -20,6 +17,7 @@ import java.util.Date;
 @Builder
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PersonTraining implements Serializable {
 
     private static final long serialVersionUID = -5990810947595710271L;
@@ -55,9 +53,14 @@ public class PersonTraining implements Serializable {
 
     @Getter
     @Setter
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "TRAINING_ID")
 	@JsonBackReference("assign-training")
     private Training training;
+
+    @JsonProperty
+    public Long getTrainingId(){
+        return training == null ? null : training.getId();
+    }
 
 }
