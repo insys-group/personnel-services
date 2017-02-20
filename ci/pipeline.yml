@@ -4,25 +4,32 @@ resources:
   type: git
   source:
     uri: https://github.com/insys-group/trapps-api.git
-    branch: develop
+    branch: feature/concourse
 - name: deploy-trapps-api
   type: cf
   source:
-    api: api.local.pcfdev.io
-    username: user
-    password: pass
-    organization: pcfdev-org
-    space: pcfdev-space
+    api: api.system.luxoft-pcf.com
+    username: concourse
+    password:
+    organization: insys
+    space: development
     skip_cert_check: true
 
 jobs:
-- name: deploy
+- name: build
   public: true
   plan:
   - get: trapps-api-source
     trigger: true
   - task: package
     file: trapps-api-source/ci/tasks/package.yml
+
+- name: deploy
+  public: true
+  plan:
+  - get: trapps-api-source
+    trigger: true
+    passed: [build]
   - put: deploy-trapps-api
     params:
       manifest: trapps-api-source/manifest.yml
