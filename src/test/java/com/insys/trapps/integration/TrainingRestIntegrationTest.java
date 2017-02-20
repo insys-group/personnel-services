@@ -1,15 +1,10 @@
 package com.insys.trapps.integration;
 
-import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.RestAssured.with;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
-
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.insys.trapps.model.Address;
+import com.insys.trapps.model.Training;
+import com.insys.trapps.model.TrainingTask;
+import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.response.ValidatableResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,11 +13,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.insys.trapps.model.Address;
-import com.insys.trapps.model.Training;
-import com.insys.trapps.model.TrainingTask;
-import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.response.ValidatableResponse;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.jayway.restassured.RestAssured.given;
+import static com.jayway.restassured.RestAssured.with;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItems;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -35,10 +33,6 @@ public class TrainingRestIntegrationTest {
     private String basePath;
 
     private static final String TRAINING_PATH = "/trainings";
-    /**
-     * The container appears in REST-assured tests. There is no this element in real communication to a microservice. 
-     */
-    private static String JSON_NESTED_CONTAINER = "_embedded";
     
     @Before
     public void setup() {
@@ -80,18 +74,6 @@ public class TrainingRestIntegrationTest {
     		.body("name", equalTo(newName)).and()
     		.body("tasks.name", hasItems(newTaskNames));
     }
-    
-    
-    @Test
-    public void testGetAllTrainings() throws Exception {
-    	deletAllTrainings();
-    	
-    	Training training = initTraining();
-    	postTrainingRequest(training);
-    	
-		getAllTrainingsRequest()
-    		.body(JSON_NESTED_CONTAINER + ".trainings", hasSize(1));
-    }
 
 	private void deleteTrainingRequest(long id) {
 		with()
@@ -109,28 +91,12 @@ public class TrainingRestIntegrationTest {
 			.statusCode(HttpStatus.OK.value());
 	}
 
-
-	private ValidatableResponse getAllTrainingsRequest() {
-		return 
-		with()
-    			.get(basePath + TRAINING_PATH)
-    	.then()
-				.log().everything()
-    			.statusCode(HttpStatus.OK.value());
-	}
-
-
 	private void setNewFieldsTo(Training training, String[] newTaskNames, String newName) {
     	training.setName(newName);
     	training.getLocation().setAddress1("New Address 1");
-    	training.setTasks(initTasks(training,newTaskNames));
+    	training.setTasks(initTasks(newTaskNames));
 	}
 
-	private void deletAllTrainings() {
-		getAllTrainingsRequest().extract().jsonPath()
-			.getList(JSON_NESTED_CONTAINER + ".trainings.id").stream()
-			.mapToLong(id -> new Long((Integer) id)).forEach(this::deleteTrainingRequest);
-	}
 
 	private Training postTrainingRequest(Training training) {
 		return 
@@ -159,11 +125,11 @@ public class TrainingRestIntegrationTest {
 				.location(initAddress())
 				.online(true)
 				.build();
-		training.setTasks(initTasks(training,"Test Task 1", "Test Task 2"));
+		training.setTasks(initTasks("Test Task 1", "Test Task 2"));
 		return training;
 	}
 
-	private Set<TrainingTask> initTasks(Training training, String... taskNames) {
+	private Set<TrainingTask> initTasks(String... taskNames) {
 		return Arrays.stream(taskNames)
 				.map(name -> TrainingTask.builder().name(name).build())
 				.collect(Collectors.toSet());

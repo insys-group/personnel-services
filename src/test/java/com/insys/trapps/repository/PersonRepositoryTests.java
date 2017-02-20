@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import com.insys.trapps.respositories.TrainingRepository;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -56,6 +57,9 @@ import lombok.extern.slf4j.Slf4j;
 public class PersonRepositoryTests {
 	@Autowired
 	private PersonRepository repository;
+
+	@Autowired
+	private TrainingRepository trainingRepository;
 	
 	@Autowired
 	private BusinessRepository businessRepository;
@@ -136,16 +140,19 @@ public class PersonRepositoryTests {
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
 				.build();
-		PersonTraining personTraining = initPersonTraining(person,initTraining("Test Training"));
-		person.setPersonTrainings(singletonList(personTraining));
+		Training training = initTraining("Test Training");
+		trainingRepository.saveAndFlush(training);
+		PersonTraining personTraining = initPersonTraining(person, training);
+		person.setPersonTrainings(asList(personTraining));
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
 		
 		PersonTraining anotherPersonTraining = initPersonTraining(person, initTraining("Another Training"));
-		person.getPersonTrainings().add(anotherPersonTraining);
-		person=repository.saveAndFlush(person);
+		addPersonTraining(person, anotherPersonTraining);
+
+		person = repository.saveAndFlush(person);
 		
-		person=repository.getOne(person.getId());
+		person = repository.getOne(person.getId());
 		assertThat(assoicatedTrainingNames(person), hasItems("Test Training", "Another Training"));
 	}
 
@@ -157,7 +164,7 @@ public class PersonRepositoryTests {
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
 				.personSkills(personSkills)
-				
+
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
@@ -168,11 +175,11 @@ public class PersonRepositoryTests {
 		log.debug("Deleting Skill = " + skillToDelete.toString());
 		person.getPersonSkills().remove(skillToDelete);
 		person=repository.saveAndFlush(person);
-		
+
 		person=repository.getOne(person.getId());
 		personSkills.forEach(personSkill -> log.debug("After Skill Delete " + personSkill.toString()));
 
-		assertEquals(0, 
+		assertEquals(0,
 				person.getPersonSkills().stream()
 					.filter(skill -> skill.getId().equals(skillToDelete.getId()))
 					.collect(Collectors.toList()).size()
@@ -187,7 +194,7 @@ public class PersonRepositoryTests {
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
 				.personDocuments(personDocuments)
-				
+
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
@@ -207,7 +214,7 @@ public class PersonRepositoryTests {
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
 				.personSkills(personSkills)
 				.personDocuments(personDocuments)
-				
+
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
@@ -215,7 +222,7 @@ public class PersonRepositoryTests {
 		person.getPersonDocuments().forEach(personDocument -> assertNotNull(personDocument.getId()));
 		person.getPersonSkills().forEach(personSkill -> assertNotNull(personSkill.getId()));
 	}
-	
+
 	@Test
 	public void testDeletePersonWithSkillsAndDocuments() {
 		Set<PersonSkill> personSkills=new HashSet<>();
@@ -228,7 +235,7 @@ public class PersonRepositoryTests {
 				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
 				.personSkills(personSkills)
 				.personDocuments(personDocuments)
-				
+
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
@@ -253,18 +260,18 @@ public class PersonRepositoryTests {
 		assertNotNull(person.getId());
 		person=repository.getOne(person.getId());
 		person.getPersonDocuments().forEach(personDocument -> assertNotNull(personDocument.getId()));
-		
+
 		PersonDocument document=PersonDocument.builder().fileName("skills.doc").document("This is skills document".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build();
 		person.getPersonDocuments().add(document);
 		person=repository.saveAndFlush(person);
-		
+
 		person=repository.getOne(person.getId());
 		person.getPersonDocuments().forEach(personDocument -> {
 			assertNotNull(personDocument.getId());
 			log.debug("Document is " + personDocument.toString());
 		});
 	}
-	
+
 	@Test
 	public void testDeletePersonDocuments() {
 		Set<PersonDocument> personDocuments=new HashSet<>();
@@ -280,22 +287,22 @@ public class PersonRepositoryTests {
 		assertNotNull(person.getId());
 		person=repository.getOne(person.getId());
 		person.getPersonDocuments().forEach(personDocument -> {assertNotNull(personDocument.getId());log.debug("Before Document Delete " + personDocument.toString());});
-		
+
 		PersonDocument documentToDelete=person.getPersonDocuments().stream().findFirst().get();
 		log.debug("Deleting document = " + documentToDelete.toString());
 		person.getPersonDocuments().remove(documentToDelete);
 		person=repository.saveAndFlush(person);
-		
+
 		person=repository.getOne(person.getId());
 		personDocuments.forEach(personDocument -> log.debug("After Document Delete " + personDocument.toString()));
-		
-		assertEquals(0, 
+
+		assertEquals(0,
 			person.getPersonDocuments().stream()
 				.filter(document -> document.getId().equals(documentToDelete.getId()))
 				.collect(Collectors.toList()).size()
 		);
 	}
-	
+
 	@Test
 	public void testDeleteAllPersonDocuments() {
 		Set<PersonDocument> personDocuments=new HashSet<>();
@@ -309,18 +316,18 @@ public class PersonRepositoryTests {
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
-		
+
 		person=repository.getOne(person.getId());
 		person.getPersonDocuments().forEach(personDocument -> {assertNotNull(personDocument.getId());log.debug("Before Document Delete " + personDocument.toString());});
-		
+
 		log.debug("Deleting all documents = ");
 		person.getPersonDocuments().clear();
 		person=repository.saveAndFlush(person);
-		
+
 		person=repository.getOne(person.getId());
 		assertEquals(0, person.getPersonDocuments().size());
 	}
-	
+
 	@Test
 	public void testUpdatePersonDocuments() {
 		Set<PersonDocument> personDocuments=new HashSet<>();
@@ -334,20 +341,20 @@ public class PersonRepositoryTests {
 				.build();
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
-		
+
 		person=repository.getOne(person.getId());
 		person.getPersonDocuments().forEach(personDocument -> {assertNotNull(personDocument.getId());log.debug("Before Document Update " + personDocument.toString());});
-		
+
 		log.debug("Deleting all documents = ");
 		person.getPersonDocuments().clear();
 		person=repository.saveAndFlush(person);
-		
+
 		person=repository.getOne(person.getId());
 		assertEquals(0, person.getPersonDocuments().size());
-		
+
 		person.getPersonDocuments().add(PersonDocument.builder().fileName("resume-update.doc").document("This is resume".getBytes()).uploadTimestamp(new Date()).fileSize(100L).build());
 		repository.saveAndFlush(person);
-		
+
 		person=repository.getOne(person.getId());
 		assertEquals(1, person.getPersonDocuments().size());
 	}
@@ -362,7 +369,7 @@ public class PersonRepositoryTests {
 		assertNotNull(person.getId());
 		assertNotNull(person.getAddress().getId());
 	}
-	
+
 	@Test
 	public void testUpdatePersonWithAddress() {
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
@@ -372,15 +379,15 @@ public class PersonRepositoryTests {
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
 		assertNotNull(person.getAddress().getId());
-		
+
 		person=repository.getOne(person.getId());
 		person.getAddress().setAddress2("#201");
 		person=repository.saveAndFlush(person);
-		
+
 		person=repository.getOne(person.getId());
 		assertEquals("#201", person.getAddress().getAddress2());
 	}
-	
+
 	@Test
 	public void testDeletePersonAddress() {
 		Person person=Person.builder().firstName("Omar").lastName("Sabir")
@@ -390,17 +397,24 @@ public class PersonRepositoryTests {
 		person=repository.saveAndFlush(person);
 		assertNotNull(person.getId());
 		assertNotNull(person.getAddress().getId());
-		
+
 		person=repository.getOne(person.getId());
 		person.setAddress(null);
 		person=repository.saveAndFlush(person);
-		
+
 		person=repository.getOne(person.getId());
 		assertNull(person.getAddress());
 	}
 
 	private List<String> assoicatedTrainingNames(Person person) {
 		return person.getPersonTrainings().stream().map(PersonTraining::getTraining).map(Training::getName).collect(Collectors.toList());
+	}
+
+	private void addPersonTraining(Person person, PersonTraining anotherPersonTraining) {
+		//New array list was created because person.getPersonTrainings() return AbstractList
+		ArrayList<PersonTraining> savedPersonTrainings = new ArrayList<>(person.getPersonTrainings());
+		savedPersonTrainings.add(anotherPersonTraining);
+		person.setPersonTrainings(savedPersonTrainings);
 	}
 
 	private PersonTraining initPersonTraining(Person person, Training training) {
