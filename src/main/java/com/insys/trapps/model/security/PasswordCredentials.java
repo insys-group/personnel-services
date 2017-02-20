@@ -1,15 +1,11 @@
 /**
  * 
  */
-package com.insys.trapps.model;
+package com.insys.trapps.model.security;
+
+import lombok.*;
 
 import java.io.Serializable;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author msabir

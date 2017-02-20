@@ -3,10 +3,11 @@
  */
 package com.insys.trapps.service;
 
+import com.insys.trapps.model.security.User;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.insys.trapps.model.Person;
-import com.insys.trapps.model.PersonDocument;
+import com.insys.trapps.model.person.Person;
+import com.insys.trapps.model.person.PersonDocument;
 
 /**
  * @author msabir
@@ -14,7 +15,17 @@ import com.insys.trapps.model.PersonDocument;
  */
 public interface PersonService {
 
-	/**
+    /**
+     * @param id
+     */
+    Person findPerson(Long id);
+
+    /**
+     * @param username
+     */
+    User findUser(String username);
+
+    /**
 	 * @param id
 	 * @param person
 	 */

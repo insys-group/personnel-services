@@ -1,5 +1,6 @@
-package com.insys.trapps.model;
+package com.insys.trapps.model.person;
 
+import com.insys.trapps.model.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -70,6 +71,11 @@ public class Person implements Serializable {
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "BUSINESS_ID", nullable = false)
     private Business business;
+
+    @Getter
+    @Setter
+    @Column(name = "USERNAME", nullable = true)
+    private String username;
 
     @Getter
     @Setter

@@ -5,6 +5,8 @@ package com.insys.trapps.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -52,4 +54,32 @@ public class AuthToken implements Serializable {
 			return new Date(expiration.getTime());
 		return null;
 	}
+
+	@Getter
+	@Setter
+	private String error;
+
+	@Getter
+	@Setter
+	private String errorDescription;
+
+	@Getter
+	@Setter
+	private Long id;
+
+	@Getter
+	@Setter
+	private String username;
+
+	@Getter
+	@Setter
+	private String firstName;
+
+	@Getter
+	@Setter
+	private String lastName;
+
+	@Getter
+	@Setter
+	private String authorities;
 }

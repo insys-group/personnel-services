@@ -10,26 +10,33 @@ security:
     resource:
       user-info-uri: http://trapps-api.local.pcfdev.io/user
 trapps:
-  access-token:
-    url: /oauth/token
+  client-id: trapps-application-iwquy-ienke-qnbek-iuysc-pwirh
+  client-secret: trapps-application-secret-oiweds-iujwsd-ujrqcd-iorcl-klmvek
+  access-token-url: /oauth/token
   client:
     apps: http://trapps-web.local.pcfdev.io
 ---
 spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/trappsdb?useSSL=false
+    username: root
+    driver-class-name: com.mysql.jdbc.Driver
   profiles: local
   devtools:
     restart:
       enabled: true
-  jpa:
-    show-sql: false
-    properties:
-      hibernate:
-        hbm2ddl:
-          import_files: local_insert.sql
-  h2:
-    console:
-      enabled: true
-      path: /console
+#  jpa:
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        hbm2ddl:
+#          import_files: V2__trapps_db_insert_data.sql
+#    generate-ddl: true
+
+#  h2:
+#    console:
+#      enabled: true
+#      path: /console
 server: 
   port: 8081
 security:
@@ -39,8 +46,9 @@ security:
     resource:
       user-info-uri: http://nj395mac11.fios-router.home:8081/user
 trapps:
-  access-token:
-    url: /oauth/token
+  client-id: trapps-application-iwquy-ienke-qnbek-iuysc-pwirh
+  client-secret: trapps-application-secret-oiweds-iujwsd-ujrqcd-iorcl-klmvek
+  access-token-url: /oauth/token
   client:
     apps: http://nj395mac11.fios-router.home:4201
 logging:
@@ -65,11 +73,11 @@ spring:
 security:
   basic:
     enabled: false
-  oauth2:
-    client:
-      client-id: trapps-application
-      client-secret: trapps-application-secret
-      authorized-grant-types: authorization_code,refresh_token,password,client_credentials
-      scope: read,write
+#  oauth:
+#    client-info:
+#      client-id: trapps-application-iwquy-ienke-qnbek-iuysc-pwirh
+#      client-secret: trapps-application-secret-oiweds-iujwsd-ujrqcd-iorcl-klmvek
+#      authorized-grant-types: authorization_code,refresh_token,password,client_credentials
+#      scope: read,write
       
   

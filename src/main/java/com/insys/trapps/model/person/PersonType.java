@@ -1,4 +1,4 @@
-package com.insys.trapps.model;
+package com.insys.trapps.model.person;
 
 
 /**

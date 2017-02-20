@@ -1,9 +1,3 @@
-
-group = 'com.insys'
-version = '0.0.1-SNAPSHOT'
-
-description = """trapps-api"""
-
 buildscript {
     ext {
         springBootVersion = '1.4.4.RELEASE'
@@ -16,8 +10,17 @@ buildscript {
     }
 }
 
+plugins {
+    id "org.flywaydb.flyway" version "4.0.3"
+}
+
 apply plugin: 'java'
 apply plugin: 'org.springframework.boot'
+
+group = 'com.insys'
+version = '0.0.1-SNAPSHOT'
+
+description = """trapps-api"""
 
 jar {
     baseName = 'trapps-api'
@@ -49,10 +52,18 @@ dependencies {
     compile('com.google.code.findbugs:annotations:3.0.1')
     compile('org.projectlombok:lombok:1.16.10')
     compile('com.jayway.restassured:rest-assured:2.9.0')
+
+    compile "org.flywaydb:flyway-core:4.1.0"
 }
 
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:Camden.SR5"
     }
+}
+
+flyway {
+    url = "jdbc:mysql://localhost:3306/trappsdb?useSSL=false"
+    user = "root"
+    outOfOrder = false
 }

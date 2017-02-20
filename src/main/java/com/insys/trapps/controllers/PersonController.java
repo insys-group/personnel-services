@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.insys.trapps.model.Person;
-import com.insys.trapps.model.PersonDocument;
+import com.insys.trapps.model.person.Person;
+import com.insys.trapps.model.person.PersonDocument;
 import com.insys.trapps.service.PersonService;
 
 /**

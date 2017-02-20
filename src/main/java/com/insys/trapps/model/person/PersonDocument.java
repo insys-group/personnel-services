@@ -1,4 +1,4 @@
-package com.insys.trapps.model;
+package com.insys.trapps.model.person;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -12,12 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.insys.trapps.model.person.Person;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

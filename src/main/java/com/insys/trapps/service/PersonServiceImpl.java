@@ -11,14 +11,16 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import com.insys.trapps.model.security.User;
+import com.insys.trapps.respositories.UserRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.insys.trapps.model.Address;
-import com.insys.trapps.model.Person;
-import com.insys.trapps.model.PersonDocument;
+import com.insys.trapps.model.person.Person;
+import com.insys.trapps.model.person.PersonDocument;
 import com.insys.trapps.respositories.PersonRepository;
 
 /**
@@ -28,14 +30,30 @@ import com.insys.trapps.respositories.PersonRepository;
 @Service
 @Transactional
 public class PersonServiceImpl implements PersonService {
-	@Autowired
-	private PersonRepository repository;
+	private PersonRepository personRepository;
+    private UserRepository userRepository;
+
 	
 	private Logger logger=Logger.getLogger(PersonService.class);
-	
-	@Override
+
+	public PersonServiceImpl(PersonRepository personRepository, UserRepository userRepository) {
+	    this.personRepository=personRepository;
+	    this.userRepository=userRepository;
+    }
+
+    @Override
+    public Person findPerson(Long id) {
+        return personRepository.getOne(id);
+    }
+
+    @Override
+    public User findUser(String username) {
+        return userRepository.getOne(username);
+    }
+
+    @Override
 	public void updatePerson(Long id, Person person) {
-		Person dbPerson=repository.getOne(id);
+		Person dbPerson=personRepository.getOne(id);
 		//dbPerson.getPersonDocuments().clear();
 		dbPerson.getPersonSkills().clear();
 		
@@ -89,15 +107,15 @@ public class PersonServiceImpl implements PersonService {
 		dbPerson.setTitle(person.getTitle());
 		dbPerson.setPersonType(person.getPersonType());
 		
-		repository.saveAndFlush(dbPerson);
-		Person savedPerson=repository.getOne(id);
+		personRepository.saveAndFlush(dbPerson);
+		Person savedPerson=personRepository.getOne(id);
 		logger.debug("Person in DB is " + savedPerson.toString());
 	}
 	
 	@Override
 	public PersonDocument save(Long id, String fileName, MultipartFile file) throws Exception {
 		logger.debug("Enter: PersonServiceImpl.save("+id+", "+fileName+", "+file.getName()+")");
-		Person person=repository.getOne(id);
+		Person person=personRepository.getOne(id);
 		Set<PersonDocument> dbPersonDocuments=person.getPersonDocuments();
 		List<PersonDocument> matchedPersonDocuments=dbPersonDocuments.stream().filter(personDocument -> personDocument.getFileName().equals(fileName)).collect(Collectors.toList());
 		PersonDocument document=null;
@@ -113,28 +131,28 @@ public class PersonServiceImpl implements PersonService {
 		document.setUploadTimestamp(new Date());
 		document.setFileSize(Long.valueOf(document.getDocument().length));
 		
-		person=repository.saveAndFlush(person);
+		person=personRepository.saveAndFlush(person);
 		return person.getPersonDocuments().stream().filter(doc -> doc.getFileName().equals(fileName)).findFirst().get();
 	}
 	
 	@Override
 	public PersonDocument getDocument(Long id, Long documentId) throws Exception {
 		logger.debug("Enter: PersonServiceImpl.getDocument("+id+", "+documentId+")");
-		Person person=repository.getOne(id);
+		Person person=personRepository.getOne(id);
 		return person.getPersonDocuments().stream().filter(doc -> doc.getId().equals(documentId)).findFirst().get();
 	}
 	
 	@Override
 	public PersonDocument deleteDocument(Long id, Long documentId) throws Exception {
 		logger.debug("Enter: PersonServiceImpl.deleteDocument("+id+", "+documentId+")");
-		Person person=repository.getOne(id);
+		Person person=personRepository.getOne(id);
 		Optional<PersonDocument> document=person.getPersonDocuments().stream().filter(doc -> doc.getId().equals(documentId)).findFirst();
 		if(!document.isPresent()) {
 			return null;
 		}
 		PersonDocument doc=document.get();
 		person.getPersonDocuments().remove(doc);
-		repository.saveAndFlush(person);
+		personRepository.saveAndFlush(person);
 		return doc;
 	}
 }
