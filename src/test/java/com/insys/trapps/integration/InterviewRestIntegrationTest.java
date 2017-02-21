@@ -10,6 +10,8 @@ import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.insys.trapps.model.interview.*;
+import com.insys.trapps.repository.interview.QuestionRepositoryTests;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,11 +28,7 @@ import com.insys.trapps.model.BusinessType;
 import com.insys.trapps.model.Person;
 import com.insys.trapps.model.PersonType;
 import com.insys.trapps.model.Role;
-import com.insys.trapps.model.interview.Feedback;
-import com.insys.trapps.model.interview.Interview;
 import com.insys.trapps.model.interview.Interview.InterviewBuilder;
-import com.insys.trapps.model.interview.Quality;
-import com.insys.trapps.model.interview.Question;
 import com.insys.trapps.respositories.BusinessRepository;
 import com.insys.trapps.respositories.PersonRepository;
 import com.insys.trapps.respositories.RoleRepository;
@@ -46,6 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
 public class InterviewRestIntegrationTest {
+
 	@Autowired
 	private FeedbackRepository feedbackRepo;
 	@Autowired
@@ -55,7 +54,7 @@ public class InterviewRestIntegrationTest {
 	@Autowired
 	private BusinessRepository businessRepo;
 
-	@Value("${local.server.port}")
+    @Value("${local.server.port}")
 	private int port;
 
 	@Value("${spring.data.rest.basePath}")
@@ -93,6 +92,8 @@ public class InterviewRestIntegrationTest {
 				PersonType.Candidate);
 		personRepo.saveAndFlush(updatedCandidate);
 
+
+
 		feedback = Feedback.builder().comment("Excellent").interviewer(firstInterviewer).build();
 		feedbackRepo.save(feedback);
 
@@ -117,21 +118,6 @@ public class InterviewRestIntegrationTest {
 		assertThat(candidate.getLastName(), equalTo("Candidate Last Name"));
 	}
 
-	@Test
-	public void testUpdateInterviewWithQuestions() {
-		Interview interview = createInterview();
-
-		long id = postRequestForInterview(interview).getInt("id");
-		String[] questionNames = new String[] { "Updated Question 1", "Updated Question 2" };
-		setNewFieldsToInterview(interview, id, questionNames);
-		long updatedId = postRequestForInterview(interview).getInt("id");
-		JsonPath updatedInterview = getRequestForInterview(id);
-
-		assertThat(updatedId, equalTo(id));
-		checkPerson(updatedInterview);
-		checkQuestions(updatedInterview, questionNames);
-	}
-
 	private void checkQuestions(JsonPath updatedInterview, String... questionNames) {
 		List<String> updatedQuestions = getQuestions(updatedInterview);
 		assertThat(updatedQuestions.size(), equalTo(questionNames.length));
@@ -151,10 +137,10 @@ public class InterviewRestIntegrationTest {
 	}
 
 	private void setNewFieldsToInterview(Interview interview, long id, String... questionNames) {
-		Set<Question> questions = createQuestions(questionNames);
+		Set<Answer> answers = createAnswers(questionNames);
 		interview.setId(id);
 		interview.setCandidate(updatedCandidate);
-		interview.setQuestions(questions);
+		interview.setAnswers(answers);
 	}
 
 	private JsonPath postRequestForInterview(Interview interview) {
@@ -178,7 +164,7 @@ public class InterviewRestIntegrationTest {
 
 	private Interview createInterview() {
 		return getInterviewBuilder().interviewers(new HashSet<Person>(Arrays.asList(firstInterviewer, secondInterviewer)))
-				.questions(createQuestions("Question 1", "Question 2", "Question 3"))
+				.answers(createAnswers("Question 1", "Question 2", "Question 3"))
 				.feedbacks(createFeedbacks("Comment 1", "Comment 2", "Comment 3")).build();
 	}
 
@@ -195,9 +181,17 @@ public class InterviewRestIntegrationTest {
 	}
 
 	private Question createQuestion(String question) {
-		return Question.builder().question(question).answer("Answer")
-				.quality(Quality.Excellent).comment("Comment").build();
+		return Question.builder().question(question).build();
 	}
+
+    private Set<Answer> createAnswers(String... answers) {
+        return Arrays.stream(answers).map(this::createAnswer).collect(Collectors.toSet());
+    }
+
+    private Answer createAnswer(String answer) {
+        return Answer.builder().question(createQuestion("q1?")).answer("Answer")
+                .quality(Quality.Excellent).comment("Comment").build();
+    }
 
 	private Set<Feedback> createFeedbacks(String... questions) {
 		return Arrays.stream(questions).map(this::createFeedback).collect(Collectors.toSet());

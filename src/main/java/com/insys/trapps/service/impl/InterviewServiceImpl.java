@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.*;
 
 import com.insys.trapps.model.interview.Feedback;
+import com.insys.trapps.model.interview.InterviewTemplate;
 import com.insys.trapps.respositories.interview.FeedbackRepository;
+import com.insys.trapps.respositories.interview.InterviewTemplateRepository;
 import com.insys.trapps.service.InterviewService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class InterviewServiceImpl implements InterviewService {
     @Autowired
 	private FeedbackRepository feedbackRepository;
 
+    @Autowired
+    private InterviewTemplateRepository interviewTemplateRepository;
+
     private Logger logger = Logger.getLogger(InterviewService.class);
 
     public Interview getInterview(long id) {
@@ -36,6 +41,10 @@ public class InterviewServiceImpl implements InterviewService {
         Feedback existingFeedback = feedbackRepository.findOne(feedback.getId());
         existingFeedback.setComment(feedback.getComment());
         feedbackRepository.saveAndFlush(feedback);
+    }
+
+    public InterviewTemplate getTemplate(long id){
+        return interviewTemplateRepository.findOne(id);
     }
 
 }

@@ -2,6 +2,7 @@ package com.insys.trapps.controllers;
 
 import com.insys.trapps.model.interview.Feedback;
 import com.insys.trapps.model.interview.Interview;
+import com.insys.trapps.model.interview.InterviewTemplate;
 import com.insys.trapps.service.InterviewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,13 @@ public class InterviewController {
     @ResponseStatus(HttpStatus.OK)
     public void updateFeedback(@RequestBody Feedback feedback) {
         interviewService.updateFeedback(feedback);
+    }
+
+    @GetMapping(value = "/interviewTemplates/{id}")
+    public ResponseEntity<InterviewTemplate> getInterviewTemplate(@PathVariable("id") Long id) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(interviewService.getTemplate(id));
     }
 
 }
