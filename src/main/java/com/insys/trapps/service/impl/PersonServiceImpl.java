@@ -1,11 +1,12 @@
 /**
- *
+ * 
  */
-package com.insys.trapps.service;
+package com.insys.trapps.service.impl;
 
 import com.insys.trapps.model.*;
 import com.insys.trapps.respositories.PersonRepository;
 import com.insys.trapps.respositories.TrainingRepository;
+import com.insys.trapps.service.PersonService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author msabir
+ *
  */
 @Service
 @Transactional

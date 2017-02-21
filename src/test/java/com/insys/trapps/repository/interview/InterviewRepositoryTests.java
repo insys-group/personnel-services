@@ -100,7 +100,7 @@ public class InterviewRepositoryTests {
 	}
 
 	private Interview initInterview() {
-		return Interview.builder().candidate(mockCandidate).date(new Date().getTime()).role(mockRole).build();
+		return Interview.builder().candidate(mockCandidate).date(new Date()).role(mockRole).build();
 	}
 
 	private Business initBusiness() {
