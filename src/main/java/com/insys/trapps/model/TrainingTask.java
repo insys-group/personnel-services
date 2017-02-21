@@ -20,41 +20,35 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "TRAINING_TASK")
-@EqualsAndHashCode(of = {"name","weblink","description"})
+@EqualsAndHashCode(of = {"name", "description", "weblink"})
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @ToString
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
-//@JsonRootName("task")
 @JsonIgnoreProperties({"content", "links"})
 public class TrainingTask implements Serializable {
-	
-	private static final long serialVersionUID = 9124554833641859811L;
-	
-	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+
+    private static final long serialVersionUID = 9124554833641859811L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter
     @Setter
     private Long id;
-	
+
     @Getter
     @Setter
     @Column(nullable = false)
     @NonNull
     private String name;
-	
+
     @Getter
     @Setter
     private String description;
-    
+
     @Getter
     @Setter
     private String weblink;
-    
-    @Getter
-    @Setter
-    @Column(nullable = true)
-    private boolean completed;
-	
+
 }

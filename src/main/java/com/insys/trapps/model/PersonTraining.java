@@ -8,10 +8,12 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "PERSON_TRAINING")
-@EqualsAndHashCode(of = {"training", "person"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"progress", "completedTasks"}, callSuper = false)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @Builder
@@ -53,8 +55,18 @@ public class PersonTraining implements Serializable {
 
     @Getter
     @Setter
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "TRAINING_ID")
     private Training training;
+
+
+    @Getter
+    @Setter
+    @OneToMany(cascade = { CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinTable(name = "PERSON_TRAINING_TASK_COMPLETION"
+            , joinColumns = @JoinColumn(name = "person_training_id", referencedColumnName = "ID")
+            , inverseJoinColumns = @JoinColumn(name = "tasks_id", referencedColumnName = "ID")
+    )
+    private Set<TrainingTask> completedTasks = new HashSet<>();
 
 }

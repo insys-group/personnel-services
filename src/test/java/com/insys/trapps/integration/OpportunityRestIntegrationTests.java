@@ -75,6 +75,7 @@ public class OpportunityRestIntegrationTests {
         .when()
                         .post(basePath + OPP_PATH)
         .then()
+                .log().everything()
                         .statusCode(HttpStatus.CREATED.value())
                         .extract().jsonPath().get("_links.self.href").toString();
 
@@ -92,6 +93,7 @@ public class OpportunityRestIntegrationTests {
         .when()
                 .post(basePath + OPP_STEP_PATH)
         .then()
+                .log().everything()
                 .statusCode(HttpStatus.CREATED.value());
 
   /*      given()

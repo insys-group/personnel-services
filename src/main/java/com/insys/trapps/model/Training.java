@@ -64,10 +64,5 @@ public class Training implements Serializable {
 	)
 	private Set<TrainingTask> tasks = new HashSet<>();
 
-	@Getter
-	@Setter
-	@OneToMany(mappedBy = "training", cascade = CascadeType.MERGE)
-	private Set<PersonTraining> personTrainings = new HashSet<>();
-
 
 }

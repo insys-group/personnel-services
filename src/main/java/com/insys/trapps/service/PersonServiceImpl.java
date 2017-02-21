@@ -3,24 +3,18 @@
  */
 package com.insys.trapps.service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import com.insys.trapps.model.Training;
+import com.insys.trapps.model.*;
 import com.insys.trapps.respositories.TrainingRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.insys.trapps.model.Address;
-import com.insys.trapps.model.Person;
-import com.insys.trapps.model.PersonDocument;
 import com.insys.trapps.respositories.PersonRepository;
 
 /**
@@ -29,8 +23,11 @@ import com.insys.trapps.respositories.PersonRepository;
 @Service
 @Transactional
 public class PersonServiceImpl implements PersonService {
+
     @Autowired
     private PersonRepository repository;
+    @Autowired
+    private TrainingRepository trainingRepository;
 
     private Logger logger = Logger.getLogger(PersonService.class);
 
@@ -64,8 +61,21 @@ public class PersonServiceImpl implements PersonService {
         if (person.getPersonTrainings() != null) {
             person.getPersonTrainings().forEach(personTraining -> {
                 personTraining.setPerson(dbPerson);
+//TODO Implement adding of CompletedTask to personTrainings
+//                Long trainingId = personTraining.getTraining().getId();
+//                Training dbTraining = trainingRepository.findOne(trainingId);
+//                personTraining.setTraining(dbTraining);
+//                Set<TrainingTask> tasks = dbTraining.getTasks();
+//                personTraining.setCompletedTasks(personTraining.getCompletedTasks().stream()
+//                        .map(completedTask -> tasks.stream()
+//                                .filter(task -> task.getId().equals(completedTask.getId())).findFirst().get())
+//                        .collect(Collectors.toSet()));
+
                 dbPerson.getPersonTrainings().add(personTraining);
+
             });
+
+
         }
 
         logger.debug("Address is " + (dbPerson.getAddress() == null ? "address is null" : dbPerson.getAddress().toString()));
@@ -78,6 +88,15 @@ public class PersonServiceImpl implements PersonService {
         dbPerson.setPersonType(person.getPersonType());
 
         Person savedPerson = repository.saveAndFlush(dbPerson);
+
+        for (PersonTraining dbPersonTraining : savedPerson.getPersonTrainings()) {
+            Set<TrainingTask> dbCompletedTasks =
+                    (dbPersonTraining.getCompletedTasks() == null) ? new HashSet<>() : dbPersonTraining.getCompletedTasks();
+            person.getPersonTrainings().stream()
+                    .filter(personTraining -> personTraining.getId().equals(dbPersonTraining.getId()))
+                    .findAny().ifPresent(personTraining -> dbCompletedTasks.addAll(personTraining.getCompletedTasks()));
+        }
+
         logger.debug("Person in DB is " + savedPerson.toString());
     }
 
@@ -127,8 +146,13 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person savePerson(Person person) {
-        if (person.getPersonTrainings()!=null) {
-            person.getPersonTrainings().forEach(personTraining -> personTraining.setPerson(person));
+        if (person.getPersonTrainings() != null) {
+            person.getPersonTrainings().forEach(personTraining -> {
+                personTraining.setPerson(person);
+                Long trainingId = personTraining.getTraining().getId();
+                Training dbTraining = trainingRepository.findOne(trainingId);
+                personTraining.setTraining(dbTraining);
+            });
         }
         return repository.saveAndFlush(person);
     }

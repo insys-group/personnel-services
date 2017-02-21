@@ -95,6 +95,6 @@ public class Person implements Serializable {
 	@Setter
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
 	@JsonManagedReference ("person-training")
-	private List<PersonTraining> personTrainings = new ArrayList<>();
+	private Set<PersonTraining> personTrainings = new HashSet<>();
 
 }

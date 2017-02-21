@@ -9,6 +9,8 @@ import com.insys.trapps.respositories.PersonRepository;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.with;
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.*;
@@ -147,21 +150,20 @@ public class PersonRestIntegrationTests {
         Person person = postPersonRequest(personWithTraining);
 
         with()
+                .contentType("application/x-spring-data-verbose+json")
                 .get(basePath + PERSON_PATH + "/" + person.getId())
-        .then()
+                .then()
                 .log().everything()
         .assertThat()
                 .body("personTrainings._links.training", hasSize(1))
-                .body("personTrainings._links.training.href", hasItems(endsWith(savedTraining.getId().toString())));
+                .body("personTrainings._links.training.href", linksToIdOf(savedTraining));
 
     }
 
     @Test
     public void testUpdatePersonWithTraining() {
         Training firstTraining = postTrainingRequest(createTraining("First Test Training"));
-        Person personWithTraining = createPersonWithTraining(firstTraining);
-        Person savedPerson = postPersonRequest(personWithTraining);
-        getPersonRequest(savedPerson);
+        Person savedPerson = postPersonRequest(createPersonWithTraining(firstTraining));
         Training newTraining = postTrainingRequest(createTraining("Second Test Training"));
         PersonTraining newPersonTraining = createPersonTraining(savedPerson, newTraining);
         savedPerson.getPersonTrainings().add(newPersonTraining);
@@ -170,14 +172,37 @@ public class PersonRestIntegrationTests {
                 .contentType("application/json")
                 .body(savedPerson)
                 .log().everything()
-        .when()
+                .when()
                 .put(basePath + PERSON_PATH + "/put/" + savedPerson.getId())
-        .then()
+                .then()
                 .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
 
         Person response = getPersonRequest(savedPerson);
 
         assertThat(response.getPersonTrainings(), hasSize(2));
+    }
+
+    @Test
+    public void testUpdateTaskCompletion() {
+        Training firstTraining = postTrainingRequest(createTraining("First Test Training"));
+        Person savedPerson = postPersonRequest(createPersonWithTraining(firstTraining));
+        PersonTraining personTraining = savedPerson.getPersonTrainings().stream().findAny().get();
+        TrainingTask trainingTask = personTraining.getTraining().getTasks().stream().findAny().get();
+        personTraining.setCompletedTasks(new HashSet<>(singletonList(trainingTask)));
+
+        given()
+                .contentType("application/json")
+                .body(savedPerson)
+                .log().everything()
+                .when()
+                .put(basePath + PERSON_PATH + "/put/" + savedPerson.getId())
+                .then()
+                .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
+
+        Person response = getPersonRequest(savedPerson);
+
+        Set<TrainingTask> completedTasks = response.getPersonTrainings().stream().findFirst().get().getCompletedTasks();
+        assertThat(completedTasks, contains(trainingTask));
     }
 
     @Test
@@ -244,7 +269,7 @@ public class PersonRestIntegrationTests {
                 .personType(PersonType.Employee).business(business).email("omar@insys.com")
                 .build();
         PersonTraining personTraining = createPersonTraining(person, training);
-        person.setPersonTrainings(Collections.singletonList(personTraining));
+        person.setPersonTrainings(new HashSet<>(singletonList(personTraining)));
         return person;
     }
 
@@ -270,7 +295,7 @@ public class PersonRestIntegrationTests {
 
     private Set<TrainingTask> createTasks(String... taskNames) {
         return Arrays.stream(taskNames)
-                .map(name -> TrainingTask.builder().name(name).description("Spring training tasks").completed(false)
+                .map(name -> TrainingTask.builder().name(name).description("Spring training tasks")
                         .weblink("localhost").build())
                 .collect(Collectors.toSet());
     }
@@ -281,5 +306,9 @@ public class PersonRestIntegrationTests {
 
     private long createEndDate() {
         return LocalDate.of(2017, Month.JANUARY, 31).toEpochDay();
+    }
+
+    private Matcher<Iterable<String>> linksToIdOf(Training savedTraining) {
+        return hasItems(endsWith(savedTraining.getId().toString()));
     }
 }

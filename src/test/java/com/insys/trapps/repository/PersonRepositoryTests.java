@@ -3,23 +3,12 @@
  */
 package com.insys.trapps.repository;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javax.transaction.Transactional;
-
+import com.insys.trapps.TrappsApiApplication;
+import com.insys.trapps.model.*;
+import com.insys.trapps.respositories.BusinessRepository;
+import com.insys.trapps.respositories.PersonRepository;
 import com.insys.trapps.respositories.TrainingRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -29,22 +18,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.insys.trapps.TrappsApiApplication;
-import com.insys.trapps.model.Address;
-import com.insys.trapps.model.Business;
-import com.insys.trapps.model.BusinessType;
-import com.insys.trapps.model.Person;
-import com.insys.trapps.model.PersonDocument;
-import com.insys.trapps.model.PersonSkill;
-import com.insys.trapps.model.PersonTraining;
-import com.insys.trapps.model.PersonType;
-import com.insys.trapps.model.ProgressType;
-import com.insys.trapps.model.Training;
-import com.insys.trapps.model.TrainingTask;
-import com.insys.trapps.respositories.BusinessRepository;
-import com.insys.trapps.respositories.PersonRepository;
+import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import lombok.extern.slf4j.Slf4j;
+import static java.util.Collections.singletonList;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.junit.Assert.*;
 
 /**
  * @author msabir
@@ -82,7 +66,7 @@ public class PersonRepositoryTests {
 			business=Business.builder().name("Test Business").businessType(BusinessType.INSYS).description("Test Business").build();
 			business=businessRepository.saveAndFlush(business);
 			log.debug("The Id is " + business.getId());
-			businessRepository.findAll().stream().forEach(bus -> log.debug("Business created is " + bus.getId()));
+			businessRepository.findAll().forEach(bus -> log.debug("Business created is " + bus.getId()));
 		}
 	}
 
@@ -137,18 +121,10 @@ public class PersonRepositoryTests {
 	
 	@Test
 	public void testUpdatePersonWithTraining() {
-		Person person=Person.builder().firstName("Omar").lastName("Sabir")
-				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
-				.build();
-		Training training = initTraining("Test Training");
-		trainingRepository.saveAndFlush(training);
-		PersonTraining personTraining = initPersonTraining(person, training);
-		person.setPersonTrainings(asList(personTraining));
-		person=repository.saveAndFlush(person);
-		assertNotNull(person.getId());
+		Person person = persistPersonWithTraining();
 		
 		PersonTraining anotherPersonTraining = initPersonTraining(person, initTraining("Another Training"));
-		addPersonTraining(person, anotherPersonTraining);
+		person.getPersonTrainings().add(anotherPersonTraining);
 
 		person = repository.saveAndFlush(person);
 		
@@ -270,6 +246,24 @@ public class PersonRepositoryTests {
 			assertNotNull(personDocument.getId());
 			log.debug("Document is " + personDocument.toString());
 		});
+	}
+
+	@Test
+	public void testUpdateTaskCompletion() {
+		Person person = persistPersonWithTraining();
+
+		PersonTraining personTraining = person.getPersonTrainings().iterator().next();
+		Set<TrainingTask> tasks = personTraining.getTraining().getTasks();
+
+		TrainingTask completedTask = tasks.stream().findAny().get();
+
+		personTraining.setCompletedTasks(new HashSet<>(singletonList(completedTask)));
+
+		person = repository.saveAndFlush(person);
+
+		Person savedPerson = repository.getOne(person.getId());
+		Set<TrainingTask> savedCompletedTasks = savedPerson.getPersonTrainings().iterator().next().getCompletedTasks();
+		assertThat(savedCompletedTasks, contains(completedTask));
 	}
 
 	@Test
@@ -406,15 +400,20 @@ public class PersonRepositoryTests {
 		assertNull(person.getAddress());
 	}
 
-	private List<String> assoicatedTrainingNames(Person person) {
-		return person.getPersonTrainings().stream().map(PersonTraining::getTraining).map(Training::getName).collect(Collectors.toList());
+	private Person persistPersonWithTraining() {
+		Person person=Person.builder().firstName("Omar").lastName("Sabir")
+				.personType(PersonType.Candidate).business(business).email("omar@insys.com")
+				.build();
+		Training training = initTraining("Test Training");
+		trainingRepository.saveAndFlush(training);
+		PersonTraining personTraining = initPersonTraining(person, training);
+		person.setPersonTrainings(new HashSet<>(singletonList(personTraining)));
+		person=repository.saveAndFlush(person);
+		return person;
 	}
 
-	private void addPersonTraining(Person person, PersonTraining anotherPersonTraining) {
-		//New array list was created because person.getPersonTrainings() return AbstractList
-		ArrayList<PersonTraining> savedPersonTrainings = new ArrayList<>(person.getPersonTrainings());
-		savedPersonTrainings.add(anotherPersonTraining);
-		person.setPersonTrainings(savedPersonTrainings);
+	private List<String> assoicatedTrainingNames(Person person) {
+		return person.getPersonTrainings().stream().map(PersonTraining::getTraining).map(Training::getName).collect(Collectors.toList());
 	}
 
 	private PersonTraining initPersonTraining(Person person, Training training) {
@@ -430,11 +429,11 @@ public class PersonRepositoryTests {
 				.name(name)
 				.online(true)
 				.build();
-		training.setTasks(initTasks(training,"Test Task 1", "Test Task 2"));
+		training.setTasks(initTasks("Test Task 1", "Test Task 2"));
 		return training;
 	}
 
-	private Set<TrainingTask> initTasks(Training training, String... taskNames) {
+	private Set<TrainingTask> initTasks(String... taskNames) {
 		return Arrays.stream(taskNames)
 				.map(name -> TrainingTask.builder().name(name).build())
 				.collect(Collectors.toSet());
