@@ -172,10 +172,10 @@ public class PersonRestIntegrationTests {
                 .contentType("application/json")
                 .body(savedPerson)
                 .log().everything()
-                .when()
+        .when()
                 .put(basePath + PERSON_PATH + "/put/" + savedPerson.getId())
                 .then()
-                .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
+        .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
 
         Person response = getPersonRequest(savedPerson);
 
@@ -194,9 +194,9 @@ public class PersonRestIntegrationTests {
                 .contentType("application/json")
                 .body(savedPerson)
                 .log().everything()
-                .when()
+        .when()
                 .put(basePath + PERSON_PATH + "/put/" + savedPerson.getId())
-                .then()
+        .then()
                 .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
 
         Person response = getPersonRequest(savedPerson);
@@ -222,7 +222,7 @@ public class PersonRestIntegrationTests {
     private Person getPersonRequest(Person person) {
         return with()
                 .get(basePath + PERSON_PATH + "/" + person.getId())
-                .then()
+        .then()
                 .log().everything()
                 .extract().as(Person.class);
     }
@@ -232,10 +232,10 @@ public class PersonRestIntegrationTests {
                 given()
                         .contentType("application/json")
                         .body(person)
-                        .when()
+                .when()
                         .log().everything()
                         .post(basePath + PERSON_PATH)
-                        .then()
+                .then()
                         .statusCode(HttpStatus.CREATED.value())
                         .extract().as(Person.class);
     }

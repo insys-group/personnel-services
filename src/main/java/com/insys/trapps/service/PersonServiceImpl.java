@@ -3,19 +3,20 @@
  */
 package com.insys.trapps.service;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javax.transaction.Transactional;
-
 import com.insys.trapps.model.*;
+import com.insys.trapps.respositories.PersonRepository;
 import com.insys.trapps.respositories.TrainingRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.insys.trapps.respositories.PersonRepository;
+import javax.transaction.Transactional;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author msabir
@@ -61,21 +62,8 @@ public class PersonServiceImpl implements PersonService {
         if (person.getPersonTrainings() != null) {
             person.getPersonTrainings().forEach(personTraining -> {
                 personTraining.setPerson(dbPerson);
-//TODO Implement adding of CompletedTask to personTrainings
-//                Long trainingId = personTraining.getTraining().getId();
-//                Training dbTraining = trainingRepository.findOne(trainingId);
-//                personTraining.setTraining(dbTraining);
-//                Set<TrainingTask> tasks = dbTraining.getTasks();
-//                personTraining.setCompletedTasks(personTraining.getCompletedTasks().stream()
-//                        .map(completedTask -> tasks.stream()
-//                                .filter(task -> task.getId().equals(completedTask.getId())).findFirst().get())
-//                        .collect(Collectors.toSet()));
-
                 dbPerson.getPersonTrainings().add(personTraining);
-
             });
-
-
         }
 
         logger.debug("Address is " + (dbPerson.getAddress() == null ? "address is null" : dbPerson.getAddress().toString()));
@@ -89,13 +77,9 @@ public class PersonServiceImpl implements PersonService {
 
         Person savedPerson = repository.saveAndFlush(dbPerson);
 
-        for (PersonTraining dbPersonTraining : savedPerson.getPersonTrainings()) {
-            Set<TrainingTask> dbCompletedTasks =
-                    (dbPersonTraining.getCompletedTasks() == null) ? new HashSet<>() : dbPersonTraining.getCompletedTasks();
-            person.getPersonTrainings().stream()
-                    .filter(personTraining -> personTraining.getId().equals(dbPersonTraining.getId()))
-                    .findAny().ifPresent(personTraining -> dbCompletedTasks.addAll(personTraining.getCompletedTasks()));
-        }
+        updateCompletedTasks(person, savedPerson);
+
+        repository.saveAndFlush(savedPerson);
 
         logger.debug("Person in DB is " + savedPerson.toString());
     }
@@ -117,7 +101,7 @@ public class PersonServiceImpl implements PersonService {
         document.setFileName(fileName);
         document.setPerson(person);
         document.setUploadTimestamp(new Date());
-        document.setFileSize(Long.valueOf(document.getDocument().length));
+        document.setFileSize((long) document.getDocument().length);
 
         person = repository.saveAndFlush(person);
         return person.getPersonDocuments().stream().filter(doc -> doc.getFileName().equals(fileName)).findFirst().get();
@@ -155,5 +139,27 @@ public class PersonServiceImpl implements PersonService {
             });
         }
         return repository.saveAndFlush(person);
+    }
+
+    private void updateCompletedTasks(Person person, Person savedPerson) {
+        Set<TrainingTask> allPersonTasks = savedPerson.getPersonTrainings().stream()
+                .flatMap(personTraining -> personTraining.getTraining().getTasks().stream())
+                .collect(Collectors.toSet());
+
+        for (PersonTraining dbPersonTraining : savedPerson.getPersonTrainings()) {
+            if (person.getPersonTrainings() != null) {
+                person.getPersonTrainings().stream()
+                        .filter(dbPersonTraining::equals)
+                        .forEach(personTraining -> {
+                            Set<TrainingTask> dbTrainingTasks = allPersonTasks.stream()
+                                    .filter(personTask -> {
+                                        Set<TrainingTask> completedTasks = personTraining.getCompletedTasks();
+                                        return completedTasks != null && completedTasks.stream().map(TrainingTask::getId).collect(Collectors.toList()).contains(personTask.getId());
+                                    })
+                                    .collect(Collectors.toSet());
+                            dbPersonTraining.getCompletedTasks().addAll(dbTrainingTasks);
+                        });
+            }
+        }
     }
 }

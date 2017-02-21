@@ -57,11 +57,7 @@ public class Training implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToMany(cascade = { CascadeType.ALL}, fetch = FetchType.EAGER)
-	@JoinTable(name = "TRAINING_TASKS"
-			, joinColumns = @JoinColumn(name = "training_id", referencedColumnName = "ID")
-			, inverseJoinColumns = @JoinColumn(name = "tasks_id", referencedColumnName = "ID")
-	)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true, targetEntity = TrainingTask.class)
 	private Set<TrainingTask> tasks = new HashSet<>();
 
 
