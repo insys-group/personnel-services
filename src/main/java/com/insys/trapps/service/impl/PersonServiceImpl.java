@@ -1,9 +1,12 @@
 /**
- * 
+ *
  */
 package com.insys.trapps.service.impl;
 
-import com.insys.trapps.model.*;
+import com.insys.trapps.model.Address;
+import com.insys.trapps.model.Person;
+import com.insys.trapps.model.PersonDocument;
+import com.insys.trapps.model.PersonTraining;
 import com.insys.trapps.respositories.PersonRepository;
 import com.insys.trapps.respositories.TrainingRepository;
 import com.insys.trapps.service.PersonService;
@@ -13,15 +16,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 
 /**
  * @author msabir
- *
  */
 @Service
 @Transactional
@@ -60,13 +63,7 @@ public class PersonServiceImpl implements PersonService {
             dbPerson.setAddress(person.getAddress());
         }
 
-        dbPerson.getPersonTrainings().clear();
-        if (person.getPersonTrainings() != null) {
-            person.getPersonTrainings().forEach(personTraining -> {
-                personTraining.setPerson(dbPerson);
-                dbPerson.getPersonTrainings().add(personTraining);
-            });
-        }
+        updatePersonTrainings(person, dbPerson);
 
         logger.debug("Address is " + (dbPerson.getAddress() == null ? "address is null" : dbPerson.getAddress().toString()));
         dbPerson.setBusiness(person.getBusiness());
@@ -78,10 +75,6 @@ public class PersonServiceImpl implements PersonService {
         dbPerson.setPersonType(person.getPersonType());
 
         Person savedPerson = repository.saveAndFlush(dbPerson);
-
-        updateCompletedTasks(person, savedPerson);
-
-        repository.saveAndFlush(savedPerson);
 
         logger.debug("Person in DB is " + savedPerson.toString());
     }
@@ -130,38 +123,38 @@ public class PersonServiceImpl implements PersonService {
         return doc;
     }
 
-    @Override
-    public Person savePerson(Person person) {
-        if (person.getPersonTrainings() != null) {
-            person.getPersonTrainings().forEach(personTraining -> {
-                personTraining.setPerson(person);
-                Long trainingId = personTraining.getTraining().getId();
-                Training dbTraining = trainingRepository.findOne(trainingId);
-                personTraining.setTraining(dbTraining);
+    private void updatePersonTrainings(Person person, Person dbPerson) {
+        Set<PersonTraining> personTrainings = person.getPersonTrainings();
+        if (personTrainings == null) {
+            return;
+        }
+        Function<PersonTraining, Boolean> isNewPersonTraining = personTraining -> personTraining.getId() == null;
+        Map<Boolean, List<PersonTraining>> personTrainingsIsNew = personTrainings.stream()
+                .collect(Collectors.groupingBy(isNewPersonTraining));
+
+        List<PersonTraining> newPersonTrainings = personTrainingsIsNew.get(TRUE);
+        if (newPersonTrainings != null) {
+            newPersonTrainings.forEach(newPersonTraining -> {
+                newPersonTraining.setPerson(dbPerson);
+                dbPerson.getPersonTrainings().add(newPersonTraining);
             });
         }
-        return repository.saveAndFlush(person);
-    }
 
-    private void updateCompletedTasks(Person person, Person savedPerson) {
-        Set<TrainingTask> allPersonTasks = savedPerson.getPersonTrainings().stream()
-                .flatMap(personTraining -> personTraining.getTraining().getTasks().stream())
-                .collect(Collectors.toSet());
-
-        for (PersonTraining dbPersonTraining : savedPerson.getPersonTrainings()) {
-            if (person.getPersonTrainings() != null) {
-                person.getPersonTrainings().stream()
-                        .filter(dbPersonTraining::equals)
-                        .forEach(personTraining -> {
-                            Set<TrainingTask> dbTrainingTasks = allPersonTasks.stream()
-                                    .filter(personTask -> {
-                                        Set<TrainingTask> completedTasks = personTraining.getCompletedTasks();
-                                        return completedTasks != null && completedTasks.stream().map(TrainingTask::getId).collect(Collectors.toList()).contains(personTask.getId());
-                                    })
-                                    .collect(Collectors.toSet());
-                            dbPersonTraining.getCompletedTasks().addAll(dbTrainingTasks);
-                        });
-            }
+        List<PersonTraining> savedPersonTrainings = personTrainingsIsNew.get(FALSE);
+        if (savedPersonTrainings != null) {
+            savedPersonTrainings.forEach(personTraining ->
+                    dbPerson.getPersonTrainings().stream()
+                            .filter(dbPersonTraining -> personTraining.getId().equals(dbPersonTraining.getId()))
+                            .findFirst().ifPresent(dbPersonTraining -> {
+                                dbPersonTraining.setStartDate(personTraining.getStartDate());
+                                dbPersonTraining.setEndDate(personTraining.getEndDate());
+                                dbPersonTraining.setProgress(personTraining.getProgress());
+                                dbPersonTraining.getCompletedTasks().clear();
+                                dbPersonTraining.getCompletedTasks().addAll(personTraining.getCompletedTasks());
+                            }
+                    )
+            );
         }
+
     }
 }

@@ -38,14 +38,6 @@ public class PersonController {
 		logger.debug("Person to be saved is " + person.toString());
 		service.updatePerson(id, person);
 	}
-
-	@PostMapping(value = "/persons")
-	@ResponseStatus(HttpStatus.CREATED)
-	public @ResponseBody Person savePerson(@RequestBody Person person) {
-		logger.debug("Enter: PersonPutController.savePerson()");
-		logger.debug("Person to be saved is " + person.toString());
-		return service.savePerson(person);
-	}
 	
 	@PostMapping(value="/persondocuments/{id}/documents")
     public ResponseEntity<Resource<PersonDocument>> handleFileUpload(

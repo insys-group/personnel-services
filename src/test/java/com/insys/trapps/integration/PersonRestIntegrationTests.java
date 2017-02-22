@@ -7,7 +7,7 @@ import com.insys.trapps.model.*;
 import com.insys.trapps.respositories.BusinessRepository;
 import com.insys.trapps.respositories.PersonRepository;
 import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.response.Response;
+import com.jayway.restassured.response.ValidatableResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -23,17 +23,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.with;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
 
 /**
  * @author msabir
@@ -71,10 +72,7 @@ public class PersonRestIntegrationTests {
 
     @Test
     public void testCreatePerson() throws Exception {
-        Person person = Person.builder().firstName("Omar").lastName("Sabir")
-                .personType(PersonType.Candidate).business(business)
-                .email("omar@insys.com")
-                .build();
+        Person person = personBuilder().build();
         given()
                 .contentType("application/json")
                 .body(person)
@@ -88,13 +86,7 @@ public class PersonRestIntegrationTests {
 
     @Test
     public void testCreatePersonWithSkills() {
-        Set<PersonSkill> personSkills = new HashSet<>();
-        personSkills.add(PersonSkill.builder().name("Spring").scale(8).build());
-        personSkills.add(PersonSkill.builder().name("JPA").scale(8).build());
-        Person person = Person.builder().firstName("Omar").lastName("Sabir")
-                .personType(PersonType.Candidate).business(business).email("omar@insys.com")
-                .personSkills(personSkills)
-                .build();
+        Person person = createPersonWithSkills();
         given()
                 .contentType("application/json")
                 .body(person)
@@ -120,22 +112,10 @@ public class PersonRestIntegrationTests {
                 s.setId(null);
             }
         });
-        person.getBusiness().setDescription("TestingBusinessUpdate");
-        given()
-                .contentType("application/json")
-                .body(person)
-                .log().everything()
-        .when()
-                .put(basePath + PERSON_PATH + "/put/" + person.getId())
-        .then()
-                .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
 
-        with()
-                .contentType("application/json")
-        .when()
-                .get(basePath + PERSON_PATH + "/" + person.getId())
-        .then()
-                .log().everything()
+        putPersonRequest(person);
+
+        getPersonRequest(person)
                 .statusCode(HttpStatus.OK.value())
         .assertThat()
                 .body("personSkills", hasSize(3))
@@ -146,63 +126,54 @@ public class PersonRestIntegrationTests {
     @Test
     public void testCreatePersonWithTraining() {
         Training savedTraining = postTrainingRequest(createTraining("Test Training"));
-        Person personWithTraining = createPersonWithTraining(savedTraining);
-        Person person = postPersonRequest(personWithTraining);
+        Person savedPerson = postPersonRequest(personBuilder().build());
+        savedPerson.setPersonTrainings(createPersonTrainings(savedPerson, savedTraining));
 
-        with()
-                .contentType("application/x-spring-data-verbose+json")
-                .get(basePath + PERSON_PATH + "/" + person.getId())
-                .then()
-                .log().everything()
+        putPersonRequest(savedPerson);
+
+        getPersonRequest(savedPerson)
         .assertThat()
                 .body("personTrainings._links.training", hasSize(1))
                 .body("personTrainings._links.training.href", linksToIdOf(savedTraining));
-
     }
 
     @Test
     public void testUpdatePersonWithTraining() {
-        Training firstTraining = postTrainingRequest(createTraining("First Test Training"));
-        Person savedPerson = postPersonRequest(createPersonWithTraining(firstTraining));
+        Training savedTraining = postTrainingRequest(createTraining("Test Training"));
+        Person person = postPersonRequest(personBuilder().build());
+        person.setPersonTrainings(createPersonTrainings(person, savedTraining));
+        putPersonRequest(person);
+        Person savedPerson = getPersonRequestAs(person);
         Training newTraining = postTrainingRequest(createTraining("Second Test Training"));
-        PersonTraining newPersonTraining = createPersonTraining(savedPerson, newTraining);
-        savedPerson.getPersonTrainings().add(newPersonTraining);
+        Set<PersonTraining> newPersonTraining = createPersonTrainings(savedPerson, newTraining);
+        savedPerson.getPersonTrainings().addAll(newPersonTraining);
 
-        given()
-                .contentType("application/json")
-                .body(savedPerson)
-                .log().everything()
-        .when()
-                .put(basePath + PERSON_PATH + "/put/" + savedPerson.getId())
-                .then()
-        .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
+        putPersonRequest(savedPerson);
 
-        Person response = getPersonRequest(savedPerson);
 
-        assertThat(response.getPersonTrainings(), hasSize(2));
+        getPersonRequest(person)
+        .assertThat()
+                .body("personTrainings", hasSize(2)).and()
+                .body("personTrainings._links.training.href", linksToIdOf(savedTraining, newTraining));
     }
 
     @Test
     public void testUpdateTaskCompletion() {
-        Training firstTraining = postTrainingRequest(createTraining("First Test Training"));
-        Person savedPerson = postPersonRequest(createPersonWithTraining(firstTraining));
+        Training savedTraining = postTrainingRequest(createTraining("Test Training"));
+        Person savedPerson = postPersonRequest(personBuilder().build());
+        Set<PersonTraining> personTrainings = createPersonTrainings(savedPerson, savedTraining);
+        savedPerson.setPersonTrainings(personTrainings);
+        putPersonRequest(savedPerson);
+        savedPerson = getPersonRequestAs(savedPerson);
         PersonTraining personTraining = savedPerson.getPersonTrainings().stream().findAny().get();
-        TrainingTask trainingTask = personTraining.getTraining().getTasks().stream().findAny().get();
+        TrainingTask trainingTask = savedTraining.getTasks().stream().findAny().get();
         personTraining.setCompletedTasks(new HashSet<>(singletonList(trainingTask)));
 
-        given()
-                .contentType("application/json")
-                .body(savedPerson)
-                .log().everything()
-        .when()
-                .put(basePath + PERSON_PATH + "/put/" + savedPerson.getId())
-        .then()
-                .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
+        putPersonRequest(savedPerson);
 
-        Person response = getPersonRequest(savedPerson);
-
-        Set<TrainingTask> completedTasks = response.getPersonTrainings().stream().findFirst().get().getCompletedTasks();
-        assertThat(completedTasks, contains(trainingTask));
+        getPersonRequest(savedPerson)
+        .assertThat()
+                .body("personTrainings.completedTasks.name", contains(contains(trainingTask.getName())));
     }
 
     @Test
@@ -219,12 +190,16 @@ public class PersonRestIntegrationTests {
         assertNull(person);
     }
 
-    private Person getPersonRequest(Person person) {
+    private Person getPersonRequestAs(Person person) {
+        return getPersonRequest(person)
+                .extract().as(Person.class);
+    }
+
+    private ValidatableResponse getPersonRequest(Person person) {
         return with()
                 .get(basePath + PERSON_PATH + "/" + person.getId())
         .then()
-                .log().everything()
-                .extract().as(Person.class);
+                .log().everything();
     }
 
     private Person postPersonRequest(Person person) {
@@ -240,6 +215,17 @@ public class PersonRestIntegrationTests {
                         .extract().as(Person.class);
     }
 
+    private void putPersonRequest(Person savedPerson) {
+        given()
+                .contentType("application/json")
+                .body(savedPerson)
+                .log().everything()
+        .when()
+                .put(basePath + PERSON_PATH + "/put/" + savedPerson.getId())
+        .then()
+                .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
+    }
+
     private Training postTrainingRequest(Training training) {
         return
                 given()
@@ -253,33 +239,26 @@ public class PersonRestIntegrationTests {
                         .extract().as(Training.class);
     }
 
-    public Person createPersonWithSkills() {
+    private Person.PersonBuilder personBuilder() {
+        return Person.builder().firstName("Omar").lastName("Sabir")
+                .personType(PersonType.Employee).business(business).email("omar@insys.com");
+    }
+
+    private Person createPersonWithSkills() {
         Set<PersonSkill> personSkills = new HashSet<>();
         personSkills.add(PersonSkill.builder().name("Spring").scale(8).build());
         personSkills.add(PersonSkill.builder().name("JPA").scale(8).build());
-        return Person.builder().firstName("Omar").lastName("Sabir")
-                .personType(PersonType.Candidate).business(business).email("omar@insys.com")
-                .personSkills(personSkills)
-                .build();
+        return personBuilder().personSkills(personSkills).build();
 
     }
 
-    private Person createPersonWithTraining(Training training) {
-        Person person = Person.builder().firstName("Omar").lastName("Sabir")
-                .personType(PersonType.Employee).business(business).email("omar@insys.com")
-                .build();
-        PersonTraining personTraining = createPersonTraining(person, training);
-        person.setPersonTrainings(new HashSet<>(singletonList(personTraining)));
-        return person;
-    }
-
-    private PersonTraining createPersonTraining(Person person, Training training) {
-        return PersonTraining.builder()
+    private Set<PersonTraining> createPersonTrainings(Person person, Training training) {
+        return new HashSet<>(singletonList(PersonTraining.builder()
                 .progress(ProgressType.IN_PROGRESS)
                 .startDate(createStartDate())
                 .endDate(createEndDate())
                 .training(training)
-                .person(person).build();
+                .person(person).build()));
     }
 
     private Training createTraining(String name) {
@@ -308,7 +287,11 @@ public class PersonRestIntegrationTests {
         return LocalDate.of(2017, Month.JANUARY, 31).toEpochDay();
     }
 
-    private Matcher<Iterable<String>> linksToIdOf(Training savedTraining) {
-        return hasItems(endsWith(savedTraining.getId().toString()));
+    private Matcher<Iterable<String>> linksToIdOf(Training... savedTraining) {
+        Matcher[] endsWithTrainingIdMatchers = Arrays.stream(savedTraining)
+                .mapToLong(Training::getId)
+                .mapToObj(Long::toString)
+                .map(Matchers::endsWith).toArray(Matcher[]::new);
+        return hasItems(endsWithTrainingIdMatchers);
     }
 }
