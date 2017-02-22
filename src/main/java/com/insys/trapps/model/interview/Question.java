@@ -35,36 +35,9 @@ public class Question implements Serializable {
 	@Setter
 	private Long id;
 
-	// @Version
-	// @Getter
-	// @Setter
-	// @Column(name = "VERSION")
-	// private Long version;
-	
-    @Getter
-    @Setter
-    @ManyToOne
-    @JoinColumn(name = "INTERVIEW_ID")
-    private Interview interview;
-
 	@Getter
 	@Setter
 	@Column(name = "QUESTION", nullable = false)
 	private String question;
 
-	@Getter
-	@Setter
-	@Column(name = "ANSWER")
-	private String answer;
-
-	@Getter
-	@Setter
-	@Column(name = "COMMENT")
-	private String comment;
-
-	@Getter
-	@Setter
-	@Column(name = "QUALITY")
-	@Enumerated(EnumType.STRING)
-	private Quality quality;
 }

@@ -66,8 +66,9 @@ public class Interview implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToMany(targetEntity = Question.class, cascade = CascadeType.ALL, orphanRemoval=true)
-	private Set<Question> questions;
+	@OneToMany(targetEntity = Answer.class, cascade = CascadeType.ALL, orphanRemoval=true)
+	@OrderBy("QUESTION_ID ASC")
+	private Set<Answer> answers;
 
 	@Getter
 	@Setter
