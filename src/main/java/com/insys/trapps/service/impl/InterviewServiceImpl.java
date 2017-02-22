@@ -26,8 +26,6 @@ public class InterviewServiceImpl implements InterviewService {
     @Autowired
 	private FeedbackRepository feedbackRepository;
 
-    private Logger logger = Logger.getLogger(InterviewService.class);
-
     public Interview getInterview(long id) {
         return interviewRepository.findOne(id);
     }

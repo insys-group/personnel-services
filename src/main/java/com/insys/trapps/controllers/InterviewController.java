@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 public class InterviewController {
 
-    private Logger logger = LoggerFactory.getLogger(PersonController.class);
     @Autowired
     private InterviewService interviewService;
 
