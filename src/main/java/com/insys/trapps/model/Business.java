@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -67,11 +68,6 @@ public class Business implements Serializable {
 
     @Getter
     @Setter
-    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
-    private Set<Opportunity> opportunities;
-
-    @Getter
-    @Setter
     @OneToMany(cascade = { CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinTable(name = "LOCATION"
             , joinColumns = @JoinColumn(name = "BUSINESS_ID", referencedColumnName = "ID")
@@ -82,7 +78,7 @@ public class Business implements Serializable {
 	@Override
 	public String toString() {
 		return "Business [name=" + name + ", description=" + description + ", businessType=" + businessType
-				+ ", persons=" + persons + ", opportunities=" + opportunities + ", addresses=" + addresses
+				+ ", persons=" + persons + ", addresses=" + addresses
 				+ ", getId()=" + getId() + "]";
 	}
 }

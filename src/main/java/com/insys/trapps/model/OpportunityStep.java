@@ -39,12 +39,6 @@ public class OpportunityStep implements Serializable {
     @Setter
     private Long id;
 
-//    @Version
-//    @Getter
-//    @Setter
-//    @Column(name = "VERSION")
-//    private Long version;
-
     @Getter
     @Setter
     @NonNull
@@ -56,18 +50,5 @@ public class OpportunityStep implements Serializable {
     @Setter
     @NonNull
     protected String comments;
-
-    @Getter
-    @Setter
-    @ManyToOne
-    @JoinColumn(name = "OPPORTUNITY_ID", nullable = false)
-    private Opportunity opportunity;
-	
-//	@PrePersist
-//	public void init() {
-//		if(this.version==null) {
-//			this.version=1L;
-//		}
-//	}
 
 }
