@@ -27,7 +27,7 @@ insert into PERSON(id, first_name, last_name , phone, email, title, person_type,
 insert into PERSON(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) values(13, 'Michael', 'Orth', '237-28-3427', 'morth@apptium.com', 'Manager', 'Vendor', 8, 19);
 insert into PERSON(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) values(14, 'Kevin', 'Meloney', '872-28-1297', 'kmulder@comcast.com', 'Manager', 'Client', 9, 15);
 insert into PERSON(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) values(15, 'Chris', 'Umbel', '297-28-1276', 'cumbel@pivotal.com', 'Architect', 'Pivotal', 10, 17);
-insert into PERSON(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) values(16, 'Jhon', 'Snow', '111-11-1111', 'jsnow@gmail.com', 'Developer', 'Candidate', 11, 16);
+insert into PERSON(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) values(16, 'John', 'Snow', '111-11-1111', 'jsnow@gmail.com', 'Developer', 'Candidate', 11, 16);
 
 insert into ROLE(id , name) values(1 , 'Java Developer');
 insert into SKILL(id , name) values(1 , 'Java JDK');
