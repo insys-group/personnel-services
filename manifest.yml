@@ -8,6 +8,6 @@ applications:
   stack: cflinuxfs2
   services:
   - trapps-db
-  routes:
-  - route: trapps-api.api.system.luxoft-pcf.com
+  #routes:
+  #- route: trapps-api.api.system.luxoft-pcf.com
 
