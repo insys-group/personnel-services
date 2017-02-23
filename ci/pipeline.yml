@@ -37,4 +37,4 @@ jobs:
   - task: smoke_test
     file: trapps-api-source/ci/tasks/smoke-test.yml
     params:
-      HEALTH_URL: http://trapps-api.local.pcfdev.io/health
+      HEALTH_URL: http://trapps-api.apps.luxoft-pcf.com/health
