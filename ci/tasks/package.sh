@@ -6,7 +6,8 @@ pushd trapps-api-source
   echo "Packaging JAR"
   ./gradlew clean build -x test
 popd
-
+ls 
+ls ../
 jar_count=`find trapps-api-source/build/libs/ -type f -name *.jar | wc -l`
 
 if [ $jar_count -gt 1 ]; then
