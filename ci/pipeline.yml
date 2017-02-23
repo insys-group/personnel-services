@@ -18,7 +18,6 @@ resources:
   type: s3
   source:
     bucket: pcf-stack2-concoursetrappsbucket
-    regexp: trapps-api/trapps-*.jar
     access_key_id: AKIAIS3Y4EOKVNIAE7OQ
     secret_access_key: 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
 
