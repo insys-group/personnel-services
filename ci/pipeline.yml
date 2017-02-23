@@ -16,20 +16,13 @@ resources:
     skip_cert_check: true
 
 jobs:
-- name: build
+- name: deploy
   public: true
   plan:
   - get: trapps-api-source
     trigger: true
   - task: package
     file: trapps-api-source/ci/tasks/package.yml
-
-- name: deploy
-  public: true
-  plan:
-  - get: trapps-api-source
-    trigger: true
-    passed: [build]
   - put: deploy-trapps-api
     params:
       manifest: trapps-api-source/manifest.yml
