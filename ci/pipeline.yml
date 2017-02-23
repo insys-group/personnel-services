@@ -23,6 +23,8 @@ jobs:
     trigger: true
   - task: package
     file: trapps-api-source/ci/tasks/package.yml
+    params:
+      path: package-output
 
 - name: deploy
   public: true
