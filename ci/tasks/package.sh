@@ -16,8 +16,7 @@ if [ $jar_count -gt 1 ]; then
   exit 1
 fi
 echo "this is the jar count" $jar_count
-#find trapps-api-source/ -type f -name *.jar -exec cp "{}" package-output/trapps-api.jar \;
-find trapps-api-source/ -type f -name *.jar -exec cp "{}" package-output/trapps-api-1.0.jar \;
+find trapps-api-source/ -type f -name *.jar -exec cp "{}" package-output/trapps-api.jar \;
 ls -l package-output
 echo "Done packaging"
 exit 0
