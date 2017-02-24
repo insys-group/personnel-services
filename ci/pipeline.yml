@@ -19,7 +19,7 @@ resources:
   source:
     bucket: pcf-stack2-concoursetrappsbucket
     versioned_file: trapps-api/trapps-api.jar
-    access_key_id: xAKIAIS3Y4EOKVNIAE7OQ
+    access_key_id: AKIAIS3Y4EOKVNIAE7OQ
     secret_access_key: 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
 
 jobs:
