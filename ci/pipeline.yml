@@ -33,7 +33,7 @@ jobs:
   - put: release
     params:
       file: package-output/trapps-api.jar
-      acl: authenticated-read 
+      acl: public-read 
 - name: deploy
   public: true
   plan:
