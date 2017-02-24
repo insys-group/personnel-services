@@ -10,40 +10,23 @@ resources:
   source:
     api: api.system.luxoft-pcf.com
     username: concourse
-    password:
+    password: Pipel1ne@insys
     organization: insys
     space: development
     skip_cert_check: true
-- name: release
-  type: s3
-  source:
-    bucket: pcf-stack2-concoursetrappsbucket
-    versioned_file: trapps-api/trapps-api.jar
-    access_key_id: AKIAIS3Y4EOKVNIAE7OQ
-    secret_access_key: 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
 
 jobs:
-- name: build
+- name: deploy
   public: true
   plan:
   - get: trapps-api-source
     trigger: true
   - task: package
     file: trapps-api-source/ci/tasks/package.yml
-  - put: release
-    params:
-      file: package-output/trapps-api.jar
-      acl: public-read 
-- name: deploy
-  public: true
-  plan:
-  - get: trapps-api-source
-    trigger: false
-    passed: [build]
   - put: deploy-trapps-api
     params:
       manifest: trapps-api-source/manifest.yml
-      path: s3://trapps-api/trapps-api.jar
+      path: package-output/trapps-api.jar
 
 - name: smoke_test
   public: true
@@ -54,4 +37,4 @@ jobs:
   - task: smoke_test
     file: trapps-api-source/ci/tasks/smoke-test.yml
     params:
-      HEALTH_URL: http://trapps-api.local.pcfdev.io/health
+      HEALTH_URL: http://trapps-api.apps.luxoft-pcf.com/health
