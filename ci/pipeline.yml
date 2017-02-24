@@ -32,7 +32,7 @@ jobs:
     file: trapps-api-source/ci/tasks/package.yml
   - put: release
     params:
-      file: package-output/trapps-api.jar
+      file: package-output/trapps-api-1.0.jar
   
 - name: deploy
   public: true
