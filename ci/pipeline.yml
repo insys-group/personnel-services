@@ -18,7 +18,7 @@ resources:
   type: s3
   source:
     bucket: pcf-stack2-concoursetrappsbucket
-    versioned_file: trapps-api.jar
+    versioned_file: trapps-api/trapps-api.jar
     access_key_id: AKIAIS3Y4EOKVNIAE7OQ
     secret_access_key: 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
 
@@ -32,7 +32,7 @@ jobs:
     file: trapps-api-source/ci/tasks/package.yml
   - put: release
     params:
-      file: package-output/trapps-api.jar
+      from: package-output/trapps-api.jar
   
 - name: deploy
   public: true
