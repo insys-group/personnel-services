@@ -9,8 +9,8 @@ resources:
   type: cf
   source:
     api: api.system.luxoft-pcf.com
-    username: concourse
-    password: Pipel1ne@insys
+    username: {{pcf-user}}
+    password: {{pcf-pwd}}
     organization: insys
     space: development
     skip_cert_check: true
