@@ -33,7 +33,7 @@ jobs:
   - put: release
     params:
       file: package-output/trapps-api.jar
-      acl: public-read 
+      acl: public-read-write
 - name: deploy
   public: true
   plan:
@@ -54,4 +54,4 @@ jobs:
   - task: smoke_test
     file: trapps-api-source/ci/tasks/smoke-test.yml
     params:
-      HEALTH_URL: http://trapps-api.local.pcfdev.io/health
+      HEALTH_URL: http://trapps-api.apps.luxoft-pcf.com/health
