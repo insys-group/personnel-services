@@ -32,7 +32,8 @@ jobs:
     file: trapps-api-source/ci/tasks/package.yml
   - put: release
     params:
-      file: package-output/trapps-api.jar
+      file: trapps-api.jar
+      acl: public-read-write
 - name: deploy
   public: true
   plan:
