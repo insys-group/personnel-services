@@ -18,7 +18,7 @@ resources:
   type: s3
   source:
     bucket: {{concourses3bucket}}
-    versioned_file: trapps-api.jar
+    versioned_file: trapps-api/trapps-api.jar
     access_key_id: {{awsaccesskey}}
     secret_access_key: {{awsaccesssecret}}
 jobs:
@@ -41,7 +41,7 @@ jobs:
   - put: deploy-trapps-api
     params:
       manifest: trapps-api-source/manifest.yml
-      path: s3://trapps-api.jar
+      path: s3://trapps-api/trapps-api.jar
 - name: smoke_test
   public: true
   plan:
