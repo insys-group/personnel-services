@@ -21,7 +21,6 @@ resources:
     versioned_file: trapps-api.jar
     access_key_id: {{awsaccesskey}}
     secret_access_key: {{awsaccesssecret}}
-
 jobs:
 - name: build
   public: true
@@ -43,7 +42,6 @@ jobs:
     params:
       manifest: trapps-api-source/manifest.yml
       path: s3://trapps-api.jar
-
 - name: smoke_test
   public: true
   plan:
