@@ -8,17 +8,17 @@ resources:
 - name: deploy-trapps-api
   type: cf
   source:
-    api: api.system.luxoft-pcf.com
+    api: {{pcf-api}}
     username: {{pcf-user}}
     password: {{pcf-pwd}}
-    organization: insys
-    space: development
+    organization: {{pcf-org}}
+    space: {{pcf-space}}
     skip_cert_check: true
 - name: release
   type: s3
   source:
     bucket: {{concourses3bucket}}
-    versioned_file: trapps-api/trapps-api.jar
+    versioned_file: trapps-api.jar
     access_key_id: {{awsaccesskey}}
     secret_access_key: {{awsaccesssecret}}
 
@@ -33,7 +33,6 @@ jobs:
   - put: release
     params:
       file: package-output/trapps-api.jar
-      acl: public-read-write
 - name: deploy
   public: true
   plan:
@@ -43,7 +42,7 @@ jobs:
   - put: deploy-trapps-api
     params:
       manifest: trapps-api-source/manifest.yml
-      path: s3://trapps-api/trapps-api.jar
+      path: s3://trapps-api.jar
 
 - name: smoke_test
   public: true
