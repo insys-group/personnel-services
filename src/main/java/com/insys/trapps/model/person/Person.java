@@ -74,11 +74,6 @@ public class Person implements Serializable {
 
     @Getter
     @Setter
-    @Column(name = "USERNAME", nullable = true)
-    private String username;
-
-    @Getter
-    @Setter
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
     private Set<PersonDocument> personDocuments=new HashSet<>();
     

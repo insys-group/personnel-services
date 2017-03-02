@@ -108,7 +108,7 @@ CREATE TABLE person
 CREATE TABLE person_document
   (
      id               BIGINT auto_increment,
-     document         BLOB NOT NULL,
+     document         LONGBLOB NOT NULL,
      file_name        VARCHAR(255) NOT NULL,
      file_size        BIGINT NOT NULL,
      upload_timestamp TIMESTAMP NOT NULL,

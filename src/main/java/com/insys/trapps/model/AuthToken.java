@@ -63,23 +63,4 @@ public class AuthToken implements Serializable {
 	@Setter
 	private String errorDescription;
 
-	@Getter
-	@Setter
-	private Long id;
-
-	@Getter
-	@Setter
-	private String username;
-
-	@Getter
-	@Setter
-	private String firstName;
-
-	@Getter
-	@Setter
-	private String lastName;
-
-	@Getter
-	@Setter
-	private String authorities;
 }

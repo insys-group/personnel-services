@@ -3,10 +3,7 @@ package com.insys.trapps.controllers.security;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.insys.trapps.model.AuthToken;
-import com.insys.trapps.model.person.Person;
-import com.insys.trapps.model.security.User;
-import com.insys.trapps.respositories.PersonRepository;
-import com.insys.trapps.service.PersonService;
+import com.insys.trapps.model.security.PasswordCredentials;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.Consts;
 import org.apache.http.Header;
@@ -20,14 +17,11 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
@@ -55,17 +49,13 @@ public class LoginController {
 
 	private Header[] headers;
 
-	private PersonService personService;
-
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-    public LoginController(PersonService personService) {
-        this.personService=personService;
-    }
-
     @PostMapping("/restlogin")
-	public ResponseEntity<AuthToken> executeRestLogin2(HttpServletRequest request, @RequestParam String username, @RequestParam String password) {
-	    logger.debug("Enter: LoginController()" + request.getRequestURI() + " " + request.getRequestURL() + " Username " + username + " Password " + password);
+	//public ResponseEntity<AuthToken> executeRestLogin2(HttpServletRequest request, @RequestParam String username, @RequestParam String password) {
+	//    logger.debug("Enter: LoginController()" + request.getRequestURI() + " " + request.getRequestURL() + " Username " + username + " Password " + password);
+	public ResponseEntity<AuthToken> executeRestLogin(HttpServletRequest request, @RequestBody PasswordCredentials passwordCredentials) {
+		logger.debug("Enter: LoginController()" + request.getRequestURI() + " " + request.getRequestURL() + " Username " + passwordCredentials.getUsername() + " Password " + passwordCredentials.getPassword());
 	    String requestURL=request.getRequestURL().toString();
 	    String requestURI=request.getRequestURI();
 	    String authTokenUrl=requestURL.substring(0, requestURL.indexOf(requestURI)) + accessTokenUrl;
@@ -73,7 +63,7 @@ public class LoginController {
         HttpClient httpclient = HttpClientBuilder.create().build();
         
 		HttpPost httppost = new HttpPost(authTokenUrl);
-		httppost.setEntity(createForm(username, password));
+		httppost.setEntity(createForm(passwordCredentials.getUsername(), passwordCredentials.getPassword()));
 		httppost.setHeaders(headers);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -92,7 +82,6 @@ public class LoginController {
 				authToken.setTokenType(authTokenMap.get("token_type"));
                 authToken.setExpiresIn(Long.parseLong(authTokenMap.get("expires_in")));
                 authToken.setScope(authTokenMap.get("scope"));
-                loadPersonDetails(authToken, username);
             } else {
 				authToken.setError(authTokenMap.get("error"));
 				authToken.setErrorDescription(authTokenMap.get("error_description"));
@@ -114,17 +103,6 @@ public class LoginController {
         return new BufferedReader(new InputStreamReader(stream)).lines().collect(Collectors.joining(" "));
     }
 
-	private void loadPersonDetails(AuthToken authToken, String username) {
-        logger.debug("Enter: LoginController.loadPersonDetails" + username);
-        authToken.setUsername(username);
-        User user=personService.findUser(username);
-        authToken.setAuthorities(user.getAuthorities().stream().map(authority->authority.getAuthority()).collect(Collectors.joining(",")));
-        Person person=personService.findPerson(user.getPersonId());
-        authToken.setId(person.getId());
-        authToken.setFirstName(person.getFirstName());
-        authToken.setLastName(person.getLastName());
-    }
-	
 	private UrlEncodedFormEntity createForm(String username, String password) {
 		List<NameValuePair> formParams = new ArrayList<NameValuePair>();
 		formParams.add(new BasicNameValuePair("grant_type", "password"));

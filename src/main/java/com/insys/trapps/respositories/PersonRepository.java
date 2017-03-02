@@ -8,5 +8,4 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @RepositoryRestResource
 @PreAuthorize("hasAuthority('ADMIN')")
 public interface PersonRepository extends JpaRepository<Person, Long> {
-    Person findByUsername(String username);
 }

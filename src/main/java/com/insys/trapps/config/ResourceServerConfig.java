@@ -1,24 +1,18 @@
 package com.insys.trapps.config;
 
+import com.insys.trapps.config.filter.CORSResponseFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.FixedPrincipalExtractor;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.security.Principal;
-import java.util.Map;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 
 /**
  * Created by msabir on 2/9/17.
@@ -26,18 +20,20 @@ import java.util.Map;
 
 @EnableResourceServer
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@RestController
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Value("${spring.data.rest.basePath}")
+    private String restBasePath;
+
+    @Value("${trapps.client-apps}")
+    private String[] clientApp;
+
+
     private TokenStore tokenStore;
-    @RequestMapping("/user")
-    public Principal user(Principal user) {
-        logger.debug("Enter: ResourceServerConfig.user()");
-        return user;
-    }
+
     public ResourceServerConfig(TokenStore tokenStore) {
         this.tokenStore=tokenStore;
     }
@@ -50,19 +46,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
+                .addFilterBefore(new CORSResponseFilter(clientApp), ChannelProcessingFilter.class)
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-                .antMatchers("/restlogin/**").permitAll()
-                .antMatchers("/api/**").fullyAuthenticated()
-                .anyRequest().authenticated();
-
-        /*
-        http
-                .csrf().disable()
-                .cors().and()
-                .authorizeRequests()
-                .antMatchers("/api/**").fullyAuthenticated();
-        */
+                    .mvcMatchers(HttpMethod.OPTIONS,"/api/**").permitAll()
+                    .mvcMatchers("/api/**").fullyAuthenticated();
     }
+
 }

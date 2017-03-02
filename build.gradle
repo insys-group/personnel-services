@@ -50,7 +50,7 @@ dependencies {
     runtime('com.h2database:h2:1.4.193')
     runtime('mysql:mysql-connector-java:5.1.40')
     compile('com.google.code.findbugs:annotations:3.0.1')
-    compile('org.projectlombok:lombok:1.16.10')
+    compileOnly('org.projectlombok:lombok:1.16.14')
     compile('com.jayway.restassured:rest-assured:2.9.0')
 
     compile "org.flywaydb:flyway-core:4.1.0"

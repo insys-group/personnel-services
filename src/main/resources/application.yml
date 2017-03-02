@@ -13,8 +13,7 @@ trapps:
   client-id: trapps-application-iwquy-ienke-qnbek-iuysc-pwirh
   client-secret: trapps-application-secret-oiweds-iujwsd-ujrqcd-iorcl-klmvek
   access-token-url: /oauth/token
-  client:
-    apps: http://trapps-web.local.pcfdev.io
+  client-apps: http://trapps-web.local.pcfdev.io
 ---
 spring:
   datasource:
@@ -44,13 +43,12 @@ security:
     enabled: false
   oauth2:
     resource:
-      user-info-uri: http://nj395mac11.fios-router.home:8081/user
+      user-info-uri: http://trapps-local:8081/user
 trapps:
   client-id: trapps-application-iwquy-ienke-qnbek-iuysc-pwirh
   client-secret: trapps-application-secret-oiweds-iujwsd-ujrqcd-iorcl-klmvek
   access-token-url: /oauth/token
-  client:
-    apps: http://nj395mac11.fios-router.home:4201
+  client-apps: http://trapps-local:4201
 logging:
   level:
     org.spring.security: DEBUG
@@ -79,5 +77,3 @@ security:
 #      client-secret: trapps-application-secret-oiweds-iujwsd-ujrqcd-iorcl-klmvek
 #      authorized-grant-types: authorization_code,refresh_token,password,client_credentials
 #      scope: read,write
-      
-  
