@@ -93,7 +93,7 @@ public class Person implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference ("person-training")
 	private Set<PersonTraining> personTrainings = new HashSet<>();
 

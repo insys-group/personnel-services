@@ -2,6 +2,7 @@ package com.insys.trapps.model.interview;
 
 import com.insys.trapps.model.Role;
 import lombok.*;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -17,6 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 @Builder
+@SuppressFBWarnings(value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
 public class InterviewTemplate {
 
     @Id

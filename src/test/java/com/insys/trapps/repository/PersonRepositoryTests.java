@@ -122,8 +122,11 @@ public class PersonRepositoryTests {
 	@Test
 	public void testUpdatePersonWithTraining() {
 		Person person = persistPersonWithTraining();
-		
-		PersonTraining anotherPersonTraining = initPersonTraining(person, initTraining("Another Training"));
+
+		Training anotherTraining = initTraining("Another Training");
+		trainingRepository.saveAndFlush(anotherTraining);
+
+		PersonTraining anotherPersonTraining = initPersonTraining(person, anotherTraining);
 		person.getPersonTrainings().add(anotherPersonTraining);
 
 		person = repository.saveAndFlush(person);
