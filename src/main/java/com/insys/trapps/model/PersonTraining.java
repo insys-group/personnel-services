@@ -66,7 +66,7 @@ public class PersonTraining implements Serializable {
 
     @Getter
     @Setter
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "PERSON_TRAINING_TASK_COMPLETION"
             , joinColumns = @JoinColumn(name = "person_training_id", referencedColumnName = "ID")
             , inverseJoinColumns = @JoinColumn(name = "tasks_id", referencedColumnName = "ID")
