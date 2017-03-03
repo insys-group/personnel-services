@@ -40,12 +40,6 @@ public class Engagement implements Serializable {
     @Setter
     private Long id;
 
-//    @Version
-//    @Getter
-//    @Setter
-//    @Column(name = "VERSION")
-//    private Long version;
-
     @Column(name = "COMMENTS")
     @Getter
     @Setter
@@ -54,19 +48,7 @@ public class Engagement implements Serializable {
 
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name = "OPPORTUNITY_ID")
-    private Opportunity opportunity;
-
-    @Getter
-    @Setter
     @OneToMany(mappedBy = "engagement", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<EngagementOpening> engagementOpenings;
-	
-//	@PrePersist
-//	public void init() {
-//		if(this.version==null) {
-//			this.version=1L;
-//		}
-//	}
+
 }

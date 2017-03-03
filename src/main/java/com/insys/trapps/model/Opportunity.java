@@ -3,19 +3,9 @@ package com.insys.trapps.model;
 import java.io.Serializable;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
-import javax.persistence.Version;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -41,11 +31,10 @@ public class Opportunity implements Serializable {
     @Setter
     private Long id;
 
-//    @Version
-//    @Getter
-//    @Setter
-//    @Column(name = "VERSION")
-//    private Long version;
+    @Getter
+    @Setter
+    @NonNull
+    protected String name;
 
     @Column(name = "COMMENTS")
     @Getter
@@ -55,29 +44,26 @@ public class Opportunity implements Serializable {
 
     @Getter
     @Setter
-    @Singular
-    @OneToMany(mappedBy = "opportunity", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = OpportunityStep.class, cascade = CascadeType.ALL, orphanRemoval=true)
+    @OrderBy("ID ASC")
     private Set<OpportunityStep> opportunitySteps;
 
     @Getter
     @Setter
-    @Singular
-    @OneToMany(mappedBy = "opportunity", cascade = CascadeType.ALL)
+    @OneToMany(targetEntity = Engagement.class, cascade = CascadeType.ALL, orphanRemoval=true)
+    @OrderBy("ID ASC")
     private Set<Engagement> engagements;
 
-    @ManyToOne
+    @Getter
+    @Setter
+    @OneToOne
     @JoinColumn(name = "BUSINESS_ID")
     private Business business;
 
-    @ManyToOne
+    @Getter
+    @Setter
+    @OneToOne
     @JoinColumn(name = "Person")
     private Person person;
-	
-//	@PrePersist
-//	public void init() {
-//		if(this.version==null) {
-//			this.version=1L;
-//		}
-//	}
 
 }
