@@ -10,6 +10,7 @@ import com.insys.trapps.respositories.PersonRepository;
 import com.insys.trapps.respositories.TrainingRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -267,6 +268,32 @@ public class PersonRepositoryTests {
 		Person savedPerson = repository.getOne(person.getId());
 		Set<TrainingTask> savedCompletedTasks = savedPerson.getPersonTrainings().iterator().next().getCompletedTasks();
 		assertThat(savedCompletedTasks, contains(completedTask));
+	}
+
+	@Test
+	public void testUpdateTaskCompletionForTwoPersons() {
+		Person person = persistPersonWithTraining();
+		Person anotherPerson=Person.builder().firstName("Mike").lastName("Tian")
+				.personType(PersonType.Candidate).business(business).email("mtian@insys.com")
+				.build();
+		PersonTraining personTraining = person.getPersonTrainings().iterator().next();
+		Training theSameTraining = trainingRepository.getOne(personTraining.getTraining().getId());
+		PersonTraining anotherPersonTraining = initPersonTraining(anotherPerson, theSameTraining);
+		anotherPerson.setPersonTrainings(new HashSet<>(singletonList(anotherPersonTraining)));
+		anotherPerson = repository.saveAndFlush(anotherPerson);
+		TrainingTask completedTask = personTraining.getTraining().getTasks().stream().findAny().get();
+
+		personTraining.setCompletedTasks(new HashSet<>(singletonList(completedTask)));
+		person = repository.saveAndFlush(person);
+		anotherPersonTraining.setCompletedTasks(new HashSet<>(singletonList(completedTask)));
+		anotherPerson = repository.saveAndFlush(anotherPerson);
+
+		Person savedPerson = repository.getOne(person.getId());
+		Set<TrainingTask> savedCompletedTasks = savedPerson.getPersonTrainings().iterator().next().getCompletedTasks();
+		assertThat(savedCompletedTasks, contains(completedTask));
+		Person anotherSavedPerson = repository.getOne(anotherPerson.getId());
+		Set<TrainingTask> anotherSavedCompletedTasks = anotherSavedPerson.getPersonTrainings().iterator().next().getCompletedTasks();
+		assertThat(anotherSavedCompletedTasks, contains(completedTask));
 	}
 
 	@Test

@@ -171,6 +171,37 @@ public class PersonRestIntegrationTests {
         .assertThat()
                 .body("personTrainings.completedTasks.name", contains(contains(trainingTask.getName())));
     }
+    @Test
+    public void testUpdateTaskCompletionForTwoPersons() {
+        Training savedTraining = postTrainingRequest(createTraining("Test Training"));
+        Person savedPerson = postPersonRequest(personBuilder().build());
+        Person anotherPerson = Person.builder().firstName("Omar").lastName("Sabir")
+                .personType(PersonType.Employee).business(business).email("omar@insys.com").build();
+        Person anotherSavedPerson = postPersonRequest(anotherPerson);
+        Set<PersonTraining> personTrainings = createPersonTrainings(savedPerson, savedTraining);
+        savedPerson.setPersonTrainings(personTrainings);
+        putPersonRequest(savedPerson);
+        Set<PersonTraining> anotherPersonTrainings = createPersonTrainings(anotherSavedPerson, savedTraining);
+        anotherSavedPerson.setPersonTrainings(anotherPersonTrainings);
+        putPersonRequest(anotherSavedPerson);
+        savedPerson = getPersonRequestAs(savedPerson);
+        anotherSavedPerson = getPersonRequestAs(anotherSavedPerson);
+        PersonTraining personTraining = savedPerson.getPersonTrainings().stream().findAny().get();
+        PersonTraining anotherPersonTraining = anotherSavedPerson.getPersonTrainings().stream().findAny().get();
+        TrainingTask trainingTask = savedTraining.getTasks().stream().findAny().get();
+        personTraining.setCompletedTasks(new HashSet<>(singletonList(trainingTask)));
+        anotherPersonTraining.setCompletedTasks(new HashSet<>(singletonList(trainingTask)));
+
+        putPersonRequest(savedPerson);
+        putPersonRequest(anotherSavedPerson);
+
+        getPersonRequest(savedPerson)
+                .assertThat()
+                .body("personTrainings.completedTasks.name", contains(contains(trainingTask.getName())));
+        getPersonRequest(anotherSavedPerson)
+                .assertThat()
+                .body("personTrainings.completedTasks.name", contains(contains(trainingTask.getName())));
+    }
 
     @Test
     public void testDeletePersonWithSkills() {

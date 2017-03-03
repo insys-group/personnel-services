@@ -3,10 +3,7 @@
  */
 package com.insys.trapps.service.impl;
 
-import com.insys.trapps.model.Address;
-import com.insys.trapps.model.Person;
-import com.insys.trapps.model.PersonDocument;
-import com.insys.trapps.model.PersonTraining;
+import com.insys.trapps.model.*;
 import com.insys.trapps.respositories.PersonRepository;
 import com.insys.trapps.respositories.TrainingRepository;
 import com.insys.trapps.service.PersonService;
@@ -128,7 +125,7 @@ public class PersonServiceImpl implements PersonService {
         //This complex logic can be replaced with moving person training to its own repository with url /persontrainings.
         //But it will increase count of requests to server from UI
         Set<PersonTraining> personTrainings = person.getPersonTrainings();
-        if (personTrainings==null || personTrainings.isEmpty()){
+        if (personTrainings == null || personTrainings.isEmpty()) {
             dbPerson.getPersonTrainings().clear();
             return;
         }
@@ -168,6 +165,7 @@ public class PersonServiceImpl implements PersonService {
                                 dbPersonTraining.setStartDate(personTraining.getStartDate());
                                 dbPersonTraining.setEndDate(personTraining.getEndDate());
                                 dbPersonTraining.setProgress(personTraining.getProgress());
+                                dbPersonTraining.setHided(personTraining.isHided());
                                 dbPersonTraining.getCompletedTasks().clear();
                                 dbPersonTraining.getCompletedTasks().addAll(personTraining.getCompletedTasks());
                                 dbPerson.getPersonTrainings().add(dbPersonTraining);
