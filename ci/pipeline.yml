@@ -37,7 +37,7 @@ resources:
     password: {{repopwd}}
 
 jobs:
-- name: build
+- name: build-and-save-to-aws
   public: true
   plan:
   - get: trapps-api-source
@@ -85,16 +85,16 @@ jobs:
     params:
       manifest: trapps-api-source/manifest.yml
       path: file-repository/trapps-api.jar
-- name: deploy
+- name: deploy-to-aws
   public: true
   plan:
   - get: trapps-api-source
     trigger: true
-    passed: [build]
+    passed: [build-and-save-to-aws]
   - put: deploy-trapps-api
     params:
       manifest: trapps-api-source/manifest.yml
-      path: s3://trapps-api/trapps-api.jar
+      path: release/trapps-api/trapps-api.jar
 - name: smoke_test
   public: true
   plan:
