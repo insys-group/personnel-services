@@ -1,4 +1,10 @@
 ---
+resource_types:
+- name: artifactory
+  type: docker-image
+  source:
+    repository: pivotalservices/artifactory-resource
+
 resources:
 - name: trapps-api-source
   type: git
@@ -17,10 +23,19 @@ resources:
 - name: release
   type: s3
   source:
+    versioned_file: "trapps-api/trapps-api.jar"
     bucket: {{concourses3bucket}}
-    versioned_file: trapps-api/trapps-api.jar
     access_key_id: {{awsaccesskey}}
     secret_access_key: {{awsaccesssecret}}
+- name: file-repository
+  type: artifactory
+  source:
+    endpoint: {{endpointurl}}
+    repository: {{repofolderpath}}
+    regex: "trapps-(?<version>.*).jar"
+    username: {{repouser}}
+    password: {{repopwd}}
+
 jobs:
 - name: build
   public: true
@@ -30,8 +45,46 @@ jobs:
   - task: package
     file: trapps-api-source/ci/tasks/package.yml
   - put: release
+    params: {file: package-output/trapps-api.jar}
+- name: build-and-save-to-artifactory
+  serial: true
+  public: true
+  plan:
+  - get: trapps-api-source
+    trigger: true
+  - task: package
+    file: trapps-api-source/ci/tasks/package.yml
+  - put: file-repository
+    params: {file: package-output/trapps-api.jar}
+
+- name: deploy-to-pcf
+  public: true
+  plan:
+  - get: file-repository
+    trigger: true
+    passed:
+      - build-and-save-to-artifactory
+  - get: trapps-api-source
+  - task: use-new-file
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: ubuntu
+          tag: "latest"
+      inputs:
+      - name: file-repository
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          ls -la file-repository
+  - put: deploy-trapps-api
     params:
-      file: package-output/trapps-api.jar
+      manifest: trapps-api-source/manifest.yml
+      path: file-repository/trapps-api.jar
 - name: deploy
   public: true
   plan:
@@ -47,7 +100,7 @@ jobs:
   plan:
   - get: trapps-api-source
     trigger: true
-    passed: [deploy]
+    passed: [deploy-to-pcf]
   - task: smoke_test
     file: trapps-api-source/ci/tasks/smoke-test.yml
     params:
