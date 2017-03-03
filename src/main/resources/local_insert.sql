@@ -45,8 +45,8 @@ insert into ROLE_SKILL values(2 , 4);
 insert into ROLE_SKILL values(2 , 5);
 insert into ROLE_SKILL values(2 , 6);
 
-insert into INTERVIEW(id, date, name, phone, person_id, role_id) values(1, 1482475703, 'Interview 1', '7035551234', 10, 1);
-insert into QUESTION(id, question, answer, comment, quality) values(0, 'What do?', 'Stuff', 'Comment', 'Excellent');
+insert into INTERVIEW(id, date, name, phone, person_id, role_id) values(1, PARSEDATETIME('03/01/2017','dd/MM/yyyy'), 'Interview 1', '7035551234', 10, 1);
+insert into QUESTION(id, question) values(0, 'What do?');
 
 insert into PERSON_SKILL(id, person_id, name, scale) values(1, 10, 'Spring', 8);
 
@@ -103,13 +103,22 @@ insert into STATE(id , state_code) values(50 , 'WV');
 insert into STATE(id , state_code) values(51 , 'WY');
 
 insert into TRAINING(id, name, address_id, online) values(1, 'Pivotal training', 1, FALSE);
+insert into TRAINING(id, name, online) values(2, 'Another training', TRUE);
 
-insert into TRAINING_TASK(id, name, weblink) values (1, 'Training Task 1', 'http://training.org/1');
-insert into TRAINING_TASK(id, name, weblink) values (2, 'Training Task 2', 'http://training.org/2');
-insert into TRAINING_TASK(id, name, weblink) values (3, 'Training Task 3', 'http://training.org/3');
+insert into TRAINING_TASK(id, name, description, weblink) values (1, 'Watch video about Spring Boot', 'Spring Boot is awesome.', 'http://training.org/1');
+insert into TRAINING_TASK(id, name, description, weblink) values (2, 'Watch video about HATEOAS', 'HATEOAS is awesome', 'http://training.org/2');
+insert into TRAINING_TASK(id, name, description, weblink) values (3, 'Watch all videos of Josh Long', 'Josh Long is awesome', 'http://training.org/3');
+insert into TRAINING_TASK(id, name, description, weblink) values (4, 'Watch another video', 'Some description', 'http://training.org/1');
+insert into TRAINING_TASK(id, name, description, weblink) values (5, 'Implement lab 2', 'The Computational Neuroscience Research Group (CNRG) is dedicated to developing and using a unified mathematical framework for modeling large-scale neurobiological systems.', 'http://training.org/2');
 
 insert into TRAINING_TASKS(training_id, tasks_id) values (1, 1);
 insert into TRAINING_TASKS(training_id, tasks_id) values (1, 2);
 insert into TRAINING_TASKS(training_id, tasks_id) values (1, 3);
+insert into TRAINING_TASKS(training_id, tasks_id) values (2, 4);
+insert into TRAINING_TASKS(training_id, tasks_id) values (2, 5);
 
-insert into PERSON_TRAINING(id, start_date, end_date, person_id, training_id) values (1, 1487203200, 1487548800, 12, 1)
+insert into PERSON_TRAINING(id, start_date, end_date, hided, person_id, training_id) values (1, 1487203200000, 1487548800000, false, 12, 1);
+insert into PERSON_TRAINING(id, start_date, end_date, hided, person_id, training_id) values (2, 1487203200000, 1487548800000, false, 16, 2);
+insert into PERSON_TRAINING(id, start_date, end_date, hided, person_id, training_id) values (3, 1487203200000, 1487548800000, false, 15, 2);
+insert into PERSON_TRAINING_TASK_COMPLETION(person_training_id, tasks_id) values (1,1);
+insert into PERSON_TRAINING_TASK_COMPLETION(person_training_id, tasks_id) values (2,4);

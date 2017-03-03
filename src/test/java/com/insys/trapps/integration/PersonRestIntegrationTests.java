@@ -138,24 +138,20 @@ public class PersonRestIntegrationTests {
     }
 
     @Test
-    public void testUpdatePersonWithTraining() {
+    public void testDeletePersonTraininigs() {
         Training savedTraining = postTrainingRequest(createTraining("Test Training"));
-        Person person = postPersonRequest(personBuilder().build());
-        person.setPersonTrainings(createPersonTrainings(person, savedTraining));
-        putPersonRequest(person);
-        Person savedPerson = getPersonRequestAs(person);
-        Training newTraining = postTrainingRequest(createTraining("Second Test Training"));
-        Set<PersonTraining> newPersonTraining = createPersonTrainings(savedPerson, newTraining);
-        savedPerson.getPersonTrainings().addAll(newPersonTraining);
-
+        Person savedPerson = postPersonRequest(personBuilder().build());
+        savedPerson.setPersonTrainings(createPersonTrainings(savedPerson, savedTraining));
         putPersonRequest(savedPerson);
 
+        savedPerson.getPersonTrainings().clear();
+        putPersonRequest(savedPerson);
 
-        getPersonRequest(person)
-        .assertThat()
-                .body("personTrainings", hasSize(2)).and()
-                .body("personTrainings._links.training.href", linksToIdOf(savedTraining, newTraining));
+        getPersonRequest(savedPerson)
+                .assertThat()
+                .body("personTrainings", hasSize(0));
     }
+
 
     @Test
     public void testUpdateTaskCompletion() {

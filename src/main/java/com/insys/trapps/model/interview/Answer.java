@@ -1,6 +1,7 @@
 package com.insys.trapps.model.interview;
 
 import lombok.*;
+import java.io.Serializable;
 
 import javax.persistence.*;
 
@@ -14,7 +15,9 @@ import javax.persistence.*;
 @NoArgsConstructor
 @ToString
 @Builder
-public class Answer {
+public class Answer implements Serializable {
+
+    private static final long serialVersionUID = -187204269892201461L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

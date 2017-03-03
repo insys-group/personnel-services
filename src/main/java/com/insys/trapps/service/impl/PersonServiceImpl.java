@@ -39,6 +39,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public void updatePerson(Long id, Person person) {
+        logger.debug("Updates person with trainings: " + person.getPersonTrainings());
         Person dbPerson = repository.getOne(id);
 
         dbPerson.getPersonSkills().clear();
@@ -124,37 +125,55 @@ public class PersonServiceImpl implements PersonService {
     }
 
     private void updatePersonTrainings(Person person, Person dbPerson) {
+        //This complex logic can be replaced with moving person training to its own repository with url /persontrainings.
+        //But it will increase count of requests to server from UI
         Set<PersonTraining> personTrainings = person.getPersonTrainings();
-        if (personTrainings == null) {
+        if (personTrainings==null || personTrainings.isEmpty()){
+            dbPerson.getPersonTrainings().clear();
             return;
         }
+        Set<Long> personTrainingIdsToUpdate = personTrainings.stream().map(PersonTraining::getId).collect(Collectors.toSet());
+        Set<PersonTraining> dbPersonTrainingsToUpdate = dbPerson.getPersonTrainings().stream()
+                .filter(dbPersonTraining -> personTrainingIdsToUpdate.contains(dbPersonTraining.getId())).collect(Collectors.toSet());
+        dbPerson.getPersonTrainings().clear();
+
         Function<PersonTraining, Boolean> isNewPersonTraining = personTraining -> personTraining.getId() == null;
         Map<Boolean, List<PersonTraining>> personTrainingsIsNew = personTrainings.stream()
                 .collect(Collectors.groupingBy(isNewPersonTraining));
 
-        List<PersonTraining> newPersonTrainings = personTrainingsIsNew.get(TRUE);
+        addNewPersonTrainings(dbPerson, personTrainingsIsNew.get(TRUE));
+
+        updateExistedPersonTrainings(dbPerson, dbPersonTrainingsToUpdate, personTrainingsIsNew.get(FALSE));
+
+    }
+
+    private void addNewPersonTrainings(Person dbPerson, List<PersonTraining> newPersonTrainings) {
         if (newPersonTrainings != null) {
             newPersonTrainings.forEach(newPersonTraining -> {
                 newPersonTraining.setPerson(dbPerson);
                 dbPerson.getPersonTrainings().add(newPersonTraining);
             });
         }
+    }
 
-        List<PersonTraining> savedPersonTrainings = personTrainingsIsNew.get(FALSE);
-        if (savedPersonTrainings != null) {
-            savedPersonTrainings.forEach(personTraining ->
-                    dbPerson.getPersonTrainings().stream()
-                            .filter(dbPersonTraining -> personTraining.getId().equals(dbPersonTraining.getId()))
+    private void updateExistedPersonTrainings(Person dbPerson, Set<PersonTraining> dbPersonTrainingsToUpdate, List<PersonTraining> personTrainingsToUpdate) {
+        if (personTrainingsToUpdate != null) {
+            personTrainingsToUpdate.forEach(personTraining ->
+                    dbPersonTrainingsToUpdate.stream()
+                            .filter(dbPersonTraining -> {
+                                Long id = dbPersonTraining.getId();
+                                return personTraining.getId().equals(id);
+                            })
                             .findFirst().ifPresent(dbPersonTraining -> {
                                 dbPersonTraining.setStartDate(personTraining.getStartDate());
                                 dbPersonTraining.setEndDate(personTraining.getEndDate());
                                 dbPersonTraining.setProgress(personTraining.getProgress());
                                 dbPersonTraining.getCompletedTasks().clear();
                                 dbPersonTraining.getCompletedTasks().addAll(personTraining.getCompletedTasks());
+                                dbPerson.getPersonTrainings().add(dbPersonTraining);
                             }
                     )
             );
         }
-
     }
 }

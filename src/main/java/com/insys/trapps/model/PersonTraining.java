@@ -48,21 +48,25 @@ public class PersonTraining implements Serializable {
 
     @Getter
     @Setter
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "PERSON_ID")
     @JsonBackReference ("person-trainings")
     private Person person;
 
     @Getter
     @Setter
-    @ManyToOne(cascade = CascadeType.ALL)
+    private boolean hided;
+
+    @Getter
+    @Setter
+    @ManyToOne
     @JoinColumn(name = "TRAINING_ID")
     private Training training;
 
 
     @Getter
     @Setter
-    @OneToMany(cascade = { CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToMany
     @JoinTable(name = "PERSON_TRAINING_TASK_COMPLETION"
             , joinColumns = @JoinColumn(name = "person_training_id", referencedColumnName = "ID")
             , inverseJoinColumns = @JoinColumn(name = "tasks_id", referencedColumnName = "ID")

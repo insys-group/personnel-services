@@ -21,6 +21,7 @@ import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.with;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -60,20 +61,20 @@ public class TrainingRestIntegrationTest {
 		checkGetRequestReturnNOT_FOUND(id);
     }
 
-    @Test
-    public void testUpdateTrainingWithPost() throws Exception {
-    	Training training = initTraining();
-    	String[] newTaskNames = new String[]{"New Task 1", "New Task 2", "New Task 3"};
-    	String newName = "New Name";
-    	
-    	Training postedTraining = postTrainingRequest(training);
-    	setNewFieldsTo(postedTraining, newTaskNames, newName);
-    	postTrainingRequest(postedTraining);
-    	
-    	getTrainingRequest(postedTraining.getId())
-    		.body("name", equalTo(newName)).and()
-    		.body("tasks.name", hasItems(newTaskNames));
-    }
+	@Test
+	public void testUpdateTraining() throws Exception {
+		Training training = initTraining();
+		String[] newTaskNames = new String[]{"New Task 1", "New Task 2", "New Task 3"};
+		String newName = "New Name";
+
+		Training postedTraining = postTrainingRequest(training);
+		setNewFieldsTo(postedTraining, newTaskNames, newName);
+		postTrainingRequest(postedTraining);
+
+		getTrainingRequest(postedTraining.getId())
+				.body("name", equalTo(newName)).and()
+				.body("tasks.name", hasItems(newTaskNames));
+	}
 
 	private void deleteTrainingRequest(long id) {
 		with()
