@@ -46,14 +46,13 @@ jobs:
     file: trapps-api-source/ci/tasks/package.yml
   - put: release
     params: {file: package-output/trapps-api.jar}
-  - put: release
-    params: {file: package-output/manifest.yml}
+
 - name: build-and-save-to-artifactory
   serial: true
   public: true
   plan:
   - get: trapps-api-source
-    trigger: true
+    trigger: false
   - task: package
     file: trapps-api-source/ci/tasks/package.yml
   - put: file-repository
@@ -64,7 +63,7 @@ jobs:
   serial: true
   plan:
   - get: file-repository
-    trigger: true
+    trigger: false
     passed:
       - build-and-save-to-artifactory
   - get: trapps-api-source
@@ -91,38 +90,21 @@ jobs:
 - name: deploy-to-pcf-from-aws
   public: true
   plan:
-  - get: trapps-api-source
+  - get: release
     trigger: true
     passed: [build-and-save-to-aws]
-  - get: release
-  - task: use-new-file
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: ubuntu
-          tag: "latest"
-      inputs:
-      - name: release
-      run:
-        path: sh
-        args:
-        - -exc
-        - |
-          ls -la release
-          pwd
-          ls -la
+  - get: trapps-api-source
   - put: deploy-trapps-api
     params:
-      manifest: release/manifest.yml
+      manifest: trapps-api-source/manifest.yml
+      path: release/trapps-api.jar
 
 - name: smoke_test
   public: true
   plan:
   - get: trapps-api-source
     trigger: true
-    passed: [deploy-to-pcf]
+    passed: [deploy-to-pcf-from-aws]
   - task: smoke_test
     file: trapps-api-source/ci/tasks/smoke-test.yml
     params:
