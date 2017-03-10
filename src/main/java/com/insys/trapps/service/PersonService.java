@@ -22,16 +22,16 @@ public interface PersonService {
 
 	/**
 	 * @param id
-	 * @param filename
+	 * @param documentId
 	 * @param file
-	 * @return 
-	 * @throws Exception 
+	 * @return
+	 * @throws Exception
 	 */
 	PersonDocument save(Long id, String fileName, MultipartFile file) throws Exception;
 
 	/**
 	 * @param id
-	 * @param fileName
+	 * @param documentId
 	 * @return
 	 * @throws Exception
 	 */
@@ -44,5 +44,4 @@ public interface PersonService {
 	 * @throws Exception
 	 */
 	PersonDocument deleteDocument(Long id, Long documentId) throws Exception;
-	
 }

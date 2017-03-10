@@ -16,8 +16,6 @@ public class EngagementBuilder {
         EngagementBuilder builder = new EngagementBuilder();
         builder.engagement = Engagement.builder()
                 .comments("Engagement 1")
-                .opportunity(opportunity)
-                //.version(1L)
                 .build();
 
         builder.engagement

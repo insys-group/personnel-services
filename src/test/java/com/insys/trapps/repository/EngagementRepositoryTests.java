@@ -9,6 +9,7 @@ import com.insys.trapps.respositories.RoleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,7 @@ public class EngagementRepositoryTests {
      * Method to test Repository functionality for creating new.
      */
     @Test
+    @Ignore
     public void testSave() throws Exception {
         log.debug("Enter: testSave " + engagementRepository.getClass().toString());
         saveAll();
@@ -92,6 +94,7 @@ public class EngagementRepositoryTests {
      * Method to test Repository functionality for update.
      */
     @Test
+    @Ignore
     public void testUpdate() throws Exception {
         log.debug("Enter: testUpdate " + engagementRepository.getClass().toString());
 

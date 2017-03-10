@@ -23,9 +23,9 @@ public class RoleBuilder {
                         Arrays.asList(
                                 Skill.builder().name("Skill 1 " + builder.role.getName())//.version(1L)
                                 .build()
-                                , Skill.builder().name("Skill 2" + builder.role.getName())//.version(1L)
+                                , Skill.builder().name("Skill 2 " + builder.role.getName())//.version(1L)
                                 .build()
-                                , Skill.builder().name("Skill 3" + builder.role.getName())//.version(1L)
+                                , Skill.builder().name("Skill 3 " + builder.role.getName())//.version(1L)
                                 .build()
                         )
                 )

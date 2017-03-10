@@ -51,7 +51,9 @@ public class OpportunityRestIntegrationTests {
 
     @Test
     public void testCreateOpportunity() {
-        Opportunity opportunity = Opportunity.builder().comments("Comcast Opportunity").build();
+        Opportunity opportunity = Opportunity.builder()
+                .name("Opportunity 1")
+                .comments("Comcast Opportunity").build();
         given()
                 .contentType("application/json")
                 .body(opportunity)
@@ -64,8 +66,9 @@ public class OpportunityRestIntegrationTests {
 
     @Test
     public void testCreateOpportunityWithSteps() throws Exception {
-        Opportunity opportunity = Opportunity.builder().comments("Aramark Opportunity")
-        		//.version(1L)
+        Opportunity opportunity = Opportunity.builder()
+                .name("Opportunity 1")
+                .comments("Aramark Opportunity")
         		.build();
         String url =
         given()
@@ -75,6 +78,7 @@ public class OpportunityRestIntegrationTests {
         .when()
                         .post(basePath + OPP_PATH)
         .then()
+                .log().everything()
                         .statusCode(HttpStatus.CREATED.value())
                         .extract().jsonPath().get("_links.self.href").toString();
 
@@ -85,33 +89,22 @@ public class OpportunityRestIntegrationTests {
                 .body(OpportunityStep.builder()
                         .comments("Step 1")
                         .stepTimestamp(Timestamp.valueOf(LocalDate.now().atStartOfDay()))
-                        .opportunity(opportunity)
                         
                         .build())
                 .log().everything()
         .when()
                 .post(basePath + OPP_STEP_PATH)
         .then()
-                .statusCode(HttpStatus.CREATED.value());
-
-  /*      given()
-                .contentType("application/json")
-                .body(OpportunityStep.builder()
-                        .comments("Step 2")
-                        .stepTimestamp(Timestamp.valueOf(LocalDate.now().atStartOfDay()))
-                        .opportunity(opportunity)
-                        .build())
                 .log().everything()
-                .when()
-                .post(basePath + OPP_STEP_PATH)
-                .then()
-                .statusCode(HttpStatus.CREATED.value());*/
+                .statusCode(HttpStatus.CREATED.value());
     }
 
     @Test
     public void testCreateOpportunityWithContacts() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        Opportunity opportunity = Opportunity.builder().comments("Aramark Opportunity").build();
+        Opportunity opportunity = Opportunity.builder()
+                .name("Opportunity 1")
+                .comments("Aramark Opportunity").build();
 
         log.debug("Creating opportunity = " + mapper.writeValueAsString(opportunity));
         String url =
@@ -124,19 +117,17 @@ public class OpportunityRestIntegrationTests {
         .then()
                 .statusCode(HttpStatus.CREATED.value())
                 .extract().jsonPath().get("_links.self.href").toString();
-        //opportunity.setId(Utils.getId(url));
 
         given()
                 .contentType("application/json")
                 .body(OpportunityStep.builder()
                         .comments("Step 1")
                         .stepTimestamp(Timestamp.valueOf(LocalDate.now().atStartOfDay()))
-                        .opportunity(opportunity)
                         .build()
                 )
                 .log().everything()
         .when()
-                .post(basePath + OPP_PATH)
+                .post(basePath + OPP_STEP_PATH)
                 .then()
                 .statusCode(HttpStatus.CREATED.value());
     }
