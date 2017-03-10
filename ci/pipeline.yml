@@ -10,7 +10,7 @@ resources:
   type: git
   source:
     uri: https://github.com/insys-group/trapps-api.git
-    branch: feature/develop
+    branch: develop
 - name: deploy-trapps-api
   type: cf
   source:
