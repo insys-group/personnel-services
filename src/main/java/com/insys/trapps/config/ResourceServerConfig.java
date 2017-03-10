@@ -48,7 +48,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:4201");
+        config.addAllowedOrigin("http://trapps.apps.luxoft-pcf.com");
         config.addAllowedOrigin("https://trapps.apps.luxoft-pcf.com");
+        config.addAllowedOrigin("http://trapps-web.local.pcfdev.io");
+        config.addAllowedOrigin("https://trapps-web.local.pcfdev.io");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
