@@ -13,17 +13,17 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @author msabir
  *
  */
-@SuppressFBWarnings(value = {"BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"})
-@Configuration
-@EnableAuthorizationServer
-public class AuthServerConfig extends GlobalAuthenticationConfigurerAdapter {
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-	@Override
-	public void init(AuthenticationManagerBuilder auth) throws Exception {
-		logger.debug("Enter: AuthServerConfig.init()");
-		auth.inMemoryAuthentication()
-			.withUser("msabir").password("msabirpass").roles("USER").and()
-			.withUser("admin").password("password").roles("ADMIN");
-	}
-}
+//@SuppressFBWarnings(value = {"BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"})
+//@Configuration
+//@EnableAuthorizationServer
+//public class AuthServerConfig extends GlobalAuthenticationConfigurerAdapter {
+//	private Logger logger = LoggerFactory.getLogger(this.getClass());
+//
+//	@Override
+//	public void init(AuthenticationManagerBuilder auth) throws Exception {
+//		logger.debug("Enter: AuthServerConfig.init()");
+//		auth.inMemoryAuthentication()
+//			.withUser("msabir").password("msabirpass").roles("USER").and()
+//			.withUser("admin").password("password").roles("ADMIN");
+//	}
+//}
