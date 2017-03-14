@@ -2,6 +2,7 @@ package com.insys.trapps.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import com.insys.trapps.model.person.Person;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.*;
 

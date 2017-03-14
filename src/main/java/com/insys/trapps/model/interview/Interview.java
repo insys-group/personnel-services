@@ -6,9 +6,9 @@ import java.util.Set;
 
 import javax.persistence.*;
 
-import com.insys.trapps.model.Person;
 import com.insys.trapps.model.Role;
 
+import com.insys.trapps.model.person.Person;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

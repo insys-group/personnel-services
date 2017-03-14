@@ -1,12 +1,11 @@
 package com.insys.trapps.model.interview;
 
+import com.insys.trapps.model.person.Person;
 import lombok.*;
 
 import java.io.Serializable;
 
 import javax.persistence.*;
-
-import com.insys.trapps.model.Person;
 
 @Entity
 @Table(name = "FEEDBACK")

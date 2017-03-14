@@ -29,13 +29,8 @@ spring:
 #    properties:
 #      hibernate:
 #        hbm2ddl:
-#          import_files: V2__trapps_db_insert_data.sql
+#          import_files: V3__trapps_db_insert_data.sql
 #    generate-ddl: true
-
-#  h2:
-#    console:
-#      enabled: true
-#      path: /console
 server: 
   port: 8081
 security:
