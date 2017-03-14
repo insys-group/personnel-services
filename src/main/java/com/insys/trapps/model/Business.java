@@ -42,12 +42,6 @@ public class Business implements Serializable {
     @Getter
     @Setter
     private Long id;
-//
-//    @Version
-//    @Setter
-//    @Getter
-//    @Column(name = "VERSION")
-//    private Long version;
 
     @Getter
     @Setter
@@ -67,13 +61,10 @@ public class Business implements Serializable {
 
     @Setter
     @Getter
-    @OneToMany(mappedBy = "business", fetch = FetchType.LAZY)
-    private Set<Person> persons;
-
-    @Getter
-    @Setter
-    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL)
-    private Set<Opportunity> opportunities;
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+     @JoinTable(joinColumns = @JoinColumn(name = "BUSINESS_ID", referencedColumnName = "ID"),
+         inverseJoinColumns = @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID"))
+     private Set<Person> persons;
 
     @Getter
     @Setter
@@ -87,14 +78,7 @@ public class Business implements Serializable {
 	@Override
 	public String toString() {
 		return "Business [name=" + name + ", description=" + description + ", businessType=" + businessType
-				+ ", persons=" + persons + ", opportunities=" + opportunities + ", addresses=" + addresses
+				+ ", persons=" + persons + ", addresses=" + addresses
 				+ ", getId()=" + getId() + "]";
 	}
-	
-//	@PrePersist
-//	public void init() {
-//		if(this.version==null) {
-//			this.version=1L;
-//		}
-//	}
 }

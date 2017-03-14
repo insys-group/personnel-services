@@ -50,8 +50,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-                    .mvcMatchers(HttpMethod.OPTIONS,"/api/**").permitAll()
-                    .mvcMatchers("/api/**").fullyAuthenticated();
+                .mvcMatchers(HttpMethod.OPTIONS,"/api/**").permitAll()
+                .mvcMatchers("/api/**").fullyAuthenticated();
     }
 
 }

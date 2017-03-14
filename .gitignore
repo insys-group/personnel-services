@@ -110,6 +110,9 @@ local.properties
 # IntelliJ
 /out/
 
+# Concourse
+ci/private.yml
+
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 

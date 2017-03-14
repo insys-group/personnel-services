@@ -13,9 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -68,12 +66,5 @@ public class Role implements Serializable {
     @Setter
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     private Set<EngagementOpening> engagementOpenings;
-	
-//	@PrePersist
-//	public void init() {
-//		if(this.version==null) {
-//			this.version=1L;
-//		}
-//	}
 
 }

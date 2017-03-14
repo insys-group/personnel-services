@@ -1,7 +1,6 @@
 package com.insys.trapps.model.person;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -14,24 +13,28 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import com.insys.trapps.model.person.Person;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "PERSON_DOCUMENT")
 @EqualsAndHashCode(of = {"fileName"}, callSuper = false)
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @Builder
 @SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
+@ToString
 public class PersonDocument implements Serializable {
 	private static final long serialVersionUID = 4569824666811236042L;
 
@@ -41,16 +44,11 @@ public class PersonDocument implements Serializable {
     @Setter
     private Long id;
 
-//    @Version
-//    @Getter
-//    @Setter
-//    @Column(name = "VERSION")
-//    private Long version;
-
     @Getter
     @Setter
     @ManyToOne
     @JoinColumn(name = "PERSON_ID")
+    @JsonBackReference
     private Person person;
 
     @Getter
@@ -78,18 +76,5 @@ public class PersonDocument implements Serializable {
     public byte[] getDocument() {
     	return this.document;
     }
-	@Override
-	public String toString() {
-		return "PersonDocument [person=" + person + ", fileName=" + fileName + ", uploadTimestamp=" + uploadTimestamp
-				+ ", document=" + Arrays.toString(document) + ", getId()=" + getId()
-				+ "]";
-	}
-	
-//	@PrePersist
-//	public void init() {
-//		if(this.version==null) {
-//			this.version=1L;
-//		}
-//	}
 
 }

@@ -1,0 +1,111 @@
+---
+resource_types:
+- name: artifactory
+  type: docker-image
+  source:
+    repository: pivotalservices/artifactory-resource
+
+resources:
+- name: trapps-api-source
+  type: git
+  source:
+    uri: https://github.com/insys-group/trapps-api.git
+    branch: develop
+- name: deploy-trapps-api
+  type: cf
+  source:
+    api: {{pcf-api}}
+    username: {{pcf-user}}
+    password: {{pcf-pwd}}
+    organization: {{pcf-org}}
+    space: {{pcf-space}}
+    skip_cert_check: true
+- name: release
+  type: s3
+  source:
+    versioned_file: trapps-api/trapps-api.jar
+    bucket: {{concourses3bucket}}
+    access_key_id: {{awsaccesskey}}
+    secret_access_key: {{awsaccesssecret}}
+- name: file-repository
+  type: artifactory
+  source:
+    endpoint: {{endpointurl}}
+    repository: {{repofolderpath}}
+    regex: "trapps-(?<version>.*).jar"
+    username: {{repouser}}
+    password: {{repopwd}}
+
+jobs:
+- name: build-and-save-to-aws
+  public: true
+  plan:
+  - get: trapps-api-source
+    trigger: true
+  - task: package
+    file: trapps-api-source/ci/tasks/package.yml
+  - put: release
+    params: {file: package-output/trapps-api.jar}
+
+- name: build-and-save-to-artifactory
+  serial: true
+  public: true
+  plan:
+  - get: trapps-api-source
+    trigger: false
+  - task: package
+    file: trapps-api-source/ci/tasks/package.yml
+  - put: file-repository
+    params: {file: package-output/trapps-api.jar}
+
+- name: deploy-to-pcf
+  public: true
+  serial: true
+  plan:
+  - get: file-repository
+    trigger: false
+    passed:
+      - build-and-save-to-artifactory
+  - get: trapps-api-source
+  - task: use-new-file
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: ubuntu
+          tag: "latest"
+      inputs:
+      - name: file-repository
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          ls -la file-repository
+  - put: deploy-trapps-api
+    params:
+      manifest: trapps-api-source/manifest.yml
+      path: file-repository/trapps-api.jar
+- name: deploy-to-pcf-from-aws
+  public: true
+  plan:
+  - get: release
+    trigger: true
+    passed: [build-and-save-to-aws]
+  - get: trapps-api-source
+  - put: deploy-trapps-api
+    params:
+      manifest: trapps-api-source/manifest.yml
+      path: release/trapps-api.jar
+
+- name: smoke_test
+  public: true
+  plan:
+  - get: trapps-api-source
+    trigger: true
+    passed: [deploy-to-pcf-from-aws]
+  - task: smoke_test
+    file: trapps-api-source/ci/tasks/smoke-test.yml
+    params:
+      HEALTH_URL: http://trapps-api.apps.luxoft-pcf.com/health

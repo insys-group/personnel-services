@@ -47,42 +47,42 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 	private String[] scopes;
     */
 
-    private AuthenticationManager authenticationManager;
+	private AuthenticationManager authenticationManager;
 
-    private ClientDetailsService clientDetailsService;
+	private ClientDetailsService clientDetailsService;
 	private UserDetailsService userDetailsService;
 	private TokenStore tokenStore;
 
 	public AuthServerConfig(AuthenticationManager authenticationManager,
-                            @Qualifier("ClientDetailsServiceImpl")
-                            ClientDetailsService clientDetailsService,
-                            UserDetailsService userDetailsService,
-                            TokenStore tokenStore) {
-	    this.authenticationManager=authenticationManager;
-	    this.clientDetailsService=clientDetailsService;
+							@Qualifier("ClientDetailsServiceImpl")
+									ClientDetailsService clientDetailsService,
+							UserDetailsService userDetailsService,
+							TokenStore tokenStore) {
+		this.authenticationManager=authenticationManager;
+		this.clientDetailsService=clientDetailsService;
 		this.userDetailsService=userDetailsService;
 		this.tokenStore=tokenStore;
 	}
 
-    @Override
+	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		logger.debug("Enter: AuthServerConfig.configure()");
 		endpoints.userDetailsService(this.userDetailsService)
-                .tokenStore(this.tokenStore)
-                .authenticationManager(this.authenticationManager);
+				.tokenStore(this.tokenStore)
+				.authenticationManager(this.authenticationManager);
 		//endpoints.setClientDetailsService(this.clientDetailsService);
 	}
 
-    @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-	    logger.debug("Enter: AuthServerConfig.configure()");
-	    clients.withClientDetails(this.clientDetailsService);
+	@Override
+	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+		logger.debug("Enter: AuthServerConfig.configure()");
+		clients.withClientDetails(this.clientDetailsService);
 //        clients.inMemory()
 //                .withClient(clientId)
 //                .authorizedGrantTypes(grantTypes)
 //                .secret(clientSecret)
 //                .scopes(scopes);
-    }
+	}
 }
 /*
 public class AuthServerConfig extends GlobalAuthenticationConfigurerAdapter {
