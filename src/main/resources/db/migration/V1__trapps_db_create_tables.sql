@@ -150,6 +150,7 @@ CREATE TABLE state
   (
      id         BIGINT auto_increment,
      state_code VARCHAR(255) NOT NULL,
+     version    BIGINT,
      PRIMARY KEY (id)
   );
 

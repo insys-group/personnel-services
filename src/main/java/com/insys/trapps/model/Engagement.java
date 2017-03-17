@@ -27,7 +27,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "ENGAGEMENT")
-@EqualsAndHashCode(exclude = {"opportunity", "engagementOpenings"}, callSuper = false)
+@EqualsAndHashCode(exclude = {"engagementOpenings"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

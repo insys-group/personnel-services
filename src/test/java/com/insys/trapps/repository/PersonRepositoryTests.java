@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-<<<<<<< HEAD
 import com.insys.trapps.TrappsApiApplication;
 import com.insys.trapps.model.Address;
 import com.insys.trapps.model.Business;
@@ -30,13 +29,11 @@ import com.insys.trapps.model.person.PersonSkill;
 import com.insys.trapps.model.person.PersonType;
 import com.insys.trapps.respositories.BusinessRepository;
 import com.insys.trapps.respositories.PersonRepository;
-=======
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
->>>>>>> develop
 
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.hasItems;
