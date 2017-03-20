@@ -36,8 +36,15 @@ public class UserAuthority implements GrantedAuthority {
     @JsonIgnore
     private User user;
 
-    @Getter
-    @Setter
     @Column(name = "AUTHORITY", nullable = false)
     private String authority;
+
+    @Override
+    public String getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
+    }
 }

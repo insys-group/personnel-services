@@ -1,6 +1,7 @@
 package com.insys.trapps.model;
 
 import com.insys.trapps.model.person.Person;
+import lombok.Builder;
 import lombok.*;
 
 import javax.persistence.*;

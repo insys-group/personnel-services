@@ -6,7 +6,11 @@ import com.insys.trapps.model.security.UserInfo;
 import com.insys.trapps.service.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
@@ -20,14 +24,21 @@ public class UserController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private PersonService personService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public UserController(PersonService personService) {
         this.personService=personService;
     }
 
-    @GetMapping("/user")
-    public UserInfo user(Principal user) {
-        logger.debug("Enter: UserController.user()" + user.getName());
-        return loadUserInfo(user.getName());
+    @GetMapping(value = "/user/{username}")
+    public UserInfo user(@PathVariable("username") String username) {
+        return loadUserInfo(username);
+    }
+
+    @GetMapping("/password")
+    public String test(String password) {
+        return passwordEncoder.encode(password);
     }
 
     private UserInfo loadUserInfo(String username) {

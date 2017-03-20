@@ -9,11 +9,6 @@ security:
   oauth2:
     resource:
       user-info-uri: http://trapps-api.local.pcfdev.io/user
-trapps:
-  client-id: trapps-application-iwquy-ienke-qnbek-iuysc-pwirh
-  client-secret: trapps-application-secret-oiweds-iujwsd-ujrqcd-iorcl-klmvek
-  access-token-url: /oauth/token
-  client-apps: http://trapps-web.local.pcfdev.io
 ---
 spring:
   datasource:
@@ -24,32 +19,22 @@ spring:
   devtools:
     restart:
       enabled: true
-#  jpa:
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        hbm2ddl:
-#          import_files: V3__trapps_db_insert_data.sql
-#    generate-ddl: true
 server: 
   port: 8081
 security:
   basic:
     enabled: false
-  oauth2:
-    resource:
-      user-info-uri: http://trapps-local:8081/user
-trapps:
-  client-id: trapps-application-iwquy-ienke-qnbek-iuysc-pwirh
-  client-secret: trapps-application-secret-oiweds-iujwsd-ujrqcd-iorcl-klmvek
-  access-token-url: /oauth/token
-  client-apps: http://trapps-local:4201
 logging:
   level:
     org.spring.security: DEBUG
     org.springframework.web: ERROR
     com.insys.trapps: DEBUG
     org.hibernate: ERROR
+authentication:
+  oauth:
+    clientid: trapps-app
+    secret: QQsfDh5Q7S1BB8UHiB0Ni3okKn8lEEbeDx1k4k2OjT2jWuzr
+    tokenValidityInSeconds: 1800
 ---
 spring:
   profiles: local,cloud
@@ -66,9 +51,3 @@ spring:
 security:
   basic:
     enabled: false
-#  oauth:
-#    client-info:
-#      client-id: trapps-application-iwquy-ienke-qnbek-iuysc-pwirh
-#      client-secret: trapps-application-secret-oiweds-iujwsd-ujrqcd-iorcl-klmvek
-#      authorized-grant-types: authorization_code,refresh_token,password,client_credentials
-#      scope: read,write

@@ -156,8 +156,8 @@ CREATE TABLE state
 
 CREATE TABLE user
   (
-     username                VARCHAR(25) NOT NULL,
-     password                VARCHAR(25) NOT NULL,
+     username                VARCHAR(50) NOT NULL,
+     password                VARCHAR(500) NOT NULL,
      account_non_expired     BOOLEAN NOT NULL,
      account_non_locked      BOOLEAN NOT NULL,
      credentials_non_expired BOOLEAN NOT NULL,
