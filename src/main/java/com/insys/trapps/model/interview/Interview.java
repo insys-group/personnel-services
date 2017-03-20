@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.insys.trapps.model.Role;
 
 import com.insys.trapps.model.person.Person;
@@ -52,13 +54,14 @@ public class Interview implements Serializable {
 	@Getter
 	@Setter
 	@OneToOne
-	@JoinColumn(name = "PERSON_ID")
+	@JoinColumn(name = "person_id")
+	@JsonManagedReference
 	private Person candidate;
 
 	@Getter
 	@Setter
 	@OneToOne
-	@JoinColumn(name = "ROLE_ID")
+	@JoinColumn(name = "role_id")
 	private Role role;
 
 	@Getter

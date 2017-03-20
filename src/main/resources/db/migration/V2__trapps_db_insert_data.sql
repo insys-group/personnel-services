@@ -130,3 +130,5 @@ INSERT INTO address(id, address_1 , city , state, zip_code, country) VALUES(11, 
 INSERT INTO person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) VALUES(16, 'Armando', 'Reyna', '720-560-8971', 'areyna@insys.com', 'Architect', 'Employee', 11, 16);
 INSERT INTO user (username, password, person_id, account_non_expired, account_non_locked, credentials_non_expired, enabled) VALUES('areyna', 'cb5af25a063f751372465c0f27ef9cada13ecd8d850564ebcab690d0c725ffddf6786887c444f016', 16, true, true, true, true);
 INSERT INTO user_authority(id, username, authority) VALUES (2, 'areyna', 'ADMIN');
+
+insert into PERSON(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) values(17, 'John', 'Snow', '111-11-1111', 'jsnow@gmail.com', 'Developer', 'Candidate', 11, 16);

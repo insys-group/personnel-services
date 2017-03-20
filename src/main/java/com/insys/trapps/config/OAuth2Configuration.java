@@ -1,5 +1,12 @@
 package com.insys.trapps.config;
 
+import com.insys.trapps.model.*;
+import com.insys.trapps.model.interview.Feedback;
+import com.insys.trapps.model.interview.Interview;
+import com.insys.trapps.model.interview.InterviewTemplate;
+import com.insys.trapps.model.person.Person;
+import com.insys.trapps.model.security.Client;
+import com.insys.trapps.model.security.User;
 import com.insys.trapps.security.Authorities;
 import com.insys.trapps.security.CustomAuthenticationEntryPoint;
 import com.insys.trapps.security.CustomLogoutSuccessHandler;
@@ -10,10 +17,10 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpMethod;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -23,6 +30,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import javax.sql.DataSource;
 
@@ -39,18 +49,31 @@ public class OAuth2Configuration {
         @Autowired
         private CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
+        @Bean
+        public CorsFilter corsFilter() {
+            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+            CorsConfiguration config = new CorsConfiguration();
+            config.setAllowCredentials(true);
+            config.addAllowedOrigin("*");
+            config.addAllowedHeader("*");
+            config.addAllowedMethod("*");
+            source.registerCorsConfiguration("/**", config);
+            CorsFilter corsFilter = new CorsFilter(source);
+            return corsFilter;
+        }
+
         @Override
         public void configure(HttpSecurity http) throws Exception {
 
+
             http
+                    .cors().and()
                     .exceptionHandling()
                     .authenticationEntryPoint(customAuthenticationEntryPoint)
-                    .and()
-                    .logout()
+                    .and().logout()
                     .logoutUrl("/oauth/logout")
                     .logoutSuccessHandler(customLogoutSuccessHandler)
-                    .and()
-                    .csrf()
+                    .and().csrf()
                     .requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize"))
                     .disable()
                     .headers()
@@ -59,8 +82,7 @@ public class OAuth2Configuration {
                     //.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                     .authorizeRequests()
-                    .antMatchers("/api/v1").authenticated();
-
+                    .antMatchers("/api/v1/**").authenticated();
         }
 
     }
@@ -113,6 +135,33 @@ public class OAuth2Configuration {
             this.propertyResolver = new RelaxedPropertyResolver(environment, ENV_OAUTH);
         }
 
+    }
+
+    @Configuration
+    public class RepositoryConfiguration extends RepositoryRestConfigurerAdapter {
+
+        @Override
+        public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
+
+            config.exposeIdsFor(Business.class);
+            config.exposeIdsFor(Client.class);
+            config.exposeIdsFor(ContractDetail.class);
+            config.exposeIdsFor(Contract.class);
+            config.exposeIdsFor(Engagement.class);
+            config.exposeIdsFor(EngagementOpening.class);
+            config.exposeIdsFor(Opportunity.class);
+            config.exposeIdsFor(OpportunityStep.class);
+            config.exposeIdsFor(Person.class);
+            config.exposeIdsFor(Role.class);
+            config.exposeIdsFor(Skill.class);
+            config.exposeIdsFor(State.class);
+            config.exposeIdsFor(Training.class);
+            config.exposeIdsFor(User.class);
+            config.exposeIdsFor(Feedback.class);
+            config.exposeIdsFor(Interview.class);
+            config.exposeIdsFor(InterviewTemplate.class);
+
+        }
     }
 
 }

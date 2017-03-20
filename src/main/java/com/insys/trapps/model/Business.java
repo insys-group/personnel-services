@@ -59,12 +59,12 @@ public class Business implements Serializable {
     @Enumerated(EnumType.STRING)
     private BusinessType businessType;
 
-    @Setter
-    @Getter
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
-     @JoinTable(joinColumns = @JoinColumn(name = "BUSINESS_ID", referencedColumnName = "ID"),
-         inverseJoinColumns = @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID"))
-     private Set<Person> persons;
+//    @Setter
+//    @Getter
+//    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+//     @JoinTable(joinColumns = @JoinColumn(name = "BUSINESS_ID", referencedColumnName = "ID"),
+//         inverseJoinColumns = @JoinColumn(name = "PERSON_ID", referencedColumnName = "ID"))
+//     private Set<Person> persons;
 
     @Getter
     @Setter
@@ -78,7 +78,7 @@ public class Business implements Serializable {
 	@Override
 	public String toString() {
 		return "Business [name=" + name + ", description=" + description + ", businessType=" + businessType
-				+ ", persons=" + persons + ", addresses=" + addresses
+				+ ", addresses=" + addresses
 				+ ", getId()=" + getId() + "]";
 	}
 }

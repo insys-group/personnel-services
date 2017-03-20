@@ -39,7 +39,7 @@ public class InterviewTemplate {
     @Getter
     @Setter
     @OneToOne
-    @JoinColumn(name = "ROLE_ID")
+    @JoinColumn(name = "role_id")
     private Role role;
 
     @Getter
