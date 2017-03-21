@@ -8,7 +8,7 @@ CREATE TABLE feedback (
   person_id bigint(20) DEFAULT NULL,
   PRIMARY KEY (id),
   CONSTRAINT feedback_person_id FOREIGN KEY (person_id) REFERENCES person (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 --
 -- Table structure for table interview
@@ -24,7 +24,7 @@ CREATE TABLE interview (
   PRIMARY KEY (id),
   CONSTRAINT interview_person_id FOREIGN KEY (person_id) REFERENCES person (id),
   CONSTRAINT interview_role_id FOREIGN KEY (role_id) REFERENCES role (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 --
 -- Table structure for table question
@@ -39,7 +39,7 @@ CREATE TABLE question (
   interview_id bigint(20) DEFAULT NULL,
   PRIMARY KEY (id),
   CONSTRAINT question_interview_id FOREIGN KEY (interview_id) REFERENCES interview (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 --
 -- Table structure for table answer
@@ -53,7 +53,7 @@ CREATE TABLE answer (
   question_id bigint(20) DEFAULT NULL,
   PRIMARY KEY (id),
   CONSTRAINT answer_question_id FOREIGN KEY (question_id) REFERENCES question (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 --
 -- Table structure for table interview_answers
@@ -65,7 +65,7 @@ CREATE TABLE interview_answers (
   PRIMARY KEY (interview_id,answers_id),
   CONSTRAINT interview_answers_interview_id FOREIGN KEY (interview_id) REFERENCES interview (id),
   CONSTRAINT interview_answers_answers_id FOREIGN KEY (answers_id) REFERENCES answer (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 --
 -- Table structure for table interview_feedbacks
@@ -77,7 +77,7 @@ CREATE TABLE interview_feedbacks (
   PRIMARY KEY (interview_id,feedbacks_id),
   CONSTRAINT interview_feedbacks_feedbacks_id FOREIGN KEY (feedbacks_id) REFERENCES feedback (id),
   CONSTRAINT interview_feedbacks_interview_id FOREIGN KEY (interview_id) REFERENCES interview (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 --
 -- Table structure for table interview_interviewers
@@ -89,7 +89,7 @@ CREATE TABLE interview_interviewers (
   PRIMARY KEY (interview_id,interviewers_id),
   CONSTRAINT interview_interviewers_interviewers_id FOREIGN KEY (interviewers_id) REFERENCES person (id),
   CONSTRAINT interview_interviewers_interview_id FOREIGN KEY (interview_id) REFERENCES interview (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 --
 -- Table structure for table interview_questions
@@ -101,7 +101,7 @@ CREATE TABLE interview_questions (
   PRIMARY KEY (interview_id,questions_id),
   CONSTRAINT interview_questions_interview_id FOREIGN KEY (interview_id) REFERENCES interview (id),
   CONSTRAINT interview_questions_questions_id FOREIGN KEY (questions_id) REFERENCES question (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 --
 -- Table structure for table interview_template
@@ -114,7 +114,7 @@ CREATE TABLE interview_template (
   role_id bigint(20) DEFAULT NULL,
   PRIMARY KEY (id),
   CONSTRAINT interview_template_role_id FOREIGN KEY (role_id) REFERENCES role (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 --
 -- Table structure for table interview_template_questions
@@ -126,4 +126,4 @@ CREATE TABLE interview_template_questions (
   PRIMARY KEY (interview_template_id,questions_id),
   CONSTRAINT interview_template_questions_questions_id FOREIGN KEY (questions_id) REFERENCES question (id),
   CONSTRAINT interview_template_questions_interview_template_id FOREIGN KEY (interview_template_id) REFERENCES interview_template (id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
