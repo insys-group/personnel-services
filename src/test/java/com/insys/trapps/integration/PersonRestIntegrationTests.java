@@ -4,8 +4,10 @@
 package com.insys.trapps.integration;
 
 import com.insys.trapps.model.*;
-import com.insys.trapps.respositories.BusinessRepository;
-import com.insys.trapps.respositories.PersonRepository;
+import com.insys.trapps.model.security.User;
+import com.insys.trapps.model.security.UserAuthority;
+import com.insys.trapps.respositories.*;
+import com.insys.trapps.security.Authorities;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.ValidatableResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -32,11 +34,10 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.jayway.restassured.RestAssured.basic;
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.with;
 import static java.util.Arrays.asList;
@@ -52,42 +53,94 @@ import static org.junit.Assert.assertNull;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
 public class PersonRestIntegrationTests {
+
     @Autowired
-    private PersonRepository repository;
+    private PersonRepository personRepository;
+
     @Autowired
     private BusinessRepository businessRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserAuthorityRepository userAuthorityRepository;
+
     private Business business;
 
+    private String PERSON_PATH = "/persons";
+
     @Value("${local.server.port}")
-    private int port;
+    private int PORT;
 
     @Value("${spring.data.rest.basePath}")
-    private String basePath;
+    private String BASE_PATH;
 
-    private final String PERSON_PATH = "/persons";
+    @Value("${authentication.oauth.path}")
+    private String OAUTH_PATH;
+
+    @Value("${authentication.oauth.clientid}")
+    private String PROP_CLIENTID;
+
+    @Value("${authentication.oauth.secret}")
+    private String PROP_SECRET;
+
+    @Value("${authentication.oauth.username}")
+    private String USERNAME;
+
+    @Value("${authentication.oauth.password}")
+    private String PASSWORD;
+
+    @Value("${authentication.oauth.encodedPassword}")
+    private String ENCODED_PASSWORD;
+
+    private String access_token = "";
 
     @Before
     public void setup() {
-        RestAssured.port = port;
+
+        RestAssured.port = PORT;
+
+        Person personUser = Person.builder().firstName("Armando").lastName("Reyna").email("areyna@insys.com").personType(PersonType.Employee).build();
+        personRepository.saveAndFlush(personUser);
+        log.debug("Person created successfully " + personUser.toString());
+
+        User appUser = User.builder().username(USERNAME).password(ENCODED_PASSWORD).personId(personUser.getId()).enabled(Boolean.TRUE).build();
+        appUser = userRepository.saveAndFlush(appUser);
+        log.debug("User created successfully " + appUser.toString());
+
         business = Business.builder().name("Test Business").businessType(BusinessType.INSYS).description("Test Business").build();
         businessRepository.saveAndFlush(business);
-        log.debug("Business created successfully" + business.toString());
+        log.debug("Business created successfully " + business.toString());
+
+        access_token = given().auth().basic(PROP_CLIENTID, PROP_SECRET)
+                .log().everything()
+                .when()
+                .contentType("application/json")
+                .queryParam("grant_type", "password")
+                .queryParam("username", USERNAME)
+                .queryParam("password", PASSWORD)
+                .post(OAUTH_PATH)
+                .then()
+                .extract().path("access_token");
+
+        log.debug("access_token " + access_token);
     }
 
     @After
     public void cleanup() {
+        userRepository.deleteAll();
     }
 
     @Test
     public void testCreatePerson() throws Exception {
         Person person = personBuilder().build();
-        given()
+        given().auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(person)
                 .log().everything()
         .when()
-                .post(basePath + PERSON_PATH)
+                .post(BASE_PATH + PERSON_PATH)
         .then()
                 .statusCode(HttpStatus.CREATED.value());
     }
@@ -96,12 +149,12 @@ public class PersonRestIntegrationTests {
     @Test
     public void testCreatePersonWithSkills() {
         Person person = createPersonWithSkills();
-        given()
+        given().auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(person)
                 .log().everything()
         .when()
-                .post(basePath + PERSON_PATH)
+                .post(BASE_PATH + PERSON_PATH)
         .then()
                 .log().everything()
                 .statusCode(HttpStatus.CREATED.value())
@@ -215,14 +268,14 @@ public class PersonRestIntegrationTests {
     @Test
     public void testDeletePersonWithSkills() {
         Person person = postPersonRequest(createPersonWithSkills());
-        given()
+        given().auth().oauth2(access_token)
                 .log().everything()
         .when()
-                .delete(basePath + PERSON_PATH + "/" + person.getId())
+                .delete(BASE_PATH + PERSON_PATH + "/" + person.getId())
         .then()
                 .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
 
-        person = repository.findOne(person.getId());
+        person = personRepository.findOne(person.getId());
         assertNull(person);
     }
 
@@ -233,43 +286,43 @@ public class PersonRestIntegrationTests {
 
     private ValidatableResponse getPersonRequest(Person person) {
         return with()
-                .get(basePath + PERSON_PATH + "/" + person.getId())
+                .get(BASE_PATH + PERSON_PATH + "/" + person.getId())
         .then()
                 .log().everything();
     }
 
     private Person postPersonRequest(Person person) {
         return
-                given()
+                given().auth().oauth2(access_token)
                         .contentType("application/json")
                         .body(person)
                 .when()
                         .log().everything()
-                        .post(basePath + PERSON_PATH)
+                        .post(BASE_PATH + PERSON_PATH)
                 .then()
                         .statusCode(HttpStatus.CREATED.value())
                         .extract().as(Person.class);
     }
 
     private void putPersonRequest(Person savedPerson) {
-        given()
+        given().auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(savedPerson)
                 .log().everything()
         .when()
-                .put(basePath + PERSON_PATH + "/put/" + savedPerson.getId())
+                .put(BASE_PATH + PERSON_PATH + "/put/" + savedPerson.getId())
         .then()
                 .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
     }
 
     private Training postTrainingRequest(Training training) {
         return
-                given()
+                given().auth().oauth2(access_token)
                         .contentType("application/json")
                         .body(training)
                 .when()
                         .log().everything()
-                        .post(basePath + "/trainings")
+                        .post(BASE_PATH + "/trainings")
                 .then()
                         .statusCode(HttpStatus.CREATED.value())
                         .extract().as(Training.class);

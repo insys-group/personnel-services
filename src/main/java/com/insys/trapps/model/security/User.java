@@ -67,12 +67,25 @@ public class User implements UserDetails, Serializable {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(this.authorities.size()==0) {
-            authorities.add(new UserAuthority(this, "USER"));
+            authorities.add(new UserAuthority(this, "ADMIN"));
         }
         return authorities;
     }
 
-    /*
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", personId=" + personId +
+                ", accountNonExpired=" + accountNonExpired +
+                ", accountNonLocked=" + accountNonLocked +
+                ", credentialsNonExpired=" + credentialsNonExpired +
+                ", enabled=" + enabled +
+                ", authorities=" + authorities +
+                '}';
+    }
+/*
     @Override
     public boolean isAccountNonExpired() {
         return false;
