@@ -30,11 +30,6 @@ logging:
     org.springframework.web: ERROR
     com.insys.trapps: DEBUG
     org.hibernate: ERROR
-authentication:
-  oauth:
-    clientid: trapps-app
-    secret: QQsfDh5Q7S1BB8UHiB0Ni3okKn8lEEbeDx1k4k2OjT2jWuzr
-    tokenValidityInSeconds: 1800
 ---
 spring:
   profiles: local,cloud
@@ -47,6 +42,11 @@ spring:
     rest:
       basePath: /api/v1
       defaultMediaType: application/json
+authentication:
+  oauth:
+    clientid: trapps-app
+    secret: QQsfDh5Q7S1BB8UHiB0Ni3okKn8lEEbeDx1k4k2OjT2jWuzr
+    tokenValidityInSeconds: 1800
 ---
 security:
   basic:
