@@ -190,7 +190,7 @@ CREATE TABLE Client
 
 CREATE TABLE oauth_access_token
   (
-    authentication_id VARCHAR(256),
+    authentication_id VARCHAR(100),
     token_id VARCHAR(256),
     token BLOB,
     user_name VARCHAR(256),
@@ -202,7 +202,7 @@ CREATE TABLE oauth_access_token
 
 CREATE TABLE oauth_refresh_token
   (
-    token_id VARCHAR(256),
+    token_id VARCHAR(100),
     token BLOB,
     authentication BLOB,
     PRIMARY KEY (token_id)
@@ -291,23 +291,3 @@ ALTER TABLE role_skill
 ALTER TABLE user_authority
   ADD CONSTRAINT fk_use_aut_use FOREIGN KEY (username) REFERENCES
   user(username);
-
--- drop table address if exists;
--- drop table business if exists;
--- drop table contract if exists;
--- drop table contract_detail if exists;
--- drop table engagement if exists;
--- drop table engagement_opening if exists;
--- drop table location if exists;
--- drop table opportunity if exists;
--- drop table opportunity_contact if exists;
--- drop table opportunity_step if exists;
--- drop table person if exists;
--- drop table person_document if exists;
--- drop table person_skill if exists;
--- drop table role if exists;
--- drop table role_skill if exists;
--- drop table skill if exists;
--- drop table state if exists;
--- drop table user if exists;
--- drop table user_authority if exists;
