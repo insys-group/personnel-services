@@ -1,38 +1,3 @@
---INSERT INTO address(id, address_1 , city , state, zip_code, country, version) VALUES(1, '10 Park Ave' , 'Manhatten' , 'NY' , '10010', 'USA', 1);
---INSERT INTO address(id, address_1 , city , state, zip_code, country, version) VALUES(2, '100 Business Ave', 'Manhatten' , 'NY' , '10012', 'USA', 1);
---INSERT INTO address(id, address_1 , city , state, zip_code, country, version) VALUES(3, '100 Comcast Ave', 'Philadelphia', 'PA', '88790', 'USA', 1);
---INSERT INTO address(id, address_1 , city , state, zip_code, country, version) VALUES(4, '10 INSYS Ave', 'Rochelle Park', 'NJ', '06786', 'USA', 1);
---INSERT INTO address(id, address_1 , city , state, zip_code, country, version) VALUES(5, '3 Gerson Rd', 'Robbinsville', 'NJ', '08691', 'USA', 1);
---INSERT INTO address(id, address_1 , city , state, zip_code, country, version) VALUES(6, '9 Tindal Ave', 'Rochelle Park', 'NJ', '08796', 'USA', 1);
---INSERT INTO address(id, address_1 , city , state, zip_code, country, version) VALUES(7, '21 Sesame St', 'Raleigh', 'NC', '77796', 'USA', 1);
---INSERT INTO address(id, address_1 , city , state, zip_code, country, version) VALUES(8, '88 100th St', 'Herndon', 'VA', '59877', 'USA', 1);
---INSERT INTO address(id, address_1 , city , state, zip_code, country, version) VALUES(9, '23 1st St', 'Secaucus', 'NJ', '09877', 'USA', 1);
---INSERT INTO address(id, address_1 , city , state, zip_code, country, version) VALUES(10, '11 Independance Ave', 'Pittsburg', 'PA', '09327', 'USA', 1);
---
---INSERT INTO business(id, name, description, business_type, version) VALUES(15, 'Comcast Inc', 'Comcast' , 'Client', 1);
---INSERT INTO business(id, name, description, business_type, version) VALUES(16, 'INSYS Group Inc', 'INSYS Group Pivotal Practice', 'INSYS', 1);
---INSERT INTO business(id, name, description, business_type, version) VALUES(17, 'Pivotal Cloud Foundry', 'Pivotal Cloud Foundry', 'Pivotal', 1);
---INSERT INTO business(id, name, description, business_type, version) VALUES(18, 'Pivotal Labs', 'Pivotal Labs', 'PivotalLabs', 1);
---INSERT INTO business(id, name, description, business_type, version) VALUES(19, 'Apptium Inc', 'Apptium Solutions', 'Vendor', 1);
---
---INSERT INTO location(business_id , address_id) VALUES(15 , 1);
---INSERT INTO location(business_id , address_id) VALUES(15 , 3);
---INSERT INTO location(business_id , address_id) VALUES(15 , 2);
---INSERT INTO location(business_id , address_id) VALUES(16 , 4);
---
---INSERT INTO person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id, version) VALUES(10, 'Muhammad', 'Sabir', '631-983-9075', 'msabir@insys.com', 'Architect', 'Employee', 5, 16, 1);
---INSERT INTO person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id, version) VALUES(11, 'Brad', 'Starkenberg', '876-99-3427', 'bstarken@insys.com', 'Architect', 'Employee', 6, 16, 1);
---INSERT INTO person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id, version) VALUES(12, 'Eric', 'Pereira', '876-99-3427', 'epereira@insys.com', 'Architect', 'Employee', 7, 16, 1);
---INSERT INTO person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id, version) VALUES(13, 'Michael', 'Orth', '237-28-3427', 'morth@apptium.com', 'Manager', 'Vendor', 8, 19, 1);
---INSERT INTO person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id, version) VALUES(14, 'Kevin', 'Meloney', '872-28-1297', 'kmulder@comcast.com', 'Manager', 'Client', 9, 15, 1);
---INSERT INTO person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id, version) VALUES(15, 'Chris', 'Umbel', '297-28-1276', 'cumbel@pivotal.com', 'Architect', 'Pivotal', 10, 17, 1);
---
---INSERT INTO person_SKILL(id, person_id, name, scale, version) VALUES(1, 10, 'Spring', 8, 1);
---
---INSERT INTO ROLE(id , name, version) VALUES(1 , 'Developer', 1);
---INSERT INTO SKILL(id , name, version) VALUES(1 , 'Java', 1);
---INSERT INTO ROLE_SKILL VALUES(1 , 1);
-
 INSERT INTO address(id, address_1 , city , state, zip_code, country) VALUES(1, '10 Park Ave' , 'Manhatten' , 'NY' , '10010', 'USA');
 INSERT INTO address(id, address_1 , city , state, zip_code, country) VALUES(2, '100 Business Ave', 'Manhatten' , 'NY' , '10012', 'USA');
 INSERT INTO address(id, address_1 , city , state, zip_code, country) VALUES(3, '100 Comcast Ave', 'Philadelphia', 'PA', '88790', 'USA');
@@ -131,4 +96,4 @@ INSERT INTO person(id, first_name, last_name , phone, email, title, person_type,
 INSERT INTO user (username, password, person_id, account_non_expired, account_non_locked, credentials_non_expired, enabled) VALUES('areyna', 'cb5af25a063f751372465c0f27ef9cada13ecd8d850564ebcab690d0c725ffddf6786887c444f016', 16, true, true, true, true);
 INSERT INTO user_authority(id, username, authority) VALUES (2, 'areyna', 'ADMIN');
 
-insert into PERSON(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) values(17, 'John', 'Snow', '111-11-1111', 'jsnow@gmail.com', 'Developer', 'Candidate', 11, 16);
+insert into person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) values(17, 'John', 'Snow', '111-11-1111', 'jsnow@gmail.com', 'Developer', 'Candidate', 11, 16);

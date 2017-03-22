@@ -291,23 +291,3 @@ ALTER TABLE role_skill
 ALTER TABLE user_authority
   ADD CONSTRAINT fk_use_aut_use FOREIGN KEY (username) REFERENCES
   user(username);
-
--- drop table address if exists;
--- drop table business if exists;
--- drop table contract if exists;
--- drop table contract_detail if exists;
--- drop table engagement if exists;
--- drop table engagement_opening if exists;
--- drop table location if exists;
--- drop table opportunity if exists;
--- drop table opportunity_contact if exists;
--- drop table opportunity_step if exists;
--- drop table person if exists;
--- drop table person_document if exists;
--- drop table person_skill if exists;
--- drop table role if exists;
--- drop table role_skill if exists;
--- drop table skill if exists;
--- drop table state if exists;
--- drop table user if exists;
--- drop table user_authority if exists;
