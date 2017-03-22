@@ -24,15 +24,10 @@ import com.jayway.restassured.RestAssured;
 
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * @author Muhammad Sabir
- */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
-public class OpportunityRestIntegrationTests {
-    @Value("${local.server.port}")
-    private int port;
+public class OpportunityRestIntegrationTests extends TestCaseAuthorization {
 
     @Value("${spring.data.rest.basePath}")
     private String basePath;
@@ -40,21 +35,13 @@ public class OpportunityRestIntegrationTests {
     private final String OPP_PATH = "/opportunities";
     private final String OPP_STEP_PATH = "/opportunitySteps";
 
-    @Before
-    public void setup() {
-        RestAssured.port = port;
-    }
-
-    @After
-    public void cleanup() {
-    }
-
     @Test
     public void testCreateOpportunity() {
         Opportunity opportunity = Opportunity.builder()
                 .name("Opportunity 1")
                 .comments("Comcast Opportunity").build();
         given()
+                .auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(opportunity)
                 .log().everything()
@@ -72,25 +59,23 @@ public class OpportunityRestIntegrationTests {
         		.build();
         String url =
         given()
-                        .contentType("application/json")
-                        .body(opportunity)
-                        .log().everything()
+                .auth().oauth2(access_token)
+                .contentType("application/json")
+                .body(opportunity)
+                .log().everything()
         .when()
-                        .post(basePath + OPP_PATH)
+                .post(basePath + OPP_PATH)
         .then()
                 .log().everything()
-                        .statusCode(HttpStatus.CREATED.value())
-                        .extract().jsonPath().get("_links.self.href").toString();
+                .statusCode(HttpStatus.CREATED.value())
+                .extract().jsonPath().get("_links.self.href").toString();
 
         opportunity.setId(Utils.getId(url));
 
         given()
+                .auth().oauth2(access_token)
                 .contentType("application/json")
-                .body(OpportunityStep.builder()
-                        .comments("Step 1")
-                        .stepTimestamp(Timestamp.valueOf(LocalDate.now().atStartOfDay()))
-                        
-                        .build())
+                .body(OpportunityStep.builder().comments("Step 1").stepTimestamp(Timestamp.valueOf(LocalDate.now().atStartOfDay())).build())
                 .log().everything()
         .when()
                 .post(basePath + OPP_STEP_PATH)
@@ -109,6 +94,7 @@ public class OpportunityRestIntegrationTests {
         log.debug("Creating opportunity = " + mapper.writeValueAsString(opportunity));
         String url =
         given()
+                .auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(opportunity)
                 .log().everything()
@@ -119,6 +105,7 @@ public class OpportunityRestIntegrationTests {
                 .extract().jsonPath().get("_links.self.href").toString();
 
         given()
+                .auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(OpportunityStep.builder()
                         .comments("Step 1")
@@ -134,7 +121,9 @@ public class OpportunityRestIntegrationTests {
 
     @Test
     public void testGetOpportunities() {
-        when()
+        given()
+                .auth().oauth2(access_token)
+        .when()
                 .get(basePath + OPP_PATH)
                 .then()
                 .statusCode(HttpStatus.OK.value());
@@ -142,7 +131,9 @@ public class OpportunityRestIntegrationTests {
 
     @Test
     public void testGetSteps() {
-        when()
+        given()
+                .auth().oauth2(access_token)
+        .when()
                 .get(basePath + OPP_PATH)
                 .then()
                 .statusCode(HttpStatus.OK.value());

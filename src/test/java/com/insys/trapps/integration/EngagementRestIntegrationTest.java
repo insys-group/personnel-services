@@ -21,15 +21,10 @@ import com.jayway.restassured.RestAssured;
 
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * Created by vnalitkin on 11/22/2016.
- */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
-public class EngagementRestIntegrationTest {
-    @Value("${local.server.port}")
-    private int port;
+public class EngagementRestIntegrationTest extends TestCaseAuthorization {
 
     @Value("${spring.data.rest.basePath}")
     private String basePath;
@@ -37,20 +32,11 @@ public class EngagementRestIntegrationTest {
     private final String ENG_PATH = "/engagements";
     private final String ENG_OPEN_PATH = "/engagementOpenings";
 
-    @Before
-    public void setup() {
-        RestAssured.port = port;
-    }
-
-    @After
-    public void cleanup() {
-    }
-
-
     @Test
     public void testCreateEngagement() {
         Engagement engagement = Engagement.builder().comments("Comcast Engagement").build();
         given()
+                .auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(engagement)
                 .log().everything()
@@ -67,6 +53,7 @@ public class EngagementRestIntegrationTest {
         		.build();
         String url =
                 given()
+                        .auth().oauth2(access_token)
                         .contentType("application/json")
                         .body(engagement)
                         .log().everything()
@@ -79,6 +66,7 @@ public class EngagementRestIntegrationTest {
         engagement.setId(Utils.getId(url));
 
         given()
+                .auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(EngagementOpening.builder()
                         .comments("engagement open 1")
@@ -92,6 +80,7 @@ public class EngagementRestIntegrationTest {
                 .statusCode(HttpStatus.CREATED.value());
 
         given()
+                .auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(EngagementOpening.builder()
                         .comments("engagement open 2")
@@ -107,7 +96,9 @@ public class EngagementRestIntegrationTest {
 
     @Test
     public void testGetEngagements() {
-        when()
+        given()
+                .auth().oauth2(access_token)
+        .when()
                 .get(basePath + ENG_PATH)
         .then()
                 .statusCode(HttpStatus.OK.value());
@@ -115,7 +106,9 @@ public class EngagementRestIntegrationTest {
 
     @Test
     public void testGetEngagementOpenings() {
-        when()
+        given()
+                .auth().oauth2(access_token)
+        .when()
                 .get(basePath + ENG_OPEN_PATH)
         .then()
                 .statusCode(HttpStatus.OK.value());

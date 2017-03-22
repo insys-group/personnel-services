@@ -34,7 +34,7 @@ public class TrainingRepositoryTest {
 	private TrainingRepository repository;
 
 	@Test
-	public void testCreateTraining() {
+	public void TrainingRepositoryTesttestCreateTraining() {
 		Training training = initTraining();
 
 		Long id = repository.saveAndFlush(training).getId();

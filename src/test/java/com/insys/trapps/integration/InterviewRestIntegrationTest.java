@@ -43,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
-public class InterviewRestIntegrationTest {
+public class InterviewRestIntegrationTest extends TestCaseAuthorization {
 
 	@Autowired
 	private FeedbackRepository feedbackRepo;
@@ -53,9 +53,6 @@ public class InterviewRestIntegrationTest {
 	private PersonRepository personRepo;
 	@Autowired
 	private BusinessRepository businessRepo;
-
-    @Value("${local.server.port}")
-	private int port;
 
 	@Value("${spring.data.rest.basePath}")
 	private String basePath;
@@ -73,7 +70,6 @@ public class InterviewRestIntegrationTest {
 
 	@Before
 	public void setup() {
-		RestAssured.port = port;
 
 		business = BusinessBuilder.buildBusiness("Insys", "Interview", BusinessType.INSYS).build();
 		businessRepo.saveAndFlush(business);
@@ -148,13 +144,29 @@ public class InterviewRestIntegrationTest {
 	}
 
 	private JsonPath postRequestForInterviewReturns(Interview interview, HttpStatus status) {
-		return given().contentType("application/json").body(interview).log().everything().when()
-				.post(basePath + INTERVIEW_PATH).then().statusCode(status.value()).extract().response().jsonPath();
+		return
+				given()
+						.auth().oauth2(access_token)
+						.contentType("application/json")
+						.body(interview)
+						.log().everything()
+				.when()
+						.post(basePath + INTERVIEW_PATH)
+				.then()
+						.statusCode(status.value())
+						.extract().response().jsonPath();
 	}
 
 	private JsonPath getRequestForInterview(long id) {
-		return given().when().get(basePath + INTERVIEW_DETAILS_PATH + "/" + id).then().statusCode(HttpStatus.OK.value()).log()
-				.everything().extract().jsonPath();
+		return
+				given()
+						.auth().oauth2(access_token)
+				.when()
+						.get(basePath + INTERVIEW_DETAILS_PATH + "/" + id)
+				.then()
+						.log().everything()
+						.statusCode(HttpStatus.OK.value())
+						.extract().jsonPath();
 	}
 
 	private Person buildPerson(String firstName, String lastName, String email, String title, PersonType type) {

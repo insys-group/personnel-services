@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.insys.trapps.model.person.Person;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,6 +35,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Business implements Serializable {
 	private static final long serialVersionUID = 542002485451980387L;
 

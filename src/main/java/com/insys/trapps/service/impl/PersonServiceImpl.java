@@ -145,6 +145,8 @@ public class PersonServiceImpl implements PersonService {
 
     private void updatePersonTrainings(Person person, Person dbPerson) {
         Set<PersonTraining> personTrainings = person.getPersonTrainings();
+        Set<PersonTraining> dbPersonTrainings = new HashSet<>(dbPerson.getPersonTrainings());
+        dbPerson.getPersonTrainings().clear();
         if (personTrainings == null) {
             return;
         }
@@ -163,7 +165,7 @@ public class PersonServiceImpl implements PersonService {
         List<PersonTraining> savedPersonTrainings = personTrainingsIsNew.get(FALSE);
         if (savedPersonTrainings != null) {
             savedPersonTrainings.forEach(personTraining ->
-                    dbPerson.getPersonTrainings().stream()
+                    dbPersonTrainings.stream()
                             .filter(dbPersonTraining -> personTraining.getId().equals(dbPersonTraining.getId()))
                             .findFirst().ifPresent(dbPersonTraining -> {
                                 dbPersonTraining.setStartDate(personTraining.getStartDate());
@@ -172,6 +174,7 @@ public class PersonServiceImpl implements PersonService {
                                 dbPersonTraining.setHided(personTraining.isHided());
                                 dbPersonTraining.getCompletedTasks().clear();
                                 dbPersonTraining.getCompletedTasks().addAll(personTraining.getCompletedTasks());
+                                dbPerson.getPersonTrainings().add(dbPersonTraining);
                             }
                     )
             );

@@ -25,21 +25,14 @@ import static org.hamcrest.Matchers.hasSize;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class TrainingRestIntegrationTest {
-			
-    @Value("${local.server.port}")
-    private int port;
+public class TrainingRestIntegrationTest extends TestCaseAuthorization {
+
     
     @Value("${spring.data.rest.basePath}")
     private String basePath;
 
     private static final String TRAINING_PATH = "/trainings";
-    
-    @Before
-    public void setup() {
-        RestAssured.port = port;
-    }
-    
+
     @Test
     public void testCreateTraining() throws Exception {
     	Training training = initTraining();
@@ -78,6 +71,7 @@ public class TrainingRestIntegrationTest {
 
 	private void deleteTrainingRequest(long id) {
 		with()
+				.auth().oauth2(access_token)
 				.log().everything()
 		        .delete(basePath + TRAINING_PATH + "/" + id)
 		.then()
@@ -86,10 +80,11 @@ public class TrainingRestIntegrationTest {
 
 	private ValidatableResponse getTrainingRequest(long id) {
 		return with()
-			.get(basePath + TRAINING_PATH + "/" + id)
+				.auth().oauth2(access_token)
+				.get(basePath + TRAINING_PATH + "/" + id)
 		.then()
-			.log().everything()
-			.statusCode(HttpStatus.OK.value());
+				.log().everything()
+				.statusCode(HttpStatus.OK.value());
 	}
 
 	private void setNewFieldsTo(Training training, String[] newTaskNames, String newName) {
@@ -102,6 +97,7 @@ public class TrainingRestIntegrationTest {
 	private Training postTrainingRequest(Training training) {
 		return 
 		given()
+				.auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(training)
         .when()
@@ -114,6 +110,7 @@ public class TrainingRestIntegrationTest {
 
 	private ValidatableResponse checkGetRequestReturnNOT_FOUND(long id) {
 		return with()
+				.auth().oauth2(access_token)
     			.get(basePath + TRAINING_PATH + "/" + id)
     	.then()
 				.log().everything()

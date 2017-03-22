@@ -1,6 +1,9 @@
 package com.insys.trapps.integration;
 
 import static com.jayway.restassured.RestAssured.given;
+import static com.jayway.restassured.RestAssured.with;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -12,6 +15,9 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import com.insys.trapps.model.person.Person;
+import com.jayway.restassured.response.ValidatableResponse;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,37 +35,21 @@ import com.insys.trapps.respositories.BusinessRepository;
 import com.jayway.restassured.RestAssured;
 
 import lombok.extern.slf4j.Slf4j;
-/**
- * @author epereira
- *
- */
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
-
-public class BusinessRestIntegrationTests {
+public class BusinessRestIntegrationTests extends TestCaseAuthorization {
 	
 	@Autowired
 	private BusinessRepository repository;
-		
-    @Value("${local.server.port}")
-    private int port;
 
     @Value("${spring.data.rest.basePath}")
     private String basePath;
 
     private final String BUSINESS_PATH = "/businesses";
 
-    
-    @Before
-    public void setup() {
-        RestAssured.port = port;
-    }
 
-    @After
-    public void cleanup() {
-    }
-    
     @Test
     public void testCreateBusiness() throws Exception {
 		Business business=Business.builder().name("Comcast")
@@ -67,6 +57,7 @@ public class BusinessRestIntegrationTests {
 				.businessType(BusinessType.Client)
 				.build();
         given()
+				.auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(business)
                 .log().everything()
@@ -102,6 +93,7 @@ public class BusinessRestIntegrationTests {
     		
     		List<Map<String, Object>> savedAddresses =
     				given()
+							.auth().oauth2(access_token)
     		                .contentType("application/json")
     		                .body(business)
     		                .log().everything()
@@ -118,7 +110,6 @@ public class BusinessRestIntegrationTests {
     }
     
     @Test
-    @Transactional
     public void testUpdateBusinessWithAddresses() {
 		Business business=createBusinessWithAddresses();
 		Address address=Address.builder().address1("625 6th Ave")
@@ -132,6 +123,7 @@ public class BusinessRestIntegrationTests {
 			{s.setCity("Reston"); s.setId(null);}});
     	
 		given()
+				.auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(business)
                 .log().everything()
@@ -141,7 +133,7 @@ public class BusinessRestIntegrationTests {
                 .statusCode(HttpStatus.OK.value()).log().everything();
 
 
-		business=repository.getOne(business.getId());
+		business = getBusinessRequest(business);
 		
 		business.getAddresses().forEach(businessAddress -> {
 			log.debug("Address created After " + businessAddress.toString());
@@ -155,19 +147,26 @@ public class BusinessRestIntegrationTests {
     }
     
     @Test
-    @Transactional
     public void testDeleteBusinessWithAddresses() {
 		Business business=createBusinessWithAddresses();
 		given()
+				.auth().oauth2(access_token)
                 .log().everything()
         .when()
                 .delete(basePath + BUSINESS_PATH + "/" + business.getId())
         .then()
                 .statusCode(HttpStatus.NO_CONTENT.value()).log().everything();
 
-		business=repository.findOne(business.getId());
-		assertNull(business);
-    }
+		String response =
+		with()
+				.auth().oauth2(access_token)
+				.get(basePath + BUSINESS_PATH + "/" + business.getId())
+		.then()
+				.log().everything()
+				.extract().asString();
+
+		assertThat(response, Matchers.isEmptyString());
+	}
     
     public Business createBusinessWithAddresses() {
     	Set<Address> businessAddresses =new HashSet<>();
@@ -194,6 +193,7 @@ public class BusinessRestIntegrationTests {
 		
 		Map<String, Object> businessProperties=
 		given()
+				.auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(business)
                 .log().everything()
@@ -202,7 +202,7 @@ public class BusinessRestIntegrationTests {
         .then()
                 .statusCode(HttpStatus.CREATED.value())
                 .extract().jsonPath().get();
-		
+
 		assertNotNull(businessProperties.get("id"));
 		
 		List<Map<String, Object>> addresses=(List<Map<String, Object>>)businessProperties.get("addresses");
@@ -219,4 +219,14 @@ public class BusinessRestIntegrationTests {
 		business.setId(new Long((Integer)businessProperties.get("id")));
 		return business;
     }
+
+	private Business getBusinessRequest(Business business) {
+		return
+				with()
+						.auth().oauth2(access_token)
+						.get(basePath + BUSINESS_PATH + "/" + business.getId())
+						.then()
+						.log().everything()
+						.extract().as(Business.class);
+	}
 }

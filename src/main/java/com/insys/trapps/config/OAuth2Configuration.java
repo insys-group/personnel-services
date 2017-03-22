@@ -5,6 +5,7 @@ import com.insys.trapps.model.interview.Feedback;
 import com.insys.trapps.model.interview.Interview;
 import com.insys.trapps.model.interview.InterviewTemplate;
 import com.insys.trapps.model.person.Person;
+import com.insys.trapps.model.person.PersonSkill;
 import com.insys.trapps.model.security.Client;
 import com.insys.trapps.model.security.User;
 import com.insys.trapps.security.Authorities;
@@ -143,6 +144,7 @@ public class OAuth2Configuration {
         @Override
         public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
 
+            config.exposeIdsFor(Address.class);
             config.exposeIdsFor(Business.class);
             config.exposeIdsFor(Client.class);
             config.exposeIdsFor(ContractDetail.class);
@@ -156,10 +158,13 @@ public class OAuth2Configuration {
             config.exposeIdsFor(Skill.class);
             config.exposeIdsFor(State.class);
             config.exposeIdsFor(Training.class);
+            config.exposeIdsFor(TrainingTask.class);
+            config.exposeIdsFor(PersonTraining.class);
             config.exposeIdsFor(User.class);
             config.exposeIdsFor(Feedback.class);
             config.exposeIdsFor(Interview.class);
             config.exposeIdsFor(InterviewTemplate.class);
+            config.exposeIdsFor(PersonSkill.class);
 
         }
     }

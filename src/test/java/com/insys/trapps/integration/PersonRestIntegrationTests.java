@@ -4,16 +4,10 @@
 package com.insys.trapps.integration;
 
 import com.insys.trapps.model.*;
-import com.insys.trapps.model.security.User;
-import com.insys.trapps.model.security.UserAuthority;
-import com.insys.trapps.respositories.*;
-import com.insys.trapps.security.Authorities;
-import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.ValidatableResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.insys.trapps.model.Business;
 import com.insys.trapps.model.BusinessType;
@@ -29,15 +22,13 @@ import com.insys.trapps.model.person.Person;
 import com.insys.trapps.model.person.PersonSkill;
 import com.insys.trapps.model.person.PersonType;
 import com.insys.trapps.respositories.BusinessRepository;
-import com.insys.trapps.respositories.PersonRepository;
-import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.response.Response;
+import org.springframework.test.context.junit4.SpringRunner;
+
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.jayway.restassured.RestAssured.basic;
 import static com.jayway.restassured.RestAssured.given;
 import static com.jayway.restassured.RestAssured.with;
 import static java.util.Arrays.asList;
@@ -46,96 +37,33 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertNull;
 
-/**
- * @author msabir
- */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
-public class PersonRestIntegrationTests {
-
-    @Autowired
-    private PersonRepository personRepository;
+public class PersonRestIntegrationTests extends TestCaseAuthorization {
 
     @Autowired
     private BusinessRepository businessRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserAuthorityRepository userAuthorityRepository;
 
     private Business business;
 
     private String PERSON_PATH = "/persons";
 
-    @Value("${local.server.port}")
-    private int PORT;
-
     @Value("${spring.data.rest.basePath}")
     private String BASE_PATH;
 
-    @Value("${authentication.oauth.path}")
-    private String OAUTH_PATH;
-
-    @Value("${authentication.oauth.clientid}")
-    private String PROP_CLIENTID;
-
-    @Value("${authentication.oauth.secret}")
-    private String PROP_SECRET;
-
-    @Value("${authentication.oauth.username}")
-    private String USERNAME;
-
-    @Value("${authentication.oauth.password}")
-    private String PASSWORD;
-
-    @Value("${authentication.oauth.encodedPassword}")
-    private String ENCODED_PASSWORD;
-
-    private String access_token = "";
-
     @Before
     public void setup() {
-
-        RestAssured.port = PORT;
-
-        Person personUser = Person.builder().firstName("Armando").lastName("Reyna").email("areyna@insys.com").personType(PersonType.Employee).build();
-        personRepository.saveAndFlush(personUser);
-        log.debug("Person created successfully " + personUser.toString());
-
-        User appUser = User.builder().username(USERNAME).password(ENCODED_PASSWORD).personId(personUser.getId()).enabled(Boolean.TRUE).build();
-        appUser = userRepository.saveAndFlush(appUser);
-        log.debug("User created successfully " + appUser.toString());
-
         business = Business.builder().name("Test Business").businessType(BusinessType.INSYS).description("Test Business").build();
         businessRepository.saveAndFlush(business);
         log.debug("Business created successfully " + business.toString());
-
-        access_token = given().auth().basic(PROP_CLIENTID, PROP_SECRET)
-                .log().everything()
-                .when()
-                .contentType("application/json")
-                .queryParam("grant_type", "password")
-                .queryParam("username", USERNAME)
-                .queryParam("password", PASSWORD)
-                .post(OAUTH_PATH)
-                .then()
-                .extract().path("access_token");
-
-        log.debug("access_token " + access_token);
-    }
-
-    @After
-    public void cleanup() {
-        userRepository.deleteAll();
     }
 
     @Test
     public void testCreatePerson() throws Exception {
         Person person = personBuilder().build();
-        given().auth().oauth2(access_token)
+        given()
+                .auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(person)
                 .log().everything()
@@ -149,7 +77,8 @@ public class PersonRestIntegrationTests {
     @Test
     public void testCreatePersonWithSkills() {
         Person person = createPersonWithSkills();
-        given().auth().oauth2(access_token)
+        given()
+                .auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(person)
                 .log().everything()
@@ -268,7 +197,8 @@ public class PersonRestIntegrationTests {
     @Test
     public void testDeletePersonWithSkills() {
         Person person = postPersonRequest(createPersonWithSkills());
-        given().auth().oauth2(access_token)
+        given()
+                .auth().oauth2(access_token)
                 .log().everything()
         .when()
                 .delete(BASE_PATH + PERSON_PATH + "/" + person.getId())
@@ -285,15 +215,18 @@ public class PersonRestIntegrationTests {
     }
 
     private ValidatableResponse getPersonRequest(Person person) {
-        return with()
-                .get(BASE_PATH + PERSON_PATH + "/" + person.getId())
-        .then()
-                .log().everything();
+        return
+                with()
+                    .auth().oauth2(access_token)
+                    .get(BASE_PATH + PERSON_PATH + "/" + person.getId())
+                .then()
+                    .log().everything();
     }
 
     private Person postPersonRequest(Person person) {
         return
-                given().auth().oauth2(access_token)
+                given()
+                        .auth().oauth2(access_token)
                         .contentType("application/json")
                         .body(person)
                 .when()
@@ -305,7 +238,8 @@ public class PersonRestIntegrationTests {
     }
 
     private void putPersonRequest(Person savedPerson) {
-        given().auth().oauth2(access_token)
+        given()
+                .auth().oauth2(access_token)
                 .contentType("application/json")
                 .body(savedPerson)
                 .log().everything()
@@ -317,7 +251,8 @@ public class PersonRestIntegrationTests {
 
     private Training postTrainingRequest(Training training) {
         return
-                given().auth().oauth2(access_token)
+                given()
+                        .auth().oauth2(access_token)
                         .contentType("application/json")
                         .body(training)
                 .when()
