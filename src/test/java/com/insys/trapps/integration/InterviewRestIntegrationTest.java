@@ -11,7 +11,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.insys.trapps.model.interview.*;
+import com.insys.trapps.model.security.User;
 import com.insys.trapps.repository.interview.QuestionRepositoryTests;
+import com.insys.trapps.respositories.UserRepository;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,6 +49,12 @@ import lombok.extern.slf4j.Slf4j;
 public class InterviewRestIntegrationTest {
 
 	@Autowired
+	private PersonRepository personRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
 	private FeedbackRepository feedbackRepo;
 	@Autowired
 	private RoleRepository roleRepo;
@@ -53,12 +62,6 @@ public class InterviewRestIntegrationTest {
 	private PersonRepository personRepo;
 	@Autowired
 	private BusinessRepository businessRepo;
-
-    @Value("${local.server.port}")
-	private int port;
-
-	@Value("${spring.data.rest.basePath}")
-	private String basePath;
 
 	private final String INTERVIEW_PATH = "/interviews";
 
@@ -71,9 +74,57 @@ public class InterviewRestIntegrationTest {
 
 	private Person firstInterviewer, secondInterviewer, candidate, updatedCandidate;
 
+	@Value("${local.server.port}")
+	private int PORT;
+
+	@Value("${spring.data.rest.basePath}")
+	private String BASE_PATH;
+
+	@Value("${authentication.oauth.path}")
+	private String OAUTH_PATH;
+
+	@Value("${authentication.oauth.clientid}")
+	private String PROP_CLIENTID;
+
+	@Value("${authentication.oauth.secret}")
+	private String PROP_SECRET;
+
+	@Value("${authentication.oauth.username}")
+	private String USERNAME;
+
+	@Value("${authentication.oauth.password}")
+	private String PASSWORD;
+
+	@Value("${authentication.oauth.encodedPassword}")
+	private String ENCODED_PASSWORD;
+
+	private String access_token = "";
+
 	@Before
 	public void setup() {
-		RestAssured.port = port;
+		
+		RestAssured.port = PORT;
+
+		Person personUser = Person.builder().firstName("Armando").lastName("Reyna").email("areyna@insys.com").personType(PersonType.Employee).build();
+		personRepository.saveAndFlush(personUser);
+		log.debug("Person created successfully " + personUser.toString());
+
+		User appUser = User.builder().username(USERNAME).password(ENCODED_PASSWORD).personId(personUser.getId()).enabled(Boolean.TRUE).build();
+		appUser = userRepository.saveAndFlush(appUser);
+		log.debug("User created successfully " + appUser.toString());
+
+		access_token = given().auth().basic(PROP_CLIENTID, PROP_SECRET)
+				.log().everything()
+				.when()
+				.contentType("application/json")
+				.queryParam("grant_type", "password")
+				.queryParam("username", USERNAME)
+				.queryParam("password", PASSWORD)
+				.post(OAUTH_PATH)
+				.then()
+				.extract().path("access_token");
+
+		log.debug("access_token " + access_token);
 
 		business = BusinessBuilder.buildBusiness("Insys", "Interview", BusinessType.INSYS).build();
 		businessRepo.saveAndFlush(business);
@@ -92,17 +143,19 @@ public class InterviewRestIntegrationTest {
 				PersonType.Candidate);
 		personRepo.saveAndFlush(updatedCandidate);
 
-
-
 		feedback = Feedback.builder().comment("Excellent").interviewer(firstInterviewer).build();
 		feedbackRepo.save(feedback);
 
 	}
 
+	@After
+	public void cleanup() {
+		userRepository.deleteAll();
+	}
+
 	@Test
 	public void testCreateEmptyInterview() {
 		Interview interview = Interview.builder().build();
-
 		postRequestForInterviewReturns(interview, HttpStatus.CONFLICT);
 	}
 
@@ -148,12 +201,12 @@ public class InterviewRestIntegrationTest {
 	}
 
 	private JsonPath postRequestForInterviewReturns(Interview interview, HttpStatus status) {
-		return given().contentType("application/json").body(interview).log().everything().when()
-				.post(basePath + INTERVIEW_PATH).then().statusCode(status.value()).extract().response().jsonPath();
+		return given().auth().oauth2(access_token).contentType("application/json").body(interview).log().everything().when()
+				.post(BASE_PATH + INTERVIEW_PATH).then().statusCode(status.value()).extract().response().jsonPath();
 	}
 
 	private JsonPath getRequestForInterview(long id) {
-		return given().when().get(basePath + INTERVIEW_DETAILS_PATH + "/" + id).then().statusCode(HttpStatus.OK.value()).log()
+		return given().auth().oauth2(access_token).when().get(BASE_PATH + INTERVIEW_DETAILS_PATH + "/" + id).then().statusCode(HttpStatus.OK.value()).log()
 				.everything().extract().jsonPath();
 	}
 
