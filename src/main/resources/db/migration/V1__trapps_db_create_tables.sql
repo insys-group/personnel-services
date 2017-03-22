@@ -190,7 +190,7 @@ CREATE TABLE Client
 
 CREATE TABLE oauth_access_token
   (
-    authentication_id VARCHAR(256),
+    authentication_id VARCHAR(100),
     token_id VARCHAR(256),
     token BLOB,
     user_name VARCHAR(256),
@@ -202,7 +202,7 @@ CREATE TABLE oauth_access_token
 
 CREATE TABLE oauth_refresh_token
   (
-    token_id VARCHAR(256),
+    token_id VARCHAR(100),
     token BLOB,
     authentication BLOB,
     PRIMARY KEY (token_id)
