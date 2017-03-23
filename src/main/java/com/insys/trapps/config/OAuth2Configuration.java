@@ -13,11 +13,14 @@ import com.insys.trapps.security.CustomAuthenticationEntryPoint;
 import com.insys.trapps.security.CustomLogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +38,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import javax.persistence.Entity;
 import javax.sql.DataSource;
 
 @Configuration
@@ -143,29 +147,21 @@ public class OAuth2Configuration {
 
         @Override
         public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
+            ClassPathScanningCandidateComponentProvider provider
+                    = new ClassPathScanningCandidateComponentProvider(false);
+            provider.addIncludeFilter(new AnnotationTypeFilter(Entity.class));
+            makeIdReturnedFor("com.insys.trapps.model", config, provider);
+        }
 
-            config.exposeIdsFor(Address.class);
-            config.exposeIdsFor(Business.class);
-            config.exposeIdsFor(Client.class);
-            config.exposeIdsFor(ContractDetail.class);
-            config.exposeIdsFor(Contract.class);
-            config.exposeIdsFor(Engagement.class);
-            config.exposeIdsFor(EngagementOpening.class);
-            config.exposeIdsFor(Opportunity.class);
-            config.exposeIdsFor(OpportunityStep.class);
-            config.exposeIdsFor(Person.class);
-            config.exposeIdsFor(Role.class);
-            config.exposeIdsFor(Skill.class);
-            config.exposeIdsFor(State.class);
-            config.exposeIdsFor(Training.class);
-            config.exposeIdsFor(TrainingTask.class);
-            config.exposeIdsFor(PersonTraining.class);
-            config.exposeIdsFor(User.class);
-            config.exposeIdsFor(Feedback.class);
-            config.exposeIdsFor(Interview.class);
-            config.exposeIdsFor(InterviewTemplate.class);
-            config.exposeIdsFor(PersonSkill.class);
-
+        private void makeIdReturnedFor(String pakage, RepositoryRestConfiguration config, ClassPathScanningCandidateComponentProvider provider) {
+            for (BeanDefinition beanDefinition : provider.findCandidateComponents(pakage)) {
+                try {
+                    Class<?> entity = Class.forName(beanDefinition.getBeanClassName());
+                    config.exposeIdsFor(entity);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
