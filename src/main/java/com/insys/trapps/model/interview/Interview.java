@@ -66,7 +66,7 @@ public class Interview implements Serializable {
 
 	@Getter
 	@Setter
-	@ManyToMany(targetEntity = Person.class, cascade = CascadeType.MERGE)
+	@ManyToMany(targetEntity = Person.class, cascade = CascadeType.PERSIST)
 	private Set<Person> interviewers;
 
 	@Getter
