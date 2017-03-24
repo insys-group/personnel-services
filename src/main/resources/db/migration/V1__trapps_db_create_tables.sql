@@ -19,76 +19,11 @@ CREATE TABLE business
      PRIMARY KEY (id)
   );
 
-CREATE TABLE contract
-  (
-     id                    BIGINT auto_increment,
-     comments              VARCHAR(255),
-     engagement_opening_id BIGINT,
-     person_id             BIGINT,
-     PRIMARY KEY (id)
-  );
-
-CREATE TABLE contract_detail
-  (
-     id          BIGINT auto_increment,
-     comments    VARCHAR(255),
-     end_date    DATE,
-     rate        DECIMAL(19, 2),
-     start_date  DATE,
-     contract_id BIGINT NOT NULL,
-     PRIMARY KEY (id)
-  );
-
-CREATE TABLE engagement
-  (
-     id             BIGINT auto_increment,
-     comments       VARCHAR(255),
-     opportunity_id BIGINT,
-     PRIMARY KEY (id)
-  );
-
-CREATE TABLE engagement_opening
-  (
-     id            BIGINT auto_increment,
-     comments      VARCHAR(255),
-     rate          DECIMAL(19, 2),
-     address_id    BIGINT,
-     engagement_id BIGINT,
-     role_id       BIGINT,
-     PRIMARY KEY (id)
-  );
-
 CREATE TABLE location
   (
      business_id BIGINT NOT NULL,
      address_id  BIGINT NOT NULL,
      PRIMARY KEY (business_id, address_id)
-  );
-
-CREATE TABLE opportunity
-  (
-     id          BIGINT auto_increment,
-     comments    VARCHAR(255),
-     business_id BIGINT,
-     person      BIGINT,
-     PRIMARY KEY (id)
-  );
-
-CREATE TABLE opportunity_contact
-  (
-     id             BIGINT auto_increment,
-     opportunity_id BIGINT,
-     person_id      BIGINT,
-     PRIMARY KEY (id)
-  );
-
-CREATE TABLE opportunity_step
-  (
-     id             BIGINT auto_increment,
-     comments       VARCHAR(255),
-     step_timestamp TIMESTAMP NOT NULL,
-     opportunity_id BIGINT NOT NULL,
-     PRIMARY KEY (id)
   );
 
 CREATE TABLE person
@@ -208,34 +143,6 @@ CREATE TABLE oauth_refresh_token
     PRIMARY KEY (token_id)
   );
 
-ALTER TABLE contract
-  ADD CONSTRAINT fk_con_eng_ope FOREIGN KEY (engagement_opening_id)
-  REFERENCES engagement_opening(id);
-
-ALTER TABLE contract
-  ADD CONSTRAINT fk_con_per FOREIGN KEY (person_id) REFERENCES
-  person(id);
-
-ALTER TABLE contract_detail
-  ADD CONSTRAINT fk_con_det_con FOREIGN KEY (contract_id)
-  REFERENCES contract(id);
-
-ALTER TABLE engagement
-  ADD CONSTRAINT fk_eng_opp FOREIGN KEY (opportunity_id)
-  REFERENCES opportunity(id);
-
-ALTER TABLE engagement_opening
-  ADD CONSTRAINT fk_eng_add FOREIGN KEY (address_id) REFERENCES
-  address(id);
-
-ALTER TABLE engagement_opening
-  ADD CONSTRAINT fk_eng_ope_eng FOREIGN KEY (engagement_id)
-  REFERENCES engagement(id);
-
-ALTER TABLE engagement_opening
-  ADD CONSTRAINT fk_eng_ope_rol FOREIGN KEY (role_id) REFERENCES
-  role(id);
-
 ALTER TABLE location
   ADD CONSTRAINT fk_loc_add FOREIGN KEY (address_id) REFERENCES
   address(id);
@@ -243,26 +150,6 @@ ALTER TABLE location
 ALTER TABLE location
   ADD CONSTRAINT fk_loc_bus FOREIGN KEY (business_id)
   REFERENCES business(id);
-
-ALTER TABLE opportunity
-  ADD CONSTRAINT fk_opp_bus FOREIGN KEY (business_id)
-  REFERENCES business(id);
-
-ALTER TABLE opportunity
-  ADD CONSTRAINT fk_opp_per FOREIGN KEY (person) REFERENCES
-  person(id);
-
-ALTER TABLE opportunity_contact
-  ADD CONSTRAINT fk_opp_con_opp FOREIGN KEY (opportunity_id)
-  REFERENCES opportunity(id);
-
-ALTER TABLE opportunity_contact
-  ADD CONSTRAINT fk_opp_con_per FOREIGN KEY (person_id) REFERENCES
-  person(id);
-
-ALTER TABLE opportunity_step
-  ADD CONSTRAINT fk_opp_ste_opp FOREIGN KEY (opportunity_id)
-  REFERENCES opportunity(id);
 
 ALTER TABLE person
   ADD CONSTRAINT fk_per_add FOREIGN KEY (address_id) REFERENCES

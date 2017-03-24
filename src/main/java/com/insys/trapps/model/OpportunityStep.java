@@ -29,7 +29,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 public class OpportunityStep implements Serializable {
 	private static final long serialVersionUID = 2759280838440810254L;
 
