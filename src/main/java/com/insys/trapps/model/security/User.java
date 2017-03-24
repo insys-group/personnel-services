@@ -1,6 +1,5 @@
 package com.insys.trapps.model.security;
 
-import com.insys.trapps.model.person.Person;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,54 +21,110 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class User implements UserDetails, Serializable {
+
     private static final long serialVersionUID = 3911995980240948127L;
 
     @Id
-    @Getter
-    @Setter
     @Column(name = "USERNAME", nullable = false)
     private String username;
 
-    @Getter
-    @Setter
     @Column(name = "PASSWORD", nullable = false)
     private String password;
 
-    @Getter
-    @Setter
     @Column(name = "PERSON_ID", nullable = false)
     private Long personId;
 
-    @Getter
-    @Setter
     @Column(name = "ACCOUNT_NON_EXPIRED", nullable = false)
     private boolean accountNonExpired=true;
 
-    @Getter
-    @Setter
     @Column(name = "ACCOUNT_NON_LOCKED", nullable = false)
     private boolean accountNonLocked=true;
 
-    @Getter
-    @Setter
     @Column(name = "CREDENTIALS_NON_EXPIRED", nullable = false)
     private boolean credentialsNonExpired=true;
 
-    @Getter
-    @Setter
     @Column(name = "ENABLED", nullable = false)
     private boolean enabled=false;
 
-    @Setter
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.EAGER, orphanRemoval=true)
     private Set<UserAuthority> authorities=new HashSet<>();
 
     @Override
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Long getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(Long personId) {
+        this.personId = personId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return accountNonExpired;
+    }
+
+    public void setAccountNonExpired(boolean accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+        this.credentialsNonExpired = credentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setAuthorities(Set<UserAuthority> authorities) {
+        this.authorities = authorities;
+    }
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.authorities.size()==0) {
-            authorities.add(new UserAuthority(this, "ADMIN"));
-        }
         return authorities;
+    }
+
+    public void addAuthority(String authority){
+        if(authorities == null){
+            authorities=new HashSet<>();
+        }
+        authorities.add(new UserAuthority(this, authority));
     }
 
     @Override
@@ -85,24 +140,4 @@ public class User implements UserDetails, Serializable {
                 ", authorities=" + authorities +
                 '}';
     }
-/*
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }*/
 }

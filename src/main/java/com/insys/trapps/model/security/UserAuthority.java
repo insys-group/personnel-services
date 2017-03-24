@@ -1,6 +1,6 @@
 package com.insys.trapps.model.security;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -29,8 +29,6 @@ public class UserAuthority implements GrantedAuthority {
         this.authority=authority;
     }
 
-    @Getter
-    @Setter
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "USERNAME", nullable = false)
     @JsonIgnore
@@ -46,5 +44,14 @@ public class UserAuthority implements GrantedAuthority {
 
     public void setAuthority(String authority) {
         this.authority = authority;
+    }
+
+    @JsonIgnore
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

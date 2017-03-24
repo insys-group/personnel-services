@@ -182,4 +182,8 @@ public class PersonServiceImpl implements PersonService {
 
     }
 
+    public Person findByEmail(String email){
+        return personRepository.findByEmail(email);
+    }
+
 }

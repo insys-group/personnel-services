@@ -4,16 +4,17 @@ import com.insys.trapps.model.person.Person;
 import com.insys.trapps.model.security.User;
 import com.insys.trapps.model.security.UserInfo;
 import com.insys.trapps.service.PersonService;
+import com.insys.trapps.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.security.Principal;
+import java.security.SecureRandom;
 import java.util.stream.Collectors;
 
 /**
@@ -21,11 +22,15 @@ import java.util.stream.Collectors;
  */
 @RestController
 public class UserController {
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private PersonService personService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserService userService;
 
     public UserController(PersonService personService) {
         this.personService=personService;
@@ -34,11 +39,6 @@ public class UserController {
     @GetMapping(value = "/user/{username}")
     public UserInfo user(@PathVariable("username") String username) {
         return loadUserInfo(username);
-    }
-
-    @GetMapping("/password")
-    public String test(String password) {
-        return passwordEncoder.encode(password);
     }
 
     private UserInfo loadUserInfo(String username) {
@@ -55,4 +55,62 @@ public class UserController {
         userInfo.setPersonType(person.getPersonType().toString());
         return userInfo;
     }
+
+    @PostMapping(value = "/api/v1/newUser")
+    @ResponseStatus(HttpStatus.OK)
+    public User save(@RequestBody User user) {
+
+        User existingUser = userService.findOne(user.getUsername());
+
+        if(existingUser == null){
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setAccountNonExpired(Boolean.TRUE);
+            user.setAccountNonLocked(Boolean.TRUE);
+            user.setCredentialsNonExpired(Boolean.TRUE);
+            user.setEnabled(Boolean.TRUE);
+            user.addAuthority("ADMIN");
+            user = userService.save(user);
+            user.setAuthorities(null);
+        }else {
+            user.setUsername(null);
+        }
+
+        return user;
+    }
+
+    @PostMapping(value = "/register")
+    @ResponseStatus(HttpStatus.OK)
+    public User register(@RequestBody User user) {
+
+        User existingUser = userService.findOne(user.getUsername());
+
+        if(existingUser == null){
+
+            Person person = personService.findByEmail(user.getUsername());
+
+            if(person == null){
+                return null;
+            } else {
+
+                int index = user.getUsername().indexOf("@");
+                user.setUsername(user.getUsername().substring(0, index));
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.setAccountNonExpired(Boolean.TRUE);
+                user.setAccountNonLocked(Boolean.TRUE);
+                user.setCredentialsNonExpired(Boolean.TRUE);
+                user.setEnabled(Boolean.TRUE);
+                user.addAuthority("ADMIN");
+                user.setPersonId(person.getId());
+                user = userService.save(user);
+                user.setAuthorities(null);
+
+            }
+
+        }else {
+            user.setUsername(null);
+        }
+
+        return user;
+    }
+
 }

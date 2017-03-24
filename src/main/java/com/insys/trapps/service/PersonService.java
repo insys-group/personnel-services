@@ -55,4 +55,7 @@ public interface PersonService {
 	 * @throws Exception
 	 */
 	PersonDocument deleteDocument(Long id, Long documentId) throws Exception;
+
+	Person findByEmail(String email);
+
 }
