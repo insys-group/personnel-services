@@ -1,4 +1,4 @@
-#TRAPPS API application
+# TRAPPS API application
 Tracking  
 Resource  
 Applicants  
@@ -24,7 +24,7 @@ cf push trapps-api
 ### Running locally
 gradle bootRun local
 
-##Steps to clone, create branch, made changes and push 
+## Steps to clone, create branch, made changes and push 
 git clone https://github.com/insys-group/trapps-api.git  
 git checkout develop  
 git branch feature/TRAP-<story number>  
