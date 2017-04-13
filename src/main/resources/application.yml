@@ -11,11 +11,12 @@ security:
       user-info-uri: http://trapps-api.local.pcfdev.io/user
 ---
 spring:
+  profiles: local
   datasource:
     url: jdbc:mysql://localhost:3306/trappsdb?useSSL=false
     username: root
+    password: root
     driver-class-name: com.mysql.jdbc.Driver
-  profiles: local
   devtools:
     restart:
       enabled: true
