@@ -36,7 +36,7 @@ public class UserController {
         this.personService=personService;
     }
 
-    @GetMapping(value = "/user/{username}")
+    @GetMapping(value = "/api/v1/user/{username}")
     public UserInfo user(@PathVariable("username") String username) {
         return loadUserInfo(username);
     }
@@ -78,7 +78,7 @@ public class UserController {
         return user;
     }
 
-    @PostMapping(value = "/register")
+    @PostMapping(value = "/api/v1/register")
     @ResponseStatus(HttpStatus.OK)
     public User register(@RequestBody User user) {
 

@@ -1,9 +1,9 @@
 applications:
 - name: trapps-api
-  instances: 2
+  instances: 1
   memory: 768M
-  #path: ./build/libs/trapps-api-0.0.1-SNAPSHOT.jar
-  path: trapps-api.jar
+  path: ./build/libs/trapps-api-0.0.1-SNAPSHOT.jar
+#  path: trapps-api.jar
   buildpack: java_buildpack
   stack: cflinuxfs2
   services:
