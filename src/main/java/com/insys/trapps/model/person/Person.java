@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.insys.trapps.model.Address;
 import com.insys.trapps.model.Business;
 import com.insys.trapps.model.PersonTraining;
+import com.insys.trapps.model.security.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -62,8 +63,8 @@ public class Person implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "ADDRESS_ID", nullable = true, insertable = true, updatable = true)
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval=true)
+	@JoinColumn(name = "ADDRESS_ID")
 	private Address address;
 
 	@Getter
@@ -74,13 +75,13 @@ public class Person implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval=true)
 	@JsonManagedReference
 	private Set<PersonDocument> personDocuments = new HashSet<>();
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval=true)
 	@JsonManagedReference
 	private Set<PersonSkill> personSkills = new HashSet<>();
 

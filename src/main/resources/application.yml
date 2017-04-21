@@ -43,6 +43,21 @@ spring:
     rest:
       basePath: /api/v1
       defaultMediaType: application/json
+  mail:
+    cc: areyna@luxoft.com
+    username: trapps.donotreply@gmail.com
+    password: Tr4pps#2017
+    port: 587
+    host: smtp.gmail.com
+    properties:
+      mail:
+        transport:
+          protocol: smpt
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        debug: false
 authentication:
   oauth:
     clientid: trapps-app

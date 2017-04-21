@@ -1,6 +1,7 @@
 package com.insys.trapps.model.security;
 
 import lombok.*;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,7 +17,6 @@ import java.util.Set;
 @Entity
 @Table(name = "USER")
 @EqualsAndHashCode(of = {"username"})
-@ToString(of = {"username", "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "enabled", "authorities"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -45,6 +45,9 @@ public class User implements UserDetails, Serializable {
 
     @Column(name = "ENABLED", nullable = false)
     private boolean enabled=false;
+
+    @Column(name = "password_changed", nullable = false)
+    private boolean passwordChanged=false;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, fetch = FetchType.EAGER, orphanRemoval=true)
     private Set<UserAuthority> authorities=new HashSet<>();
@@ -127,17 +130,11 @@ public class User implements UserDetails, Serializable {
         authorities.add(new UserAuthority(this, authority));
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", personId=" + personId +
-                ", accountNonExpired=" + accountNonExpired +
-                ", accountNonLocked=" + accountNonLocked +
-                ", credentialsNonExpired=" + credentialsNonExpired +
-                ", enabled=" + enabled +
-                ", authorities=" + authorities +
-                '}';
+    public boolean isPasswordChanged() {
+        return passwordChanged;
+    }
+
+    public void setPasswordChanged(boolean passwordChanged) {
+        this.passwordChanged = passwordChanged;
     }
 }

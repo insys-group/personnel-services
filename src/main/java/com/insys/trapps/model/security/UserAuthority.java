@@ -1,5 +1,6 @@
 package com.insys.trapps.model.security;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,7 +32,7 @@ public class UserAuthority implements GrantedAuthority {
 
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "USERNAME", nullable = false)
-    @JsonIgnore
+    @JsonBackReference
     private User user;
 
     @Column(name = "AUTHORITY", nullable = false)

@@ -55,6 +55,10 @@ dependencies {
     compile('com.jayway.restassured:rest-assured:2.9.0')
 
     compile "org.flywaydb:flyway-core:4.1.0"
+    compile group: 'javax.mail', name: 'mail', version: '1.4'
+    compile group: 'org.springframework', name: 'spring-context-support', version: '3.2.0.RELEASE'
+    compile group: 'org.freemarker', name: 'freemarker', version: '2.3.20'
+
 }
 
 dependencyManagement {

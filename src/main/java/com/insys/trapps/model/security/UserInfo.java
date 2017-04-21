@@ -14,31 +14,77 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 public class UserInfo {
-    @Getter
-    @Setter
+
     private Long id;
-
-    @Getter
-    @Setter
     private String firstName;
-
-    @Getter
-    @Setter
     private String lastName;
-
-    @Getter
-    @Setter
     private String email;
-
-    @Getter
-    @Setter
     private String personType;
-
-    @Getter
-    @Setter
     private String username;
-
-    @Getter
-    @Setter
+    private boolean passwordChanged;
     private Set<String> authorities=new HashSet<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPersonType() {
+        return personType;
+    }
+
+    public void setPersonType(String personType) {
+        this.personType = personType;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public boolean isPasswordChanged() {
+        return passwordChanged;
+    }
+
+    public void setPasswordChanged(boolean passwordChanged) {
+        this.passwordChanged = passwordChanged;
+    }
+
+    public Set<String> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<String> authorities) {
+        this.authorities = authorities;
+    }
 }

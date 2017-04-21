@@ -44,8 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         web.ignoring()
                 .antMatchers(HttpMethod.OPTIONS, "/**")
-                .antMatchers("/password")
-                .antMatchers("/register");
+                .antMatchers("/api/resetpassword");
 
     }
 
