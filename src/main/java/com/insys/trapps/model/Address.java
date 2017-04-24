@@ -25,12 +25,12 @@ import lombok.ToString;
  */
 @Entity
 @Table(name = "ADDRESS")
-@EqualsAndHashCode(of = {"address1", "city", "state", "zipCode", "country"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @ToString
 public class Address implements Serializable {
+
 	private static final long serialVersionUID = 5861431468161799374L;
 
 	@Id
@@ -38,12 +38,6 @@ public class Address implements Serializable {
     @Getter
     @Setter
     private Long id;
-//
-//    @Version
-//    @Getter
-//    @Setter
-//    @Column(name = "VERSION")
-//    private Long version;
 
     @Getter
     @Setter
@@ -79,14 +73,6 @@ public class Address implements Serializable {
     @NonNull
     @Column(name = "COUNTRY", nullable = false)
     private String country;
-//    	
-//	@PrePersist
-//	public void init() {
-//		if(this.version==null) {
-//			this.version=1L;
-//		}
-//	}
-
     
 }
 

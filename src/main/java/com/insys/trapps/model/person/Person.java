@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.insys.trapps.model.Address;
 import com.insys.trapps.model.Business;
 import com.insys.trapps.model.PersonTraining;
+import com.insys.trapps.model.interview.Interview;
 import com.insys.trapps.model.security.User;
 import lombok.*;
 
@@ -63,7 +64,7 @@ public class Person implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval=true)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "ADDRESS_ID")
 	private Address address;
 

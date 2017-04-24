@@ -53,6 +53,10 @@ public class Interview implements Serializable {
 
 	@Getter
 	@Setter
+	private int status;
+
+	@Getter
+	@Setter
 	@OneToOne
 	@JoinColumn(name = "person_id")
 	@JsonManagedReference

@@ -27,16 +27,18 @@ import com.insys.trapps.service.PersonService;
 @RepositoryRestController
 @RequestMapping("/api/v1")
 public class PersonController {
+	
 	private Logger logger = LoggerFactory.getLogger(PersonController.class);
+	
 	@Autowired
-	private PersonService service;
+	private PersonService personService;
 
 	@PutMapping(value = "/persons/put/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void updatePerson(@PathVariable("id") Long id, @RequestBody Person person) {
 		logger.debug("Enter: PersonPutController.updatePerson()" + (person==null) + person.toString());
 		logger.debug("Person to be saved is " + person.toString());
-		service.updatePerson(id, person);
+		personService.updatePerson(id, person);
 	}
 
 	@PostMapping(value="/persondocuments/{id}/documents")
@@ -46,7 +48,7 @@ public class PersonController {
 			@RequestParam("file") MultipartFile file) throws Exception {
 		PersonDocument document;
 		try{
-			document=service.save(id, fileName, file);
+			document=personService.save(id, fileName, file);
 			return ResponseEntity
 					.status(HttpStatus.CREATED)
 					.body(new Resource<PersonDocument>(document));
@@ -63,7 +65,7 @@ public class PersonController {
 			@PathVariable("id") Long id,
 			@PathVariable("documentId") Long documentId) throws Exception {
 		try{
-			PersonDocument document=service.deleteDocument(id, documentId);
+			PersonDocument document=personService.deleteDocument(id, documentId);
 			if(document==null) {
 				return ResponseEntity
 						.status(HttpStatus.NOT_FOUND)
@@ -86,7 +88,7 @@ public class PersonController {
 			HttpServletResponse response,
 			@PathVariable("id") Long id,
 			@PathVariable("documentId") Long documentId) throws Exception {
-		PersonDocument document=service.getDocument(id, documentId);
+		PersonDocument document=personService.getDocument(id, documentId);
 		response.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-download");
 		response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+document.getFileName()+"\"");
 		response.getOutputStream().write(document.getDocument());
