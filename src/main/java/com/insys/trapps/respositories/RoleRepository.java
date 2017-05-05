@@ -14,8 +14,4 @@ import java.util.List;
 @RepositoryRestResource
 public interface RoleRepository extends JpaRepository<Role, Long> {
     List<Role> findByName(String name);
-
-   // @Query("delete FROM Skill WHERE ID in (select skill_id from ROLE_SKILL where role_id = :roleId)")
-   // public void deleteSkills(@Param("roleId") Long roleId);
-
 }

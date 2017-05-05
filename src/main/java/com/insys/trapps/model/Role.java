@@ -28,7 +28,6 @@ import lombok.Setter;
  */
 @Entity
 @Table(name = "ROLE")
-@EqualsAndHashCode(exclude = {"skills", "engagementOpenings"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -55,7 +54,7 @@ public class Role implements Serializable {
 
     @Getter
     @Setter
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval=true)
+    @OneToMany(cascade = { CascadeType.ALL })
     @JoinTable(name = "ROLE_SKILL"
             , joinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")
             , inverseJoinColumns = @JoinColumn(name = "SKILL_ID", referencedColumnName = "ID")

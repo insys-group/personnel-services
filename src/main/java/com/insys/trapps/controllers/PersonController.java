@@ -5,6 +5,7 @@ package com.insys.trapps.controllers;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.insys.trapps.model.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,4 +94,5 @@ public class PersonController {
 		response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+document.getFileName()+"\"");
 		response.getOutputStream().write(document.getDocument());
 	}
+
 }
