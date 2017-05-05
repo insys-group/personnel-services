@@ -23,76 +23,95 @@ import com.insys.trapps.service.PersonService;
 
 /**
  * @author msabir
- *
  */
 @RepositoryRestController
 @RequestMapping("/api/v1")
 public class PersonController {
-	
-	private Logger logger = LoggerFactory.getLogger(PersonController.class);
-	
-	@Autowired
-	private PersonService personService;
 
-	@PutMapping(value = "/persons/put/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updatePerson(@PathVariable("id") Long id, @RequestBody Person person) {
-		logger.debug("Enter: PersonPutController.updatePerson()" + (person==null) + person.toString());
-		logger.debug("Person to be saved is " + person.toString());
-		personService.updatePerson(id, person);
-	}
+    private Logger logger = LoggerFactory.getLogger(PersonController.class);
 
-	@PostMapping(value="/persondocuments/{id}/documents")
-	public ResponseEntity<Resource<PersonDocument>> handleFileUpload(
-			@PathVariable("id") Long id,
-			@RequestHeader("x-filename") String fileName,
-			@RequestParam("file") MultipartFile file) throws Exception {
-		PersonDocument document;
-		try{
-			document=personService.save(id, fileName, file);
-			return ResponseEntity
-					.status(HttpStatus.CREATED)
-					.body(new Resource<PersonDocument>(document));
-		}catch(Exception e) {
-			e.printStackTrace();
-			return ResponseEntity
-					.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(null);
-		}
-	}
+    @Autowired
+    private PersonService personService;
 
-	@DeleteMapping(value="/persondocuments/{id}/{documentId}")
-	public ResponseEntity<PersonDocument> deleteDocument(
-			@PathVariable("id") Long id,
-			@PathVariable("documentId") Long documentId) throws Exception {
-		try{
-			PersonDocument document=personService.deleteDocument(id, documentId);
-			if(document==null) {
-				return ResponseEntity
-						.status(HttpStatus.NOT_FOUND)
-						.body(null);
-			}
-			document.setPerson(null);
-			return ResponseEntity
-					.status(HttpStatus.OK)
-					.body(document);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return ResponseEntity
-					.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(null);
-		}
-	}
+    @PutMapping(value = "/persons/put/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updatePerson(@PathVariable("id") Long id, @RequestBody Person person) {
+        logger.debug("Enter: PersonPutController.updatePerson()" + (person == null) + person.toString());
+        logger.debug("Person to be saved is " + person.toString());
+        personService.updatePerson(id, person);
+    }
 
-	@GetMapping(value="/persondocuments/{id}/{documentId}")
-	public void handleFileDownload(
-			HttpServletResponse response,
-			@PathVariable("id") Long id,
-			@PathVariable("documentId") Long documentId) throws Exception {
-		PersonDocument document=personService.getDocument(id, documentId);
-		response.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-download");
-		response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+document.getFileName()+"\"");
-		response.getOutputStream().write(document.getDocument());
-	}
+    @PostMapping(value = "/persondocuments/{id}/documents")
+    public ResponseEntity<Resource<PersonDocument>> handleFileUpload(
+            @PathVariable("id") Long id,
+            @RequestHeader("x-filename") String fileName,
+            @RequestParam("file") MultipartFile file) throws Exception {
+        PersonDocument document;
+        try {
+            document = personService.save(id, fileName, file);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(new Resource<PersonDocument>(document));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
+        }
+    }
+
+    @DeleteMapping(value = "/persondocuments/{id}/{documentId}")
+    public ResponseEntity<PersonDocument> deleteDocument(
+            @PathVariable("id") Long id,
+            @PathVariable("documentId") Long documentId) throws Exception {
+        try {
+            PersonDocument document = personService.deleteDocument(id, documentId);
+            if (document == null) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(null);
+            }
+            document.setPerson(null);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(document);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
+        }
+    }
+
+    @GetMapping(value = "/persondocuments/{id}/{documentId}")
+    public void handleFileDownload(
+            HttpServletResponse response,
+            @PathVariable("id") Long id,
+            @PathVariable("documentId") Long documentId) throws Exception {
+        PersonDocument document = personService.getDocument(id, documentId);
+        response.addHeader(HttpHeaders.CONTENT_TYPE, "application/x-download");
+        response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + document.getFileName() + "\"");
+        response.getOutputStream().write(document.getDocument());
+    }
+
+    @PostMapping(value = "/person/email/exists")
+    public ResponseEntity<Boolean> getInterview(@RequestBody Person person) {
+        Boolean exists = Boolean.FALSE;
+
+        Person existingPerson = personService.findByEmail(person.getEmail());
+        if (person.getId() != null) {
+            if (!existingPerson.getId().equals(person.getId())) {
+                exists = Boolean.TRUE;
+            }
+        } else {
+            if (existingPerson != null) {
+                exists = Boolean.TRUE;
+            }
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(exists);
+    }
 
 }
