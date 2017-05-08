@@ -64,7 +64,7 @@ public class Person implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval=true)
 	@JoinColumn(name = "ADDRESS_ID")
 	private Address address;
 

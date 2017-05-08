@@ -99,13 +99,12 @@ public class PersonController {
         Boolean exists = Boolean.FALSE;
 
         Person existingPerson = personService.findByEmail(person.getEmail());
+
         if (person.getId() != null) {
-            if (!existingPerson.getId().equals(person.getId())) {
-                exists = Boolean.TRUE;
-            }
-        } else {
             if (existingPerson != null) {
-                exists = Boolean.TRUE;
+                if (!existingPerson.getId().equals(person.getId())) {
+                    exists = Boolean.TRUE;
+                }
             }
         }
 
