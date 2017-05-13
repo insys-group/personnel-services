@@ -23,11 +23,9 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "TRAINING")
-@EqualsAndHashCode(of = { "name"})
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @Builder
-@SuppressFBWarnings(value = { "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Training implements Serializable {

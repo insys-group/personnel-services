@@ -16,12 +16,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "PERSON")
-@EqualsAndHashCode(of = { "email" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(of = {"firstName", "lastName", "phone", "email", "title"})
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Person implements Serializable {
 	private static final long serialVersionUID = 7055994680040943127L;
 
@@ -74,22 +71,20 @@ public class Person implements Serializable {
 	@JoinColumn(name = "BUSINESS_ID")
 	private Business business;
 
-	@Getter
-	@Setter
-	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval=true)
-	@JsonManagedReference
-	private Set<PersonDocument> personDocuments = new HashSet<>();
+//	@Getter
+//	@Setter
+//	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval=true)
+//	@JsonManagedReference
+//	private Set<PersonDocument> personDocuments = new HashSet<>();
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval=true)
-	@JsonManagedReference
+	@OneToMany(targetEntity = PersonSkill.class, cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<PersonSkill> personSkills = new HashSet<>();
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference ("person-training")
+	@OneToMany(targetEntity = PersonTraining.class, cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<PersonTraining> personTrainings = new HashSet<>();
 
 }

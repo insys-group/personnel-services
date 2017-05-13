@@ -5,26 +5,20 @@ package com.insys.trapps.model.person;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.insys.trapps.model.Skill;
 import lombok.*;
 
 @Entity
-@Table(name = "PERSON_SKILL")
-@EqualsAndHashCode(of = {"name"}, callSuper = false)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Table(name = "person_skill")
+@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @ToString
+@Builder
 public class PersonSkill implements Serializable {
+
 	private static final long serialVersionUID = -5990810947595710271L;
 
 	@Id
@@ -35,15 +29,9 @@ public class PersonSkill implements Serializable {
 
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name = "PERSON_ID")
-    @JsonBackReference
-    private Person person;
-
-    @Getter
-    @Setter
-    @Column(name = "NAME", nullable = false)
-    private String name;
+    @OneToOne
+    @JoinColumn(name = "skill_id")
+    private Skill skill;
     
     @Getter
     @Setter

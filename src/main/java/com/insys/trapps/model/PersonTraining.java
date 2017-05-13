@@ -14,13 +14,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "PERSON_TRAINING")
-@EqualsAndHashCode(exclude = {"progress", "completedTasks"}, callSuper = false)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@SuppressFBWarnings(value = {"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 @ToString
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class PersonTraining implements Serializable {
 
     private static final long serialVersionUID = -5990810947595710271L;
@@ -49,21 +46,13 @@ public class PersonTraining implements Serializable {
 
     @Getter
     @Setter
-    @ManyToOne
-    @JoinColumn(name = "PERSON_ID")
-    @JsonBackReference ("person-trainings")
-    private Person person;
-
-    @Getter
-    @Setter
     private boolean hided;
 
     @Getter
     @Setter
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "TRAINING_ID")
     private Training training;
-
 
     @Getter
     @Setter

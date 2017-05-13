@@ -24,7 +24,6 @@ import lombok.Setter;
  */
 @Entity
 @Table(name = "SKILL")
-@EqualsAndHashCode(of = "name", callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

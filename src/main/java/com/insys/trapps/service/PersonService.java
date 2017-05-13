@@ -29,7 +29,7 @@ public interface PersonService {
 	 * @param id
 	 * @param person
 	 */
-	void updatePerson(Long id, Person person);
+//	void updatePerson(Long id, Person person);
 
 	/**
 	 * @param id
@@ -38,7 +38,7 @@ public interface PersonService {
 	 * @return
 	 * @throws Exception
 	 */
-	PersonDocument save(Long id, String fileName, MultipartFile file) throws Exception;
+//	PersonDocument save(Long id, String fileName, MultipartFile file) throws Exception;
 
 	/**
 	 * @param id
@@ -46,7 +46,7 @@ public interface PersonService {
 	 * @return
 	 * @throws Exception
 	 */
-	PersonDocument getDocument(Long id, Long documentId) throws Exception;
+//	PersonDocument getDocument(Long id, Long documentId) throws Exception;
 
 	/**
 	 * @param id
@@ -54,8 +54,10 @@ public interface PersonService {
 	 * @return
 	 * @throws Exception
 	 */
-	PersonDocument deleteDocument(Long id, Long documentId) throws Exception;
+//	PersonDocument deleteDocument(Long id, Long documentId) throws Exception;
 
 	Person findByEmail(String email);
+
+	Person save(Person person);
 
 }

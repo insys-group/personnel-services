@@ -1,8 +1,5 @@
 spring:
   profiles: cloud
-  jpa:
-    generate-ddl: true
-    show-sql: true
 server: 
   port: 0
 security:
@@ -12,11 +9,13 @@ security:
 ---
 spring:
   profiles: local
+  jpa:
+    generate-ddl: false
+    show-sql: true
   datasource:
     url: jdbc:mysql://localhost:3306/trappsdb?useSSL=false
     username: root
     password: root
-    driver-class-name: com.mysql.jdbc.Driver
   devtools:
     restart:
       enabled: true
@@ -27,10 +26,10 @@ security:
     enabled: false
 logging:
   level:
-    org.spring.security: DEBUG
-    org.springframework.web: ERROR
-    com.insys.trapps: DEBUG
-    org.hibernate: ERROR
+    org.spring.security: INFO
+    org.springframework.web: INFO
+    com.insys.trapps: INFO
+    org.hibernate: INFO
 ---
 spring:
   profiles: local,cloud
