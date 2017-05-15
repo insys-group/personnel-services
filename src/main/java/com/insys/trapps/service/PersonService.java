@@ -25,15 +25,9 @@ public interface PersonService {
      */
     User findUser(String username);
 
-    /**
-	 * @param id
-	 * @param person
-	 */
-//	void updatePerson(Long id, Person person);
-
 	/**
 	 * @param id
-	 * @param documentId
+	 * @param fileName
 	 * @param file
 	 * @return
 	 * @throws Exception

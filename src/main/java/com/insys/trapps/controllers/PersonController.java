@@ -32,13 +32,31 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
-//    @PutMapping(value = "/persons/put/{id}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void updatePerson(@PathVariable("id") Long id, @RequestBody Person person) {
-//        logger.debug("Enter: PersonPutController.updatePerson()" + (person == null) + person.toString());
-//        logger.debug("Person to be saved is " + person.toString());
-//        personService.updatePerson(id, person);
-//    }
+    @GetMapping(value = "/person/{id}")
+    public ResponseEntity<Person> getInterview(@PathVariable("id") Long id) {
+        Person person = personService.findPerson(id);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(person);
+    }
+
+    @PostMapping(value = "/person/email/exists")
+    public ResponseEntity<Boolean> getInterview(@RequestBody Person person) {
+        Boolean exists = Boolean.FALSE;
+        Person existingPerson = personService.findByEmail(person.getEmail());
+        if (existingPerson != null) {
+            if (person.getId() != null) {
+                if (!existingPerson.getId().equals(person.getId())) {
+                    exists = Boolean.TRUE;
+                }
+            } else {
+                exists = Boolean.TRUE;
+            }
+        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(exists);
+    }
 
 //    @PostMapping(value = "/persondocuments/{id}/documents")
 //    public ResponseEntity<Resource<PersonDocument>> handleFileUpload(
@@ -92,32 +110,5 @@ public class PersonController {
 //        response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + document.getFileName() + "\"");
 //        response.getOutputStream().write(document.getDocument());
 //    }
-
-    @GetMapping(value = "/person/{id}")
-    public ResponseEntity<Person> getInterview(@PathVariable("id") Long id) {
-        Person person = personService.findPerson(id);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(person);
-    }
-
-    @PostMapping(value = "/person/email/exists")
-    public ResponseEntity<Boolean> getInterview(@RequestBody Person person) {
-        Boolean exists = Boolean.FALSE;
-
-        Person existingPerson = personService.findByEmail(person.getEmail());
-
-        if (person.getId() != null) {
-            if (existingPerson != null) {
-                if (!existingPerson.getId().equals(person.getId())) {
-                    exists = Boolean.TRUE;
-                }
-            }
-        }
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(exists);
-    }
 
 }
