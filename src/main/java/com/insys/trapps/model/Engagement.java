@@ -26,7 +26,7 @@ import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
-@Table(name = "ENGAGEMENT")
+@Table(name = "engagement")
 @EqualsAndHashCode(exclude = {"engagementOpenings"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,7 +40,7 @@ public class Engagement implements Serializable {
     @Setter
     private Long id;
 
-    @Column(name = "COMMENTS")
+    @Column(name = "comments")
     @Getter
     @Setter
     @NonNull

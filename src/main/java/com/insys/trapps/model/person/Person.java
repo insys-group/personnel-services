@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "PERSON")
+@Table(name = "person")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -30,45 +30,45 @@ public class Person implements Serializable {
 
 	@Getter
 	@Setter
-	@Column(name = "FIRST_NAME", nullable = false)
+	@Column(name = "first_name", nullable = false)
 	private String firstName;
 
 	@Getter
 	@Setter
-	@Column(name = "LAST_NAME", nullable = false)
+	@Column(name = "last_name", nullable = false)
 	private String lastName;
 
 	@Getter
 	@Setter
-	@Column(name = "PHONE")
+	@Column(name = "phone")
 	private String phone;
 
 	@Getter
 	@Setter
-	@Column(name = "EMAIL", nullable = false)
+	@Column(name = "email", nullable = false)
 	private String email;
 
 	@Getter
 	@Setter
-	@Column(name = "TITLE", nullable = true)
+	@Column(name = "title", nullable = true)
 	private String title;
 
 	@Getter
 	@Setter
-	@Column(name = "PERSON_TYPE", nullable = false)
+	@Column(name = "person_type", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private PersonType personType;
 
 	@Getter
 	@Setter
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval=true)
-	@JoinColumn(name = "ADDRESS_ID")
+	@JoinColumn(name = "address_id")
 	private Address address;
 
 	@Getter
 	@Setter
 	@ManyToOne
-	@JoinColumn(name = "BUSINESS_ID")
+	@JoinColumn(name = "business_id")
 	private Business business;
 
 //	@Getter
@@ -79,12 +79,12 @@ public class Person implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToMany(targetEntity = PersonSkill.class, cascade = CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(fetch = FetchType.EAGER, targetEntity = PersonSkill.class, cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<PersonSkill> personSkills = new HashSet<>();
 
 	@Getter
 	@Setter
-	@OneToMany(targetEntity = PersonTraining.class, cascade = CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(fetch = FetchType.EAGER, targetEntity = PersonTraining.class, cascade = CascadeType.ALL, orphanRemoval=true)
 	private Set<PersonTraining> personTrainings = new HashSet<>();
 
 }

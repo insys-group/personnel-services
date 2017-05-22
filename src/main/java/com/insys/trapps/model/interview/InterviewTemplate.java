@@ -13,7 +13,7 @@ import java.util.Set;
  */
 
 @Entity
-@Table(name = "INTERVIEW_TEMPLATE")
+@Table(name = "interview_template")
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString

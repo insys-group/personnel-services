@@ -30,7 +30,7 @@ import lombok.Setter;
  * Created by vnalitkin on 11/17/2016.
  */
 @Entity
-@Table(name = "BUSINESS")
+@Table(name = "business")
 @EqualsAndHashCode(of = {"name"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -47,17 +47,17 @@ public class Business implements Serializable {
 
     @Getter
     @Setter
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Getter
     @Setter
-    @Column(name = "DESCRIPTION", nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 
     @Getter
     @Setter
-    @Column(name = "BUSINESS_TYPE", nullable = false)
+    @Column(name = "business_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private BusinessType businessType;
 
@@ -71,9 +71,9 @@ public class Business implements Serializable {
     @Getter
     @Setter
     @OneToMany(cascade = { CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinTable(name = "LOCATION"
-            , joinColumns = @JoinColumn(name = "BUSINESS_ID", referencedColumnName = "ID")
-            , inverseJoinColumns = @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "ID")
+    @JoinTable(name = "location"
+            , joinColumns = @JoinColumn(name = "business_id", referencedColumnName = "id")
+            , inverseJoinColumns = @JoinColumn(name = "address_id", referencedColumnName = "id")
     )
     private Set<Address> addresses;
 

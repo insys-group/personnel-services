@@ -10,7 +10,7 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "OPPORTUNITY")
+@Table(name = "opportunity")
 @EqualsAndHashCode(exclude = {"comments"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,7 +29,7 @@ public class Opportunity implements Serializable {
     @NonNull
     protected String name;
 
-    @Column(name = "COMMENTS")
+    @Column(name = "comments")
     @Getter
     @Setter
     @NonNull
@@ -38,25 +38,25 @@ public class Opportunity implements Serializable {
     @Getter
     @Setter
     @OneToMany(targetEntity = OpportunityStep.class, cascade = CascadeType.ALL, orphanRemoval=true)
-    @OrderBy("ID ASC")
+    @OrderBy("id ASC")
     private Set<OpportunityStep> opportunitySteps;
 
     @Getter
     @Setter
     @OneToMany(targetEntity = Engagement.class, cascade = CascadeType.ALL, orphanRemoval=true)
-    @OrderBy("ID ASC")
+    @OrderBy("id ASC")
     private Set<Engagement> engagements;
 
     @Getter
     @Setter
     @OneToOne
-    @JoinColumn(name = "BUSINESS_ID")
+    @JoinColumn(name = "business_id")
     private Business business;
 
     @Getter
     @Setter
     @OneToOne
-    @JoinColumn(name = "Person")
+    @JoinColumn(name = "person_id")
     private Person person;
 
 }

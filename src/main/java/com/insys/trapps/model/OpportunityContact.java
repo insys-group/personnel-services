@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "OPPORTUNITY_CONTACT")
+@Table(name = "opportunity_contact")
 @AllArgsConstructor
 @NoArgsConstructor
 public class OpportunityContact implements Serializable {

@@ -24,7 +24,7 @@ import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
-@Table(name = "OPPORTUNITY_STEP")
+@Table(name = "opportunity_step")
 @EqualsAndHashCode(of = {"comments", "stepTimestamp"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,10 +41,10 @@ public class OpportunityStep implements Serializable {
     @Getter
     @Setter
     @NonNull
-    @Column(name = "STEP_TIMESTAMP" , nullable = false)
+    @Column(name = "step_timestamp" , nullable = false)
     private Timestamp stepTimestamp;
 
-    @Column(name = "COMMENTS")
+    @Column(name = "comments")
     @Getter
     @Setter
     @NonNull

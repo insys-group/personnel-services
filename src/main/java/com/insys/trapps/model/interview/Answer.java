@@ -10,7 +10,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "ANSWER")
+@Table(name = "answer")
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
@@ -28,22 +28,22 @@ public class Answer implements Serializable {
     @Getter
     @Setter
     @OneToOne(targetEntity = Question.class, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "QUESTION_ID")
+    @JoinColumn(name = "question_id")
     private Question question;
 
     @Getter
     @Setter
-    @Column(name = "ANSWER")
+    @Column(name = "answer")
     private String answer;
 
     @Getter
     @Setter
-    @Column(name = "COMMENT")
+    @Column(name = "comment")
     private String comment;
 
     @Getter
     @Setter
-    @Column(name = "QUALITY")
+    @Column(name = "quality")
     @Enumerated(EnumType.STRING)
     private Quality quality;
 

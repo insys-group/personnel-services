@@ -21,7 +21,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "INTERVIEW")
+@Table(name = "interview")
 @EqualsAndHashCode(of = { "candidate", "role", "date" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -76,7 +76,7 @@ public class Interview implements Serializable {
 	@Getter
 	@Setter
 	@OneToMany(targetEntity = Answer.class, cascade = CascadeType.ALL, orphanRemoval=true)
-	@OrderBy("QUESTION_ID ASC")
+	@OrderBy("question_id ASC")
 	private Set<Answer> answers;
 
 	@Getter

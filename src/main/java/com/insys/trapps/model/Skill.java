@@ -23,7 +23,7 @@ import lombok.Setter;
  * Created by vnalitkin on 11/17/2016.
  */
 @Entity
-@Table(name = "SKILL")
+@Table(name = "skill")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -45,7 +45,7 @@ public class Skill implements Serializable {
     @Getter
     @Setter
     @NonNull
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 	
 //	@PrePersist

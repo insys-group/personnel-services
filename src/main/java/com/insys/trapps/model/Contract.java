@@ -29,7 +29,7 @@ import lombok.Singular;
  * Created by vnalitkin on 11/17/2016.
  */
 @Entity
-@Table(name = "CONTRACT")
+@Table(name = "contract")
 @EqualsAndHashCode(exclude = {"engagementOpening", "person", "contractDetails"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -52,16 +52,16 @@ public class Contract implements Serializable {
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "ENGAGEMENT_OPENING_ID")
+    @JoinColumn(name = "engagement_opening_id")
     private EngagementOpening engagementOpening;
 
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "PERSON_ID")
+    @JoinColumn(name = "person_id")
     private Person person;
 
-    @Column(name = "COMMENTS")
+    @Column(name = "comments")
     @Getter
     @Setter
     @NonNull

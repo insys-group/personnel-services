@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "PERSON_TRAINING")
+@Table(name = "person_training")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -51,15 +51,15 @@ public class PersonTraining implements Serializable {
     @Getter
     @Setter
     @OneToOne
-    @JoinColumn(name = "TRAINING_ID")
+    @JoinColumn(name = "training_id")
     private Training training;
 
     @Getter
     @Setter
-    @ManyToMany
-    @JoinTable(name = "PERSON_TRAINING_TASK_COMPLETION"
-            , joinColumns = @JoinColumn(name = "person_training_id", referencedColumnName = "ID")
-            , inverseJoinColumns = @JoinColumn(name = "tasks_id", referencedColumnName = "ID")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "person_training_task_completion"
+            , joinColumns = @JoinColumn(name = "person_training_id", referencedColumnName = "id")
+            , inverseJoinColumns = @JoinColumn(name = "tasks_id", referencedColumnName = "id")
     )
     private Set<TrainingTask> completedTasks = new HashSet<>();
 

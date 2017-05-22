@@ -27,7 +27,7 @@ import lombok.Setter;
  * Created by vnalitkin on 11/17/2016.
  */
 @Entity
-@Table(name = "CONTRACT_DETAIL")
+@Table(name = "contract_detail")
 @EqualsAndHashCode(exclude = {"contract"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -51,28 +51,28 @@ public class ContractDetail implements Serializable {
     @Setter
     @ManyToOne
     @NonNull
-    @JoinColumn(name = "CONTRACT_ID", nullable = false)
+    @JoinColumn(name = "contract_id", nullable = false)
     private Contract contract;
 
     @Getter
     @Setter
     @NonNull
-    @Column(name = "RATE")
+    @Column(name = "rate")
     private BigDecimal rate;
 
     @Getter
     @Setter
     @NonNull
-    @Column(name = "START_DATE")
+    @Column(name = "start_date")
     private LocalDate startDate;
 
     @Getter
     @Setter
     @NonNull
-    @Column(name = "END_DATE")
+    @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Column(name = "COMMENTS")
+    @Column(name = "comments")
     @Getter
     @Setter
     @NonNull

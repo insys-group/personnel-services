@@ -19,7 +19,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "TRAINING_TASK")
+@Table(name = "training_task")
 @EqualsAndHashCode(of = {"name", "description", "weblink"})
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

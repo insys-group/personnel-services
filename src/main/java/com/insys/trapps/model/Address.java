@@ -24,7 +24,7 @@ import lombok.ToString;
  * Created by vnalitkin on 11/17/2016.
  */
 @Entity
-@Table(name = "ADDRESS")
+@Table(name = "address")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -42,36 +42,36 @@ public class Address implements Serializable {
     @Getter
     @Setter
     @NonNull
-    @Column(name = "ADDRESS_1", nullable = false)
+    @Column(name = "address_1", nullable = false)
     private String address1;
 
     @Getter
     @Setter
-    @Column(name = "ADDRESS_2")
+    @Column(name = "address_2")
     private String address2;
 
     @Getter
     @Setter
     @NonNull
-    @Column(name = "CITY", nullable = false)
+    @Column(name = "city", nullable = false)
     private String city;
 
     @Getter
     @Setter
     @NonNull
-    @Column(name = "STATE", nullable = false)
+    @Column(name = "state", nullable = false)
     private String state;
 
     @Getter
     @Setter
     @NonNull
-    @Column(name = "ZIP_CODE", nullable = false)
+    @Column(name = "zip_code", nullable = false)
     private String zipCode;
     
     @Getter
     @Setter
     @NonNull
-    @Column(name = "COUNTRY", nullable = false)
+    @Column(name = "country", nullable = false)
     private String country;
     
 }

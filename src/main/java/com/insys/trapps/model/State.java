@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "STATE")
+@Table(name = "state")
 @EqualsAndHashCode(of = {"stateCode"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,12 +33,12 @@ public class State {
     @Version
     @Getter
     @Setter
-    @Column(name = "VERSION")
+    @Column(name = "version")
     private Long version;
 
     @Getter
     @Setter
-    @Column(name = "STATE_CODE", nullable = false)
+    @Column(name = "state_code", nullable = false)
     private String stateCode;
 
 }

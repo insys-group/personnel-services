@@ -1,1 +1,0 @@
-alter TABLE interview add column status INT NOT NULL DEFAULT 1;

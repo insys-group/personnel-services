@@ -15,7 +15,7 @@ import java.util.Set;
  * Created by msabir on 2/15/17.
  */
 @Entity
-@Table(name = "USER")
+@Table(name = "user")
 @EqualsAndHashCode(of = {"username"})
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,25 +25,25 @@ public class User implements UserDetails, Serializable {
     private static final long serialVersionUID = 3911995980240948127L;
 
     @Id
-    @Column(name = "USERNAME", nullable = false)
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "PASSWORD", nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "PERSON_ID", nullable = false)
+    @Column(name = "person_id", nullable = false)
     private Long personId;
 
-    @Column(name = "ACCOUNT_NON_EXPIRED", nullable = false)
+    @Column(name = "account_non_expired", nullable = false)
     private boolean accountNonExpired=true;
 
-    @Column(name = "ACCOUNT_NON_LOCKED", nullable = false)
+    @Column(name = "account_non_locked", nullable = false)
     private boolean accountNonLocked=true;
 
-    @Column(name = "CREDENTIALS_NON_EXPIRED", nullable = false)
+    @Column(name = "credentials_non_expired", nullable = false)
     private boolean credentialsNonExpired=true;
 
-    @Column(name = "ENABLED", nullable = false)
+    @Column(name = "enabled", nullable = false)
     private boolean enabled=false;
 
     @Column(name = "password_changed", nullable = false)

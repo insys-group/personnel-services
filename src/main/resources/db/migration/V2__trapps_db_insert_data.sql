@@ -1,99 +1,78 @@
-INSERT INTO address(id, address_1 , city , state, zip_code, country) VALUES(1, '10 Park Ave' , 'Manhatten' , 'NY' , '10010', 'USA');
-INSERT INTO address(id, address_1 , city , state, zip_code, country) VALUES(2, '100 Business Ave', 'Manhatten' , 'NY' , '10012', 'USA');
-INSERT INTO address(id, address_1 , city , state, zip_code, country) VALUES(3, '100 Comcast Ave', 'Philadelphia', 'PA', '88790', 'USA');
-INSERT INTO address(id, address_1 , city , state, zip_code, country) VALUES(4, '10 INSYS Ave', 'Rochelle Park', 'NJ', '06786', 'USA');
-INSERT INTO address(id, address_1 , city , state, zip_code, country) VALUES(5, '3 Gerson Rd', 'Robbinsville', 'NJ', '08691', 'USA');
-INSERT INTO address(id, address_1 , city , state, zip_code, country) VALUES(6, '9 Tindal Ave', 'Rochelle Park', 'NJ', '08796', 'USA');
-INSERT INTO address(id, address_1 , city , state, zip_code, country) VALUES(7, '21 Sesame St', 'Raleigh', 'NC', '77796', 'USA');
-INSERT INTO address(id, address_1 , city , state, zip_code, country) VALUES(8, '88 100th St', 'Herndon', 'VA', '59877', 'USA');
-INSERT INTO address(id, address_1 , city , state, zip_code, country) VALUES(9, '23 1st St', 'Secaucus', 'NJ', '09877', 'USA');
-INSERT INTO address(id, address_1 , city , state, zip_code, country) VALUES(10, '11 Independance Ave', 'Pittsburg', 'PA', '09327', 'USA');
+--
+-- Dumping data for table state
+--
+INSERT INTO state VALUES (1,'AL',NULL),(2,'AK',NULL),(3,'AZ',NULL),(4,'AR',NULL),(5,'CA',NULL),(6,'CO',NULL),
+  (7,'CT',NULL),(8,'DE',NULL),(9,'DC',NULL),(10,'FL',NULL),(11,'GA',NULL),(12,'HI',NULL),(13,'ID',NULL),
+  (14,'IL',NULL),(15,'IN',NULL),(16,'IA',NULL),(17,'KS',NULL),(18,'KY',NULL),(19,'LA',NULL),(20,'ME',NULL),
+  (21,'MD',NULL),(22,'MA',NULL),(23,'MI',NULL),(24,'MN',NULL),(25,'MS',NULL),(26,'MO',NULL),(27,'MT',NULL),
+  (28,'NE',NULL),(29,'NV',NULL),(30,'NH',NULL),(31,'NJ',NULL),(32,'NM',NULL),(33,'NY',NULL),(34,'NC',NULL),
+  (35,'ND',NULL),(36,'OH',NULL),(37,'OK',NULL),(38,'OR',NULL),(39,'PA',NULL),(40,'RI',NULL),(41,'SC',NULL),
+  (42,'SD',NULL),(43,'TN',NULL),(44,'TX',NULL),(45,'UT',NULL),(46,'VT',NULL),(47,'VA',NULL),(48,'WA',NULL),
+  (49,'WV',NULL),(50,'WV',NULL),(51,'WY',NULL);
 
-INSERT INTO business(id, name, description, business_type) VALUES(15, 'Comcast Inc', 'Comcast' , 'Client');
-INSERT INTO business(id, name, description, business_type) VALUES(16, 'INSYS Group Inc', 'INSYS Group Pivotal Practice', 'INSYS');
-INSERT INTO business(id, name, description, business_type) VALUES(17, 'Pivotal Cloud Foundry', 'Pivotal Cloud Foundry', 'Pivotal');
-INSERT INTO business(id, name, description, business_type) VALUES(18, 'Pivotal Labs', 'Pivotal Labs', 'PivotalLabs');
-INSERT INTO business(id, name, description, business_type) VALUES(19, 'Apptium Inc', 'Apptium Solutions', 'Vendor');
+--
+-- Dumping data for table client
+--
+INSERT INTO client VALUES
+  ('trapps-application-iwquy-ienke-qnbek-iuysc-pwirh','trapps-application-secret-oiweds-iujwsd-ujrqcd-iorcl-klmvek',1,'read,write',1,'authorization_code,refresh_token,password,client_credentials',86400,0,1);
 
-INSERT INTO location(business_id , address_id) VALUES(15, 1 );
-INSERT INTO location(business_id , address_id) VALUES(15, 3);
-INSERT INTO location(business_id , address_id) VALUES(15, 2);
-INSERT INTO location(business_id , address_id) VALUES(16, 4);
+--
+-- Dumping data for table address
+--
+INSERT INTO address VALUES
+  (1,'2101 N Ursula St Apt. 323',NULL,'Aurora','USA','CO','80045'),
+  (2,'395 W Passaic St #4',NULL,'Rochelle Park','USA','NJ','07662'),
+  (3,'875 Howard Street','Fifth Floor','San Francisco','USA','CA','94103'),
+  (4,'1701 Pearl Street','Suite 200','Boulder','USA','CO','80302');
 
-INSERT INTO person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) VALUES(10, 'Muhammad', 'Sabir', '631-983-9075', 'msabir@insys.com', 'Architect', 'Employee', 5, 16);
-INSERT INTO person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) VALUES(11, 'Brad', 'Starkenberg', '876-99-3427', 'bstarken@insys.com', 'Architect', 'Employee', 6, 16);
-INSERT INTO person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) VALUES(12, 'Eric', 'Pereira', '876-99-3427', 'epereira@insys.com', 'Architect', 'Employee', 7, 16);
-INSERT INTO person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) VALUES(13, 'Michael', 'Orth', '237-28-3427', 'morth@apptium.com', 'Manager', 'Vendor', 8, 19);
-INSERT INTO person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) VALUES(14, 'Kevin', 'Meloney', '872-28-1297', 'kmulder@comcast.com', 'Manager', 'Client', 9, 15);
-INSERT INTO person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) VALUES(15, 'Chris', 'Umbel', '297-28-1276', 'cumbel@pivotal.com', 'Architect', 'Pivotal', 10, 17);
+--
+-- Dumping data for table business
+--
+INSERT INTO business VALUES
+  (1,'INSYS','INSYS Group Pivotal Practice','INSYS Group Inc'),
+  (2,'Pivotal','Pivotal Cloud Foundry','Pivotal Cloud Foundry'),
+  (3,'PivotalLabs','Pivotal Labs','Pivotal Labs');
 
-INSERT INTO person_skill(id, person_id, name, scale) VALUES(1, 10, 'Spring', 8);
+--
+-- Dumping data for table location
+--
+INSERT INTO location VALUES (1,2),(2,3),(3,4);
 
-INSERT INTO role(id , name) VALUES(1 , 'Developer');
-INSERT INTO skill(id , name) VALUES(1 , 'Java');
-INSERT INTO role_skill VALUES(1 , 1);
+--
+-- Dumping data for table person
+--
+INSERT INTO person VALUES
+  (1,'test@luxoft.com','Admin','Admin','Employee','00000000','Admin',1,1),
+  (2,'areyna@luxoft.com','Armando','Reyna','Employee','720-560-8971','Architect',1,1),
+  (3,'msabir@luxoft.com','Muhammad','Sabir','Employee','631-983-9075','Architect',null,2),
+  (4,'bstarkenberg@luxoft.com','Brad','Starkenberg','Employee','876-99-3427','Chief Architect',null,2),
+  (5,'epereira@luxoft.com','Eric','Pereira','Employee','876-99-3427','Architect',null,2),
+  (6,'kkrishna@luxoft.com','Kris','Krishna','Employee','876-99-3427','Architect',null,2),
+  (7,'vnalitkin@insys.com','Vladimir','Nalitkin','Employee','876-99-3427','Architect',null,2),
+  (8,'vmaevskiy@luxoft.com','Victor','Maevskiy','Employee','111-11-1111','Architect',null,2),
+  (9,'dalambert@luxoft.com','David','Lambert','Employee','111-11-1111','Project Manager',null,2);
 
-INSERT INTO user (username, password, person_id, account_non_expired, account_non_locked, credentials_non_expired, enabled) VALUES('msabir', 'password', 10, true, true, true, true);
-INSERT INTO user_authority(id, username, authority) VALUES (1, 'msabir', 'ADMIN');
+--
+-- Dumping data for table user
+--
+INSERT INTO user VALUES (1,'admin','cb5af25a063f751372465c0f27ef9cada13ecd8d850564ebcab690d0c725ffddf6786887c444f016',1,1,1,1,1);
 
-INSERT INTO Client (client_id, client_secret, secret_required, scopes, scoped, grant_types, access_token_validity_seconds,refresh_token_validity_seconds, auto_approve)
-VALUES ('trapps-application-iwquy-ienke-qnbek-iuysc-pwirh', 'trapps-application-secret-oiweds-iujwsd-ujrqcd-iorcl-klmvek', true, 'read,write', true, 'authorization_code,refresh_token,password,client_credentials', 86400, 0, true);
+--
+-- Dumping data for table user_authority
+--
+INSERT INTO user_authority VALUES (1,'ADMIN','admin');
 
-INSERT INTO state(id , state_code) VALUES(1 , 'AL');
-INSERT INTO state(id , state_code) VALUES(2 , 'AK');
-INSERT INTO state(id , state_code) VALUES(3 , 'AZ');
-INSERT INTO state(id , state_code) VALUES(4 , 'AR');
-INSERT INTO state(id , state_code) VALUES(5 , 'CA');
-INSERT INTO state(id , state_code) VALUES(6 , 'CO');
-INSERT INTO state(id , state_code) VALUES(7 , 'CT');
-INSERT INTO state(id , state_code) VALUES(8 , 'DE');
-INSERT INTO state(id , state_code) VALUES(9 , 'DC');
-INSERT INTO state(id , state_code) VALUES(10 , 'FL');
-INSERT INTO state(id , state_code) VALUES(11 , 'GA');
-INSERT INTO state(id , state_code) VALUES(12 , 'HI');
-INSERT INTO state(id , state_code) VALUES(13 , 'ID');
-INSERT INTO state(id , state_code) VALUES(14 , 'IL');
-INSERT INTO state(id , state_code) VALUES(15 , 'IN');
-INSERT INTO state(id , state_code) VALUES(16 , 'IA');
-INSERT INTO state(id , state_code) VALUES(17 , 'KS');
-INSERT INTO state(id , state_code) VALUES(18 , 'KY');
-INSERT INTO state(id , state_code) VALUES(19 , 'LA');
-INSERT INTO state(id , state_code) VALUES(20 , 'ME');
-INSERT INTO state(id , state_code) VALUES(21 , 'MD');
-INSERT INTO state(id , state_code) VALUES(22 , 'MA');
-INSERT INTO state(id , state_code) VALUES(23 , 'MI');
-INSERT INTO state(id , state_code) VALUES(24 , 'MN');
-INSERT INTO state(id , state_code) VALUES(25 , 'MS');
-INSERT INTO state(id , state_code) VALUES(26 , 'MO');
-INSERT INTO state(id , state_code) VALUES(27 , 'MT');
-INSERT INTO state(id , state_code) VALUES(28 , 'NE');
-INSERT INTO state(id , state_code) VALUES(29 , 'NV');
-INSERT INTO state(id , state_code) VALUES(30 , 'NH');
-INSERT INTO state(id , state_code) VALUES(31 , 'NJ');
-INSERT INTO state(id , state_code) VALUES(32 , 'NM');
-INSERT INTO state(id , state_code) VALUES(33 , 'NY');
-INSERT INTO state(id , state_code) VALUES(34 , 'NC');
-INSERT INTO state(id , state_code) VALUES(35 , 'ND');
-INSERT INTO state(id , state_code) VALUES(36 , 'OH');
-INSERT INTO state(id , state_code) VALUES(37 , 'OK');
-INSERT INTO state(id , state_code) VALUES(38 , 'OR');
-INSERT INTO state(id , state_code) VALUES(39 , 'PA');
-INSERT INTO state(id , state_code) VALUES(40 , 'RI');
-INSERT INTO state(id , state_code) VALUES(41 , 'SC');
-INSERT INTO state(id , state_code) VALUES(42 , 'SD');
-INSERT INTO state(id , state_code) VALUES(43 , 'TN');
-INSERT INTO state(id , state_code) VALUES(44 , 'TX');
-INSERT INTO state(id , state_code) VALUES(45 , 'UT');
-INSERT INTO state(id , state_code) VALUES(46 , 'VT');
-INSERT INTO state(id , state_code) VALUES(47 , 'VA');
-INSERT INTO state(id , state_code) VALUES(48 , 'WA');
-INSERT INTO state(id , state_code) VALUES(49 , 'WV');
-INSERT INTO state(id , state_code) VALUES(50 , 'WV');
-INSERT INTO state(id , state_code) VALUES(51 , 'WY');
+--
+-- Dumping data for table role
+--
+INSERT INTO role VALUES (1,'Developer');
 
-INSERT INTO address(id, address_1 , city , state, zip_code, country) VALUES(11, '2101 N Ursula St Apt. 323', 'Aurora', 'CO', '80045', 'USA');
-INSERT INTO person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) VALUES(16, 'Armando', 'Reyna', '720-560-8971', 'areyna@insys.com', 'Architect', 'Employee', 11, 16);
-INSERT INTO user (username, password, person_id, account_non_expired, account_non_locked, credentials_non_expired, enabled) VALUES('areyna', 'cb5af25a063f751372465c0f27ef9cada13ecd8d850564ebcab690d0c725ffddf6786887c444f016', 16, true, true, true, true);
-INSERT INTO user_authority(id, username, authority) VALUES (2, 'areyna', 'ADMIN');
+--
+-- Dumping data for table skill
+--
+INSERT INTO skill VALUES (1,'Java');
 
-insert into person(id, first_name, last_name , phone, email, title, person_type, address_id, business_id) values(17, 'John', 'Snow', '111-11-1111', 'jsnow@gmail.com', 'Developer', 'Candidate', 11, 16);
+--
+-- Dumping data for table role_skill
+--
+INSERT INTO role_skill VALUES (1,1);

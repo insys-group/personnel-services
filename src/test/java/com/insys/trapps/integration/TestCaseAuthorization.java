@@ -1,5 +1,7 @@
 package com.insys.trapps.integration;
 
+import com.insys.trapps.model.Business;
+import com.insys.trapps.model.BusinessType;
 import com.insys.trapps.model.person.Person;
 import com.insys.trapps.model.person.PersonType;
 import com.insys.trapps.model.security.User;
@@ -20,6 +22,9 @@ import static com.jayway.restassured.RestAssured.given;
 
 @Slf4j
 public class TestCaseAuthorization {
+
+    @Autowired
+    BusinessRepository businessRepository;
 
     @Autowired
     PersonRepository personRepository;
@@ -55,7 +60,10 @@ public class TestCaseAuthorization {
     public void authenticateUser() {
         RestAssured.port = PORT;
 
-        Person personUser = Person.builder().firstName("Armando").lastName("Reyna").email("areyna@insys.com").personType(PersonType.Employee).build();
+        Business business = Business.builder().name("INSYS").businessType(BusinessType.INSYS).description("Test Business").build();
+        business = businessRepository.saveAndFlush(business);
+
+        Person personUser = Person.builder().firstName("Armando").lastName("Reyna").email("areyna@insys.com").personType(PersonType.Employee).business(business).build();
         personRepository.saveAndFlush(personUser);
         log.debug("Person created successfully " + personUser.toString());
 

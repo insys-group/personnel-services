@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "QUESTION")
+@Table(name = "question")
 @EqualsAndHashCode(of = { "question" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,7 +37,7 @@ public class Question implements Serializable {
 
 	@Getter
 	@Setter
-	@Column(name = "QUESTION", nullable = false)
+	@Column(name = "question", nullable = false)
 	private String question;
 
 }

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * Created by msabir on 2/16/17.
  */
 @Entity
-@Table(name = "Client")
+@Table(name = "client")
 @EqualsAndHashCode(of = {"clientId"})
 @ToString(of = {"clientId", "secretRequired", "clientSecret", "scoped", "scopes", "grantTypes", "accessTokenValiditySeconds", "refreshTokenValiditySeconds", "autoApprove"})
 @AllArgsConstructor
@@ -25,47 +25,47 @@ public class Client implements ClientDetails {
     @Id
     @Getter
     @Setter
-    @Column(name = "CLIENT_ID", nullable = false)
+    @Column(name = "client_id", nullable = false)
     private String clientId;
 
     @Getter
     @Setter
-    @Column(name = "SECRET_REQUIRED", nullable = false)
+    @Column(name = "secret_required", nullable = false)
     private boolean secretRequired;
 
     @Getter
     @Setter
-    @Column(name = "CLIENT_SECRET", nullable = false)
+    @Column(name = "client_secret", nullable = false)
     private String clientSecret;
 
     @Getter
     @Setter
-    @Column(name = "SCOPED", nullable = false)
+    @Column(name = "scoped", nullable = false)
     private boolean scoped;
 
     @Getter
     @Setter
-    @Column(name = "SCOPES", nullable = false)
+    @Column(name = "scopes", nullable = false)
     private String scopes;
 
     @Getter
     @Setter
-    @Column(name = "GRANT_TYPES", nullable = false)
+    @Column(name = "grant_types", nullable = false)
     private String grantTypes;
 
     @Getter
     @Setter
-    @Column(name = "ACCESS_TOKEN_VALIDITY_SECONDS", nullable = false)
+    @Column(name = "access_token_validity_seconds", nullable = false)
     private Integer accessTokenValiditySeconds;
 
     @Getter
     @Setter
-    @Column(name = "REFRESH_TOKEN_VALIDITY_SECONDS", nullable = false)
+    @Column(name = "refresh_token_validity_seconds", nullable = false)
     private Integer refreshTokenValiditySeconds;
 
     @Getter
     @Setter
-    @Column(name = "AUTO_APPROVE", nullable = false)
+    @Column(name = "auto_approve", nullable = false)
     private boolean autoApprove;
 
     @Override

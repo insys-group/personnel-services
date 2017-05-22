@@ -27,7 +27,7 @@ import lombok.Setter;
  * Created by vnalitkin on 11/17/2016.
  */
 @Entity
-@Table(name = "ROLE")
+@Table(name = "role")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -49,15 +49,15 @@ public class Role implements Serializable {
     @Getter
     @Setter
     @NonNull
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Getter
     @Setter
     @OneToMany(cascade = { CascadeType.ALL })
-    @JoinTable(name = "ROLE_SKILL"
-            , joinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")
-            , inverseJoinColumns = @JoinColumn(name = "SKILL_ID", referencedColumnName = "ID")
+    @JoinTable(name = "role_skill"
+            , joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
+            , inverseJoinColumns = @JoinColumn(name = "skill_id", referencedColumnName = "id")
     )
     private Set<Skill> skills;
 

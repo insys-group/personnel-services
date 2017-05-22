@@ -26,7 +26,7 @@ import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
-@Table(name = "ENGAGEMENT_OPENING")
+@Table(name = "engagement_opening")
 @EqualsAndHashCode(of = {"engagement", "role", "address"}, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -49,27 +49,27 @@ public class EngagementOpening implements Serializable {
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "ENGAGEMENT_ID")
+    @JoinColumn(name = "engagement_id")
     private Engagement engagement;
 
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "ROLE_ID")
+    @JoinColumn(name = "role_id")
     private Role role;
 
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "ADDRESS_ID")
+    @JoinColumn(name = "address_id")
     private Address address;
 
-    @Column(name = "RATE")
+    @Column(name = "rate")
     @Getter
     @Setter
     private BigDecimal rate;
 
-    @Column(name = "COMMENTS")
+    @Column(name = "comments")
     @Getter
     @Setter
     @NonNull

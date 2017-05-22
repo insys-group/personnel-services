@@ -8,7 +8,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "FEEDBACK")
+@Table(name = "feedback")
 @EqualsAndHashCode(of = { "interviewer", "comment" }, callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,7 +25,7 @@ public class Feedback implements Serializable {
 	@Getter
 	@Setter
 	@OneToOne
-	@JoinColumn(name = "PERSON_ID")
+	@JoinColumn(name = "person_id")
 	private Person interviewer;
 
 	@Getter

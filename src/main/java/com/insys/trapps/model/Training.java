@@ -22,7 +22,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "TRAINING")
+@Table(name = "training")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @Builder
@@ -40,13 +40,13 @@ public class Training implements Serializable {
 
 	@Getter
 	@Setter
-	@Column(name = "NAME", nullable = false)
+	@Column(name = "name", nullable = false)
 	private String name;
 	
 	@Getter
 	@Setter
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "ADDRESS_ID", nullable = true, insertable = true, updatable = true)
+	@JoinColumn(name = "address_id", nullable = true, insertable = true, updatable = true)
 	private Address location;
 
 	@Getter
@@ -55,7 +55,7 @@ public class Training implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true, targetEntity = TrainingTask.class)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true, targetEntity = TrainingTask.class)
 	private Set<TrainingTask> tasks = new HashSet<>();
 
 

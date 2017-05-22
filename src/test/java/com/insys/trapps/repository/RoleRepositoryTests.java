@@ -105,9 +105,6 @@ public class RoleRepositoryTests {
         saveAll();
 
         Role role = roleRepository.findByName("Role 1").get(0);
-        Iterator<Skill> iterator = role.getSkills().iterator();
-        Skill skill = iterator.next();
-        iterator.remove();
 
         roleRepository.save(role);
         role = roleRepository.findByName("Role 1").get(0);

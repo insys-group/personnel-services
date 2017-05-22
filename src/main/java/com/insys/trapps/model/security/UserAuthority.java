@@ -11,7 +11,7 @@ import javax.persistence.*;
  * Created by msabir on 2/15/17.
  */
 @Entity
-@Table(name = "USER_AUTHORITY")
+@Table(name = "user_authority")
 @EqualsAndHashCode(of = {"user", "authority"})
 @ToString(of = {"authority"})
 @AllArgsConstructor
@@ -31,11 +31,11 @@ public class UserAuthority implements GrantedAuthority {
     }
 
     @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
-    @JoinColumn(name = "USERNAME", nullable = false)
+    @JoinColumn(name = "username", nullable = false)
     @JsonBackReference
     private User user;
 
-    @Column(name = "AUTHORITY", nullable = false)
+    @Column(name = "authority", nullable = false)
     private String authority;
 
     @Override

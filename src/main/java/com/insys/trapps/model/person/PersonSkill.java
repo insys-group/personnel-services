@@ -35,6 +35,6 @@ public class PersonSkill implements Serializable {
     
     @Getter
     @Setter
-    @Column(name = "SCALE", nullable = false)
+    @Column(name = "scale", nullable = false)
     private Integer scale;
 }
