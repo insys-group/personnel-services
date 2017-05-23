@@ -3,7 +3,6 @@ package com.insys.trapps.service.impl;
 import com.insys.trapps.model.Address;
 import com.insys.trapps.model.PersonTraining;
 import com.insys.trapps.model.person.Person;
-import com.insys.trapps.model.person.PersonDocument;
 import com.insys.trapps.model.security.User;
 import com.insys.trapps.respositories.PersonRepository;
 import com.insys.trapps.respositories.UserRepository;

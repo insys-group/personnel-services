@@ -7,7 +7,6 @@ import com.insys.trapps.model.security.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.insys.trapps.model.person.Person;
-import com.insys.trapps.model.person.PersonDocument;
 
 /**
  * @author msabir

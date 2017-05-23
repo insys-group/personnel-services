@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.insys.trapps.model.person.Person;
-import com.insys.trapps.model.person.PersonDocument;
 import com.insys.trapps.service.PersonService;
 
 /**
