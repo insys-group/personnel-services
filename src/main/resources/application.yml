@@ -6,6 +6,12 @@ security:
   oauth2:
     resource:
       user-info-uri: http://trapps-api.local.pcfdev.io/user
+logging:
+  level:
+    org.spring.security: TRACE
+    org.springframework.web: TRACE
+    com.insys.trapps: TRACE
+    org.hibernate: TRACE
 ---
 spring:
   profiles: local
