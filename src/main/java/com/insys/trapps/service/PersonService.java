@@ -3,6 +3,7 @@
  */
 package com.insys.trapps.service;
 
+import com.insys.trapps.model.person.PersonDocument;
 import com.insys.trapps.model.security.User;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,10 @@ public interface PersonService {
      */
     User findUser(String username);
 
+	Person findByEmail(String email);
+
+	Person save(Person person);
+
 	/**
 	 * @param id
 	 * @param fileName
@@ -31,26 +36,20 @@ public interface PersonService {
 	 * @return
 	 * @throws Exception
 	 */
-//	PersonDocument save(Long id, String fileName, MultipartFile file) throws Exception;
+	PersonDocument saveDocument(Long id, String fileName, MultipartFile file) throws Exception;
 
 	/**
-	 * @param id
 	 * @param documentId
 	 * @return
 	 * @throws Exception
 	 */
-//	PersonDocument getDocument(Long id, Long documentId) throws Exception;
+	PersonDocument getDocument(Long documentId) throws Exception;
 
 	/**
-	 * @param id
 	 * @param documentId
 	 * @return
 	 * @throws Exception
 	 */
-//	PersonDocument deleteDocument(Long id, Long documentId) throws Exception;
-
-	Person findByEmail(String email);
-
-	Person save(Person person);
+	Boolean deleteDocument(Long documentId) throws Exception;
 
 }

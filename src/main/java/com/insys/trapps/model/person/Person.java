@@ -71,11 +71,12 @@ public class Person implements Serializable {
 	@JoinColumn(name = "business_id")
 	private Business business;
 
-//	@Getter
-//	@Setter
-//	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval=true)
-//	@JsonManagedReference
-//	private Set<PersonDocument> personDocuments = new HashSet<>();
+	@Getter
+	@Setter
+	@OneToMany(fetch = FetchType.EAGER, targetEntity = PersonDocument.class, mappedBy="person", cascade = CascadeType.ALL, orphanRemoval=true)
+	@JsonManagedReference
+	@OrderBy("date ASC")
+	private Set<PersonDocument> personDocuments = new HashSet<>();
 
 	@Getter
 	@Setter

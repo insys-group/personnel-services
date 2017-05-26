@@ -12,6 +12,12 @@ logging:
     org.springframework.web: TRACE
     com.insys.trapps: TRACE
     org.hibernate: TRACE
+aws:
+  s3:
+    endpoint: s3.amazonaws.com
+    credentials:
+      accessKey: AKIAJQNOIHWF4AREOMVA
+      secretKey: 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
 ---
 spring:
   profiles: local
@@ -36,6 +42,12 @@ logging:
     org.springframework.web: INFO
     com.insys.trapps: INFO
     org.hibernate: INFO
+aws:
+  s3:
+    endpoint: http://127.0.0.1:9000
+    credentials:
+      accessKey: F1O0TGTIO8S3OCJTQPKK
+      secretKey: 6rErai/xOd8sO43eJ+8GxEJi73ct6Q/jYiOe85fH
 ---
 spring:
   profiles: local,cloud
@@ -68,6 +80,12 @@ authentication:
     clientid: trapps-app
     secret: QQsfDh5Q7S1BB8UHiB0Ni3okKn8lEEbeDx1k4k2OjT2jWuzr
     tokenValidityInSeconds: 6000
+aws:
+  s3:
+    buckets:
+      person: persondocument
+multipart.maxFileSize: 5MB
+multipart.maxRequestSize: 5MB
 ---
 security:
   basic:

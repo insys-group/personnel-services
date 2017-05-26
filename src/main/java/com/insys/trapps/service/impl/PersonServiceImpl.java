@@ -3,11 +3,17 @@ package com.insys.trapps.service.impl;
 import com.insys.trapps.model.Address;
 import com.insys.trapps.model.PersonTraining;
 import com.insys.trapps.model.person.Person;
+import com.insys.trapps.model.person.PersonDocument;
 import com.insys.trapps.model.security.User;
+import com.insys.trapps.respositories.PersonDocumentRepository;
 import com.insys.trapps.respositories.PersonRepository;
 import com.insys.trapps.respositories.UserRepository;
 import com.insys.trapps.service.PersonService;
+import com.insys.trapps.service.S3Service;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,70 +32,69 @@ import static java.util.Objects.nonNull;
 @Service
 @Transactional
 public class PersonServiceImpl implements PersonService {
-    private PersonRepository personRepository;
-    private UserRepository userRepository;
-
 
     private Logger logger = Logger.getLogger(PersonService.class);
 
-    public PersonServiceImpl(PersonRepository personRepository, UserRepository userRepository) {
-        this.personRepository = personRepository;
-        this.userRepository = userRepository;
-    }
+    @Autowired
+    private PersonRepository personRepository;
 
-    @Override
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PersonDocumentRepository personDocumentRepository;
+
+    @Autowired
+    private S3Service s3Service;
+
+    @Value("${aws.s3.buckets.person}")
+    private String PERSON_BUCKET;
+
     public Person findPerson(Long id) {
         return personRepository.findOne(id);
     }
 
-    @Override
     public User findUser(String username) {
         return userRepository.getOne(username);
     }
 
-//    @Override
-//    public PersonDocument save(Long id, String fileName, MultipartFile file) throws Exception {
-//        logger.debug("Enter: PersonServiceImpl.save(" + id + ", " + fileName + ", " + file.getName() + ")");
-//        Person person = personRepository.getOne(id);
-//        Set<PersonDocument> dbPersonDocuments = person.getPersonDocuments();
-//        List<PersonDocument> matchedPersonDocuments = dbPersonDocuments.stream().filter(personDocument -> personDocument.getFileName().equals(fileName)).collect(Collectors.toList());
-//        PersonDocument document;
-//        if (matchedPersonDocuments.size() > 0) {
-//            document = matchedPersonDocuments.get(0);
-//        } else {
-//            document = new PersonDocument();
-//            dbPersonDocuments.add(document);
-//        }
-//        document.setDocument(file.getBytes());
-//        document.setFileName(fileName);
-//        document.setPerson(person);
-//        document.setUploadTimestamp(new Date());
-//        document.setFileSize((long) document.getDocument().length);
-//
-//        person = personRepository.saveAndFlush(person);
-//        return person.getPersonDocuments().stream().filter(doc -> doc.getFileName().equals(fileName)).findFirst().get();
-//    }
-//
-//    @Override
-//    public PersonDocument getDocument(Long id, Long documentId) throws Exception {
-//        logger.debug("Enter: PersonServiceImpl.getDocument(" + id + ", " + documentId + ")");
-//        Person person = personRepository.getOne(id);
-//        return person.getPersonDocuments().stream().filter(doc -> doc.getId().equals(documentId)).findFirst().get();
-//    }
-//
-//    @Override
-//    public PersonDocument deleteDocument(Long id, Long documentId) throws Exception {
-//        logger.debug("Enter: PersonServiceImpl.deleteDocument(" + id + ", " + documentId + ")");
-//        Person person = personRepository.getOne(id);
-//        Optional<PersonDocument> document = person.getPersonDocuments().stream().filter(doc -> doc.getId().equals(documentId)).findFirst();
-//        if (!document.isPresent()) {
-//            return null;
-//        }
-//        PersonDocument doc = document.get();
-//        person.getPersonDocuments().remove(doc);
-//        personRepository.saveAndFlush(person);
-//        return doc;
-//    }
+    public PersonDocument saveDocument(Long id, String fileName, MultipartFile file) throws Exception {
+        logger.debug("Enter: PersonServiceImpl.save(" + id + ", " + fileName + ", " + file.getName() + ")");
+
+        Person person = personRepository.getOne(id);
+
+        PersonDocument personDocument = new PersonDocument();
+        personDocument.setFileName(fileName);
+        personDocument.setPerson(person);
+        personDocument.setFileSize(file.getSize());
+
+        personDocument = personDocumentRepository.saveAndFlush(personDocument);
+
+        String s3Key = "" + id + personDocument.getId();
+
+        s3Service.upload(PERSON_BUCKET, file.getInputStream(), s3Key);
+
+        personDocument.setS3key(s3Key);
+        personDocument = personDocumentRepository.saveAndFlush(personDocument);
+
+        return personDocument;
+    }
+
+    public PersonDocument getDocument(Long documentId) throws Exception {
+        PersonDocument personDocument = personDocumentRepository.findOne(documentId);
+        personDocument.setFile(s3Service.download(PERSON_BUCKET, personDocument.getS3key()));
+        return personDocument;
+    }
+
+    public Boolean deleteDocument(Long documentId) throws Exception {
+        logger.debug("Enter: PersonServiceImpl.deleteDocument(" + documentId + ")");
+        PersonDocument personDocument = personDocumentRepository.findOne(documentId);
+        Boolean deleted = s3Service.remove(PERSON_BUCKET, personDocument.getS3key());
+        Person person = personDocument.getPerson();
+        person.getPersonDocuments().remove(personDocument);
+        personRepository.saveAndFlush(person);
+        return deleted;
+    }
 
     public Person findByEmail(String email) {
         return personRepository.findByEmail(email);
