@@ -50,6 +50,6 @@ public interface PersonService {
 	 * @return
 	 * @throws Exception
 	 */
-	Boolean deleteDocument(Long documentId) throws Exception;
+	Boolean deleteDocument(Long personId, Long documentId) throws Exception;
 
 }

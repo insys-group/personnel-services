@@ -5,6 +5,7 @@ package com.insys.trapps.controllers;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.insys.trapps.model.person.PersonDTO;
 import com.insys.trapps.model.person.PersonDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,12 +42,12 @@ public class PersonController {
     }
 
     @PostMapping(value = "/person/email/exists")
-    public ResponseEntity<Boolean> getInterview(@RequestBody Person person) {
+    public ResponseEntity<Boolean> getInterview(@RequestBody PersonDTO personDTO) {
         Boolean exists = Boolean.FALSE;
-        Person existingPerson = personService.findByEmail(person.getEmail());
+        Person existingPerson = personService.findByEmail(personDTO.getEmail());
         if (existingPerson != null) {
-            if (person.getId() != null) {
-                if (!existingPerson.getId().equals(person.getId())) {
+            if (personDTO.getId() != null) {
+                if (!existingPerson.getId().equals(personDTO.getId())) {
                     exists = Boolean.TRUE;
                 }
             } else {
@@ -78,12 +79,13 @@ public class PersonController {
         response.getOutputStream().write(document.getFile());
     }
 
-    @DeleteMapping(value = "/persondocuments/{documentId}")
+    @DeleteMapping(value = "/persondocuments/{personId}/{documentId}")
     public ResponseEntity<Boolean> deleteDocument(
+            @PathVariable("personId") Long personId,
             @PathVariable("documentId") Long documentId) throws Exception {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(personService.deleteDocument(documentId));
+                    .body(personService.deleteDocument(personId, documentId));
     }
 
 }

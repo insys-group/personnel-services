@@ -42,3 +42,13 @@ authentication:
     encodedPassword: cb5af25a063f751372465c0f27ef9cada13ecd8d850564ebcab690d0c725ffddf6786887c444f016
 flyway:
   cleanOnValidationError: true
+aws:
+  s3:
+    endpoint: http://127.0.0.1:9000
+    credentials:
+      accessKey: F1O0TGTIO8S3OCJTQPKK
+      secretKey: 6rErai/xOd8sO43eJ+8GxEJi73ct6Q/jYiOe85fH
+    buckets:
+      person: persondocument
+multipart.maxFileSize: 5MB
+multipart.maxRequestSize: 5MB

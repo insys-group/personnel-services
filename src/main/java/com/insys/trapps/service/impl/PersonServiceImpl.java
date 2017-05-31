@@ -65,16 +65,20 @@ public class PersonServiceImpl implements PersonService {
 
         PersonDocument personDocument = new PersonDocument();
         personDocument.setFileName(fileName);
-        personDocument.setPerson(person);
         personDocument.setFileSize(file.getSize());
 
-        personDocument = personDocumentRepository.saveAndFlush(personDocument);
+        person.addDocument(personDocument);
+
+        personRepository.saveAndFlush(person);
+
+        personDocument = personDocumentRepository.findByFileName(fileName);
 
         String s3Key = "" + id + personDocument.getId();
 
         s3Service.upload(PERSON_BUCKET, file.getInputStream(), s3Key);
 
         personDocument.setS3key(s3Key);
+
         personDocument = personDocumentRepository.saveAndFlush(personDocument);
 
         return personDocument;
@@ -86,13 +90,21 @@ public class PersonServiceImpl implements PersonService {
         return personDocument;
     }
 
-    public Boolean deleteDocument(Long documentId) throws Exception {
+    public Boolean deleteDocument(Long personId, Long documentId) throws Exception {
         logger.debug("Enter: PersonServiceImpl.deleteDocument(" + documentId + ")");
+
         PersonDocument personDocument = personDocumentRepository.findOne(documentId);
         Boolean deleted = s3Service.remove(PERSON_BUCKET, personDocument.getS3key());
-        Person person = personDocument.getPerson();
-        person.getPersonDocuments().remove(personDocument);
+
+        Person person = personRepository.findOne(personId);
+        Optional<PersonDocument> document = person.getPersonDocuments().stream().filter(doc -> doc.getId().equals(documentId)).findFirst();
+        if (!document.isPresent()) {
+            return null;
+        }
+        PersonDocument doc = document.get();
+        person.getPersonDocuments().remove(doc);
         personRepository.saveAndFlush(person);
+
         return deleted;
     }
 

@@ -1,6 +1,6 @@
 package com.insys.trapps.model.person;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.*;
 import com.insys.trapps.model.Address;
 import com.insys.trapps.model.Business;
 import com.insys.trapps.model.PersonTraining;
@@ -17,20 +17,13 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PersonDocument implements Serializable {
+public class PersonDocument {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Getter
 	@Setter
 	private Long id;
-
-    @Getter
-    @Setter
-    @ManyToOne
-    @JoinColumn(name = "person_id")
-    @JsonBackReference
-    private Person person;
 
 	@Getter
 	@Setter
