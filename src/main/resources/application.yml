@@ -1,5 +1,11 @@
 spring:
   profiles: cloud
+  datasource:
+    tomcat:
+      max-active: 4
+      max-idle: 4
+      min-idle: 1
+      initial-size: 2
 server: 
   port: 0
 security:
@@ -8,10 +14,10 @@ security:
       user-info-uri: http://trapps-api.local.pcfdev.io/user
 logging:
   level:
-    org.spring.security: TRACE
-    org.springframework.web: TRACE
-    com.insys.trapps: TRACE
-    org.hibernate: TRACE
+    org.spring.security: INFO
+    org.springframework.web: INFO
+    com.insys.trapps: INFO
+    org.hibernate: INFO
 aws:
   s3:
     endpoint: s3.amazonaws.com
