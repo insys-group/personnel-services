@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.insys.trapps.model.Role;
 
@@ -40,16 +39,22 @@ public class Interview implements Serializable {
 
 	@Getter
 	@Setter
+	private String name;
+
+	@Getter
+	@Setter
 	@Column(nullable = false)
 	private Date date;
 
 	@Getter
 	@Setter
-	private String name;
+	@Column(name = "contact_type", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private ContactType contactType;
 
 	@Getter
 	@Setter
-	private String phone;
+	private String contact;
 
 	@Getter
 	@Setter

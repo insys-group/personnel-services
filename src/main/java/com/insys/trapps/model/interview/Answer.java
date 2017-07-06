@@ -38,6 +38,11 @@ public class Answer implements Serializable {
 
     @Getter
     @Setter
+    @Column(name = "rate")
+    private int rate;
+
+    @Getter
+    @Setter
     @Column(name = "comment")
     private String comment;
 

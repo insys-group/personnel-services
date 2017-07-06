@@ -31,14 +31,15 @@ CREATE TABLE business (
 DROP TABLE IF EXISTS person;
 CREATE TABLE person (
   id bigint(20) NOT NULL AUTO_INCREMENT,
-  email varchar(255) NOT NULL,
+  email varchar(255) DEFAULT NULL,
   first_name varchar(255) NOT NULL,
   last_name varchar(255) NOT NULL,
   person_type varchar(255) NOT NULL,
   phone varchar(255) DEFAULT NULL,
+  skype varchar(255) NULL,
   title varchar(255) DEFAULT NULL,
   address_id bigint(20) DEFAULT NULL,
-  business_id bigint(20) NOT NULL,
+  business_id bigint(20) DEFAULT NULL,
   PRIMARY KEY (id),
   CONSTRAINT fk_per_add FOREIGN KEY (address_id) REFERENCES address (id),
   CONSTRAINT fk_per_bus FOREIGN KEY (business_id) REFERENCES business (id)
@@ -425,11 +426,12 @@ CREATE TABLE interview_template (
 DROP TABLE IF EXISTS interview;
 CREATE TABLE interview (
   id bigint(20) NOT NULL AUTO_INCREMENT,
+  name varchar(255) NOT NULL,
   date datetime NOT NULL,
-  name varchar(255) DEFAULT NULL,
-  phone varchar(255) DEFAULT NULL,
+  contact_type varchar(255) NOT NULL,
+  contact varchar(255) DEFAULT NULL,
   person_id bigint(20) DEFAULT NULL,
-  role_id bigint(20) DEFAULT NULL,
+  role_id bigint(20) NOT NULL,
   status int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (id),
   CONSTRAINT interview_person_id FOREIGN KEY (person_id) REFERENCES person (id),
@@ -458,6 +460,7 @@ DROP TABLE IF EXISTS answer;
 CREATE TABLE answer (
   id bigint(20) NOT NULL AUTO_INCREMENT,
   answer varchar(255) DEFAULT NULL,
+  rate int(1) DEFAULT NULL,
   comment varchar(255) DEFAULT NULL,
   quality varchar(255) DEFAULT NULL,
   question_id bigint(20) DEFAULT NULL,

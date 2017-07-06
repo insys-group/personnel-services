@@ -42,15 +42,15 @@ INSERT INTO location VALUES (1,2),(2,3),(3,4);
 -- Dumping data for table person
 --
 INSERT INTO person VALUES
-  (1,'test@luxoft.com','Admin','Admin','Employee','00000000','Admin',1,1),
-  (2,'areyna@luxoft.com','Armando','Reyna','Employee','720-560-8971','Architect',1,1),
-  (3,'msabir@luxoft.com','Muhammad','Sabir','Employee','631-983-9075','Architect',null,2),
-  (4,'bstarkenberg@luxoft.com','Brad','Starkenberg','Employee','876-99-3427','Chief Architect',null,2),
-  (5,'epereira@luxoft.com','Eric','Pereira','Employee','876-99-3427','Architect',null,2),
-  (6,'kkrishna@luxoft.com','Kris','Krishna','Employee','876-99-3427','Architect',null,2),
-  (7,'vnalitkin@insys.com','Vladimir','Nalitkin','Employee','876-99-3427','Architect',null,2),
-  (8,'vmaevskiy@luxoft.com','Victor','Maevskiy','Employee','111-11-1111','Architect',null,2),
-  (9,'dalambert@luxoft.com','David','Lambert','Employee','111-11-1111','Project Manager',null,2);
+  (1,'test@luxoft.com','Admin','Admin','Employee',null,null,'Admin',1,1),
+  (2,'areyna@luxoft.com','Armando','Reyna','Employee','720-560-8971',null,'Architect',1,1),
+  (3,'msabir@luxoft.com','Muhammad','Sabir','Employee','631-983-9075',null,'Architect',null,2),
+  (4,'bstarkenberg@luxoft.com','Brad','Starkenberg','Employee','876-99-3427',null,'Chief Architect',null,2),
+  (5,'epereira@luxoft.com','Eric','Pereira','Employee','876-99-3427',null,'Architect',null,2),
+  (6,'kkrishna@luxoft.com','Kris','Krishna','Employee','876-99-3427',null,'Architect',null,2),
+  (7,'vnalitkin@insys.com','Vladimir','Nalitkin','Employee','876-99-3427',null,'Architect',null,2),
+  (8,'vmaevskiy@luxoft.com','Victor','Maevskiy','Employee','111-11-1111',null,'Architect',null,2),
+  (9,'dalambert@luxoft.com','David','Lambert','Employee','111-11-1111',null,'Project Manager',null,2);
 
 --
 -- Dumping data for table user

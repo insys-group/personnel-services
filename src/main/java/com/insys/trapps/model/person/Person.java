@@ -43,6 +43,11 @@ public class Person {
 
     @Getter
     @Setter
+    @Column(name = "skype")
+    private String skype;
+
+    @Getter
+    @Setter
     @Column(name = "email", nullable = false)
     private String email;
 
