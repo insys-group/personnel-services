@@ -185,7 +185,8 @@ public class InterviewRestIntegrationTest extends TestCaseAuthorization {
 	}
 
 	private InterviewBuilder getInterviewBuilder() {
-		return Interview.builder().candidate(candidate).role(role).date(createDate());
+		return Interview.builder().candidate(candidate).role(role).date(createDate()).name("Interview Test")
+				.contact("123-456-7890").status(1).contactType(ContactType.CandidatePhone);
 	}
 
 	private Set<Question> createQuestions(String... questions) {

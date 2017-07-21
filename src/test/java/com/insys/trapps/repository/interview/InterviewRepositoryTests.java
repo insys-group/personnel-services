@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
 
+import com.insys.trapps.model.interview.ContactType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -100,7 +101,8 @@ public class InterviewRepositoryTests {
 	}
 
 	private Interview initInterview() {
-		return Interview.builder().candidate(mockCandidate).date(new Date()).role(mockRole).build();
+		return Interview.builder().candidate(mockCandidate).date(new Date()).role(mockRole).name("Interview Test")
+				.contact("123-456-7890").status(1).contactType(ContactType.CandidatePhone).build();
 	}
 
 	private Business initBusiness() {
